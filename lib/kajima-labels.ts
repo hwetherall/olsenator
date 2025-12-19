@@ -175,7 +175,7 @@ export type LabelKey = keyof typeof enLabels;
 /**
  * Get labels based on Kajima mode
  */
-export function getLabels(kajimaMode: boolean): typeof enLabels {
+export function getLabels(kajimaMode: boolean): typeof enLabels | typeof jaLabels {
   return kajimaMode ? jaLabels : enLabels;
 }
 
