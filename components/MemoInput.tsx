@@ -11,7 +11,7 @@ export function MemoInput({ value, onChange, disabled }: MemoInputProps) {
     <div className="w-full">
       <label 
         htmlFor="memo-input" 
-        className="block text-sm font-medium text-[var(--muted)] mb-2"
+        className="block text-sm font-semibold text-[var(--foreground)] mb-3 tracking-wide"
       >
         Investment Memo
       </label>
@@ -31,20 +31,21 @@ Expected format includes:
 • Six-T Risk Analysis (Team, TAM, Technology, Traction, Terms, Trends)
 • 'Should We Do It' and 'Can We Do It' assessments
 • Chapter analyses (Team, Opportunity, Path to Success, Operations)"
-        className="w-full h-[400px] px-4 py-3 bg-[var(--surface)] border border-[var(--border)] 
-                   rounded-lg text-[var(--foreground)] placeholder-[var(--muted)]
-                   focus:outline-none focus:ring-2 focus:ring-[var(--accent)] focus:border-transparent
+        className="w-full h-[400px] px-5 py-4 bg-white border-2 border-[var(--border)] 
+                   rounded-2xl text-[var(--foreground)] placeholder-[var(--muted)]/60
+                   focus:outline-none focus:ring-0 focus:border-[var(--accent)]
                    resize-none font-mono text-sm leading-relaxed
                    disabled:opacity-50 disabled:cursor-not-allowed
-                   transition-all duration-200"
+                   transition-all duration-300 ease-out
+                   shadow-sm hover:shadow-md focus:shadow-md"
         spellCheck={false}
       />
-      <div className="mt-2 flex justify-between text-xs text-[var(--muted)]">
-        <span>
+      <div className="mt-3 flex justify-between text-xs text-[var(--muted)]">
+        <span className="font-medium">
           {value.length.toLocaleString()} characters
         </span>
         <span>
-          Minimum 100 characters required
+          Minimum 100 required
         </span>
       </div>
     </div>

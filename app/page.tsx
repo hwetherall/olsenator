@@ -152,42 +152,54 @@ export default function Home() {
 
   return (
     <main className="min-h-screen bg-[var(--background)]">
-      {/* Header */}
-      <header className="border-b border-[var(--border)] no-print">
-        <div className="max-w-7xl mx-auto px-6 py-6">
-          <div className="flex items-center gap-4">
-            <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-[var(--accent)] to-blue-700 flex items-center justify-center">
-              <svg
-                className="w-6 h-6 text-white"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
+      {/* Header - Innovera Style */}
+      <header className="no-print">
+        <div className="max-w-7xl mx-auto px-8 py-6">
+          <div className="flex items-center justify-between">
+            {/* Logo */}
+            <div className="flex items-center">
+              <span className="text-2xl font-light tracking-[0.2em] text-[var(--foreground)]">
+                INNOV<span className="text-[var(--accent)]">E</span>RA
+              </span>
+            </div>
+            
+            {/* Navigation */}
+            <nav className="hidden md:flex items-center gap-10">
+              <span className="text-sm font-medium tracking-wider text-[var(--foreground)] cursor-default">
+                THE OLSENATOR
+              </span>
+              <a 
+                href="https://innovera.ai" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="text-sm font-medium tracking-wider text-[var(--muted)] hover:text-[var(--accent)] transition-colors"
               >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"
-                />
-              </svg>
-            </div>
-            <div>
-              <h1 className="text-2xl font-bold text-[var(--foreground)] tracking-tight">
-                The Olsenator
-              </h1>
-              <p className="text-sm text-[var(--muted)]">
-                Extraction & Visualization Engine
-              </p>
-            </div>
+                INNOVERA.AI
+              </a>
+            </nav>
           </div>
         </div>
       </header>
 
+      {/* Hero Section */}
+      {!extractedData && !error && !isLoading && (
+        <div className="max-w-4xl mx-auto px-8 py-16 text-center no-print">
+          <h2 className="text-4xl md:text-5xl font-light text-[var(--foreground)] leading-tight mb-8">
+            Transform your investment memo into{' '}
+            <span className="text-[var(--accent)] font-normal">visual insights</span>
+          </h2>
+          <p className="text-lg text-[var(--muted)] mb-12 max-w-2xl mx-auto">
+            Paste your investment memo below and let The Olsenator extract structured data 
+            and generate beautiful infographics for executive review.
+          </p>
+        </div>
+      )}
+
       {/* Main Content */}
-      <div className="max-w-7xl mx-auto px-6 py-8 no-print">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+      <div className="max-w-7xl mx-auto px-8 py-8 no-print">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
           {/* Left Column - Input */}
-          <div className="space-y-4">
+          <div className="space-y-5">
             <MemoInput
               value={memo}
               onChange={setMemo}
@@ -198,11 +210,13 @@ export default function Home() {
               <button
                 onClick={handleExtract}
                 disabled={isLoading || memo.trim().length < 100}
-                className="flex-1 px-6 py-3 bg-[var(--accent)] hover:bg-[var(--accent-hover)]
-                           text-white font-semibold rounded-lg
+                className="flex-1 px-8 py-4 bg-[var(--accent)] hover:bg-[var(--accent-hover)]
+                           text-white font-semibold rounded-full
                            disabled:opacity-50 disabled:cursor-not-allowed
-                           transition-colors duration-200
-                           flex items-center justify-center gap-2"
+                           transition-all duration-300 ease-out
+                           flex items-center justify-center gap-2
+                           shadow-lg shadow-[var(--accent)]/20 hover:shadow-xl hover:shadow-[var(--accent)]/30
+                           tracking-wide uppercase text-sm"
               >
                 {isLoading ? (
                   <>
@@ -210,33 +224,19 @@ export default function Home() {
                     Extracting...
                   </>
                 ) : (
-                  <>
-                    <svg
-                      className="w-5 h-5"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"
-                      />
-                    </svg>
-                    Extract Data
-                  </>
+                  'Extract Data'
                 )}
               </button>
               
               <button
                 onClick={handleClear}
                 disabled={isLoading || (!memo && !extractedData && !error)}
-                className="px-4 py-3 bg-[var(--surface)] border border-[var(--border)]
-                           hover:bg-[var(--surface-hover)] text-[var(--foreground)]
-                           font-medium rounded-lg
+                className="px-6 py-4 bg-transparent border-2 border-[var(--border)]
+                           hover:border-[var(--accent)] hover:text-[var(--accent)] text-[var(--foreground)]
+                           font-medium rounded-full
                            disabled:opacity-50 disabled:cursor-not-allowed
-                           transition-colors duration-200"
+                           transition-all duration-300 ease-out
+                           tracking-wide uppercase text-sm"
               >
                 Clear
               </button>
@@ -244,7 +244,7 @@ export default function Home() {
           </div>
 
           {/* Right Column - Output */}
-          <div className="space-y-4">
+          <div className="space-y-5">
             <JsonOutput
               data={extractedData}
               error={error}
@@ -255,26 +255,28 @@ export default function Home() {
             
             {/* Generate Infographic Button */}
             {extractedData && !showInfographic && (
-              <div className="space-y-3">
+              <div className="space-y-4">
                 {/* Enhance Toggle */}
-                <div className="flex items-center justify-between p-4 bg-[var(--surface)] border border-[var(--border)] rounded-lg">
+                <div className="flex items-center justify-between p-5 bg-white border border-[var(--border)] rounded-2xl shadow-sm">
                   <div className="flex items-center gap-3">
-                    <svg className="w-5 h-5 text-[var(--muted)]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
-                    </svg>
+                    <div className="w-10 h-10 rounded-xl bg-[var(--accent)]/10 flex items-center justify-center">
+                      <svg className="w-5 h-5 text-[var(--accent)]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                      </svg>
+                    </div>
                     <div>
-                      <span className="text-sm font-medium text-[var(--foreground)]">Enhance with AI</span>
+                      <span className="text-sm font-semibold text-[var(--foreground)]">Enhance with AI</span>
                       <p className="text-xs text-[var(--muted)]">Generate executive narrative summary</p>
                     </div>
                   </div>
                   <button
                     onClick={() => setEnhanceEnabled(!enhanceEnabled)}
-                    className={`relative w-11 h-6 rounded-full transition-colors ${
-                      enhanceEnabled ? 'bg-[var(--accent)]' : 'bg-[var(--border)]'
+                    className={`relative w-12 h-7 rounded-full transition-colors ${
+                      enhanceEnabled ? 'bg-[var(--accent)]' : 'bg-gray-200'
                     }`}
                   >
                     <span
-                      className={`absolute top-1 left-1 w-4 h-4 rounded-full bg-white transition-transform ${
+                      className={`absolute top-1 left-1 w-5 h-5 rounded-full bg-white shadow-sm transition-transform ${
                         enhanceEnabled ? 'translate-x-5' : 'translate-x-0'
                       }`}
                     />
@@ -283,11 +285,13 @@ export default function Home() {
 
                 <button
                   onClick={handleGenerateInfographic}
-                  className="w-full px-6 py-4 bg-gradient-to-r from-[#1e293b] to-[#334155]
+                  className="w-full px-8 py-5 bg-gradient-to-r from-[#1e293b] to-[#334155]
                              hover:from-[#334155] hover:to-[#475569]
-                             text-white font-semibold rounded-lg
-                             transition-all duration-200
-                             flex items-center justify-center gap-3"
+                             text-white font-semibold rounded-full
+                             transition-all duration-300 ease-out
+                             flex items-center justify-center gap-3
+                             shadow-lg hover:shadow-xl
+                             tracking-wide uppercase text-sm"
                 >
                   <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 17V7m0 10a2 2 0 01-2 2H5a2 2 0 01-2-2V7a2 2 0 012-2h2a2 2 0 012 2m0 10a2 2 0 002 2h2a2 2 0 002-2M9 7a2 2 0 012-2h2a2 2 0 012 2m0 10V7m0 10a2 2 0 002 2h2a2 2 0 002-2V7a2 2 0 00-2-2h-2a2 2 0 00-2 2" />
@@ -301,26 +305,28 @@ export default function Home() {
 
         {/* Stage Disclaimer */}
         {!showInfographic && (
-          <div className="mt-12 border-t border-[var(--border)] pt-6">
-            <div className="flex items-start gap-3 text-sm text-[var(--muted)]">
-              <svg
-                className="w-5 h-5 flex-shrink-0 mt-0.5"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-                />
-              </svg>
-              <div>
-                <p className="font-medium text-[var(--foreground)]">Stage 2 — Rendering Engine</p>
-                <p className="mt-1">
-                  Extract data from your investment memo, then generate a visual infographic 
-                  optimized for executive review and print-to-PDF export.
+          <div className="mt-16 pt-8 border-t border-[var(--border)]">
+            <div className="flex items-start gap-4 max-w-2xl mx-auto">
+              <div className="w-10 h-10 rounded-xl bg-[var(--surface)] flex items-center justify-center flex-shrink-0">
+                <svg
+                  className="w-5 h-5 text-[var(--muted)]"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                  />
+                </svg>
+              </div>
+              <div className="text-sm">
+                <p className="font-semibold text-[var(--foreground)]">How it works</p>
+                <p className="mt-1 text-[var(--muted)] leading-relaxed">
+                  Extract structured data from your investment memo, then generate a visual infographic 
+                  optimized for executive review and print-to-PDF export. The entire process takes just seconds.
                 </p>
               </div>
             </div>
@@ -377,11 +383,16 @@ export default function Home() {
       )}
 
       {/* Footer */}
-      <footer className="border-t border-[var(--border)] mt-auto no-print">
-        <div className="max-w-7xl mx-auto px-6 py-4">
-          <p className="text-xs text-[var(--muted)] text-center">
-            Built for Innovera.ai — Transforming investment memos into visual insights
-          </p>
+      <footer className="mt-auto no-print">
+        <div className="max-w-7xl mx-auto px-8 py-8">
+          <div className="flex flex-col md:flex-row items-center justify-between gap-4 text-sm text-[var(--muted)]">
+            <span className="text-lg font-light tracking-[0.15em] text-[var(--foreground)]/60">
+              INNOV<span className="text-[var(--accent)]/60">E</span>RA
+            </span>
+            <p>
+              Transforming investment memos into visual insights
+            </p>
+          </div>
         </div>
       </footer>
     </main>

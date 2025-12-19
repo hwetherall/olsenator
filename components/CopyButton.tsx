@@ -23,10 +23,10 @@ export function CopyButton({ text, className = '' }: CopyButtonProps) {
   return (
     <button
       onClick={handleCopy}
-      className={`inline-flex items-center gap-2 px-3 py-1.5 text-sm font-medium
-                  bg-[var(--surface)] border border-[var(--border)] rounded-md
-                  text-[var(--foreground)] hover:bg-[var(--surface-hover)]
-                  transition-colors duration-200 ${className}`}
+      className={`inline-flex items-center gap-2 px-3.5 py-2 text-sm font-medium
+                  bg-white border-2 border-[var(--border)] rounded-full
+                  text-[var(--foreground)] hover:border-[var(--accent)] hover:text-[var(--accent)]
+                  transition-all duration-300 ease-out ${className}`}
       title="Copy to clipboard"
     >
       {copied ? (
