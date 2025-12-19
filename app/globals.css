@@ -44,3 +44,160 @@ textarea {
   scrollbar-color: var(--border) var(--surface);
 }
 
+/* ==========================================================================
+   Print Styles for Infographic Export
+   ========================================================================== */
+
+@media print {
+  /* Reset background and colors for print */
+  body {
+    background: white !important;
+    color: black !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  /* Hide UI chrome - header, footer, buttons, navigation */
+  .no-print,
+  header,
+  footer,
+  button,
+  .no-print-bg {
+    display: none !important;
+  }
+
+  /* Ensure infographic backgrounds print correctly */
+  .infographic,
+  .infographic * {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  /* Page setup */
+  @page {
+    size: A4;
+    margin: 15mm 10mm;
+  }
+
+  /* Page break controls */
+  .page-break-before {
+    page-break-before: always !important;
+    break-before: page !important;
+  }
+
+  .page-break-after {
+    page-break-after: always !important;
+    break-after: page !important;
+  }
+
+  .avoid-break {
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+  }
+
+  /* Infographic container - full width for print */
+  .infographic {
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    box-shadow: none !important;
+    border: none !important;
+  }
+
+  /* Ensure SVG radar chart prints correctly */
+  svg {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  /* Force colored backgrounds to print */
+  [style*="background"] {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  /* Grid layouts for print */
+  .grid {
+    display: grid !important;
+  }
+
+  /* Ensure links don't show URLs */
+  a[href]:after {
+    content: none !important;
+  }
+
+  /* Print-only content */
+  .print-only {
+    display: block !important;
+  }
+
+  /* Hide interactive elements */
+  .no-print button,
+  .no-print input,
+  .no-print textarea,
+  .no-print select {
+    display: none !important;
+  }
+
+  /* Improve text rendering */
+  * {
+    text-shadow: none !important;
+  }
+
+  /* Ensure images print */
+  img {
+    max-width: 100% !important;
+    page-break-inside: avoid !important;
+  }
+
+  /* Header section - keep together */
+  .infographic-header {
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+  }
+
+  /* Page 1 content */
+  .infographic-page-1 {
+    page-break-after: auto;
+  }
+
+  /* Page 2 content */
+  .infographic-page-2 {
+    page-break-before: always !important;
+  }
+
+  /* Cards should not break */
+  [class*="Card"],
+  [class*="card"] {
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+  }
+
+  /* Timeline items should not break */
+  .timeline-item {
+    page-break-inside: avoid !important;
+  }
+
+  /* Ensure proper spacing */
+  .space-y-6 > * + * {
+    margin-top: 1.5rem !important;
+  }
+
+  /* Fix flexbox for print */
+  .flex {
+    display: flex !important;
+  }
+
+  /* Ensure rounded corners show in print */
+  .rounded-lg {
+    border-radius: 0.5rem !important;
+  }
+}
+
+/* Screen-only content (hidden in print) */
+@media screen {
+  .print-only {
+    display: none !important;
+  }
+}

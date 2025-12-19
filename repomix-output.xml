@@ -40,15 +40,29 @@ The content is organized as follows:
 </file_summary>
 
 <directory_structure>
-.env.local.example
 .gitignore
+app/api/enhance/route.ts
 app/api/extract/route.ts
+app/api/generate-image/route.ts
 app/globals.css
 app/layout.tsx
 app/page.tsx
 components/CopyButton.tsx
+components/infographic/AssumptionsList.tsx
+components/infographic/ChapterSummaries.tsx
+components/infographic/ExecutiveNarrative.tsx
+components/infographic/HeaderBanner.tsx
+components/infographic/HighlightCards.tsx
+components/infographic/index.ts
+components/infographic/InfographicContainer.tsx
+components/infographic/InfographicHeader.tsx
+components/infographic/NextStepsTimeline.tsx
+components/infographic/SixTRadar.tsx
+components/infographic/VerdictCard.tsx
+components/infographic/VerdictPair.tsx
 components/JsonOutput.tsx
 components/MemoInput.tsx
+lib/infographic-styles.ts
 lib/openrouter.ts
 lib/prompts.ts
 lib/schema.ts
@@ -63,9 +77,2169 @@ tsconfig.json
 <files>
 This section contains the contents of the repository's files.
 
-<file path=".env.local.example">
-# OpenRouter API Key for Gemini 2.5 Pro access
-OPENROUTER_API_KEY=your_openrouter_api_key_here
+<file path="app/api/enhance/route.ts">
+import { NextRequest, NextResponse } from 'next/server';
+import { ExtractionResult } from '@/lib/schema';
+
+export const maxDuration = 60;
+
+const OPENROUTER_API_URL = 'https://openrouter.ai/api/v1/chat/completions';
+const MODEL = 'google/gemini-2.5-pro-preview';
+
+interface EnhanceRequest {
+  data: ExtractionResult;
+}
+
+interface EnhanceResponse {
+  success: boolean;
+  narrative?: string;
+  error?: string;
+}
+
+export async function POST(request: NextRequest): Promise<NextResponse<EnhanceResponse>> {
+  try {
+    const body: EnhanceRequest = await request.json();
+
+    if (!body.data) {
+      return NextResponse.json(
+        { success: false, error: 'Missing extraction data' },
+        { status: 400 }
+      );
+    }
+
+    const apiKey = process.env.OPENROUTER_API_KEY;
+
+    if (!apiKey) {
+      console.error('OPENROUTER_API_KEY is not configured');
+      return NextResponse.json(
+        { success: false, error: 'Server configuration error' },
+        { status: 500 }
+      );
+    }
+
+    const { data } = body;
+    
+    // Build a concise summary of the extraction for the prompt
+    const summaryContext = `
+Project: ${data.metadata.projectName}
+Industry: ${data.metadata.industry}
+Location: ${data.metadata.location || 'Not specified'}
+Stage: ${data.metadata.stage}
+Decision: ${data.metadata.decision}
+Recommendation: ${data.metadata.recommendation}
+
+Executive Summary: ${data.executiveSummary.verdict}
+
+Key Reasoning:
+${data.executiveSummary.coreReasoning.map(r => `- ${r}`).join('\n')}
+
+Six-T Risks:
+- Team: ${data.sixTRisks.team.rating} - ${data.sixTRisks.team.summary}
+- TAM: ${data.sixTRisks.tam.rating} - ${data.sixTRisks.tam.summary}
+- Technology: ${data.sixTRisks.technology.rating} - ${data.sixTRisks.technology.summary}
+- Traction: ${data.sixTRisks.traction.rating} - ${data.sixTRisks.traction.summary}
+- Terms: ${data.sixTRisks.terms.rating} - ${data.sixTRisks.terms.summary}
+- Trends: ${data.sixTRisks.trends.rating} - ${data.sixTRisks.trends.summary}
+
+Should We Do It: ${data.shouldWeDoIt.verdict} (${data.shouldWeDoIt.confidenceLevel} confidence)
+Can We Do It: ${data.canWeDoIt.verdict} (${data.canWeDoIt.confidenceLevel} confidence)
+
+Key Highlights:
+${data.highlights.map(h => `- ${h.metric}: ${h.value}`).join('\n')}
+`.trim();
+
+    const systemPrompt = `You are an executive communications specialist at a venture capital firm. Your task is to synthesize investment analysis into a brief narrative summary that a CEO could read aloud at a board meeting.
+
+Rules:
+- Write exactly 3-4 sentences
+- Use plain English, no jargon or bullet points
+- Be direct and decisive
+- Focus on the key recommendation and primary reasoning
+- Include one specific data point or metric
+- End with a clear directional statement
+
+The tone should be confident and businesslike, as if briefing a senior executive.`;
+
+    const userPrompt = `Based on this investment analysis, write a 3-4 sentence executive narrative summary:
+
+${summaryContext}`;
+
+    console.log('Generating executive narrative...');
+    const startTime = Date.now();
+
+    const response = await fetch(OPENROUTER_API_URL, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${apiKey}`,
+        'HTTP-Referer': 'https://olsenator.vercel.app',
+        'X-Title': 'The Olsenator',
+      },
+      body: JSON.stringify({
+        model: MODEL,
+        messages: [
+          { role: 'system', content: systemPrompt },
+          { role: 'user', content: userPrompt },
+        ],
+        temperature: 0.7,
+        max_tokens: 500,
+      }),
+    });
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      console.error('OpenRouter API error:', response.status, errorText);
+      return NextResponse.json(
+        { success: false, error: 'Failed to generate narrative' },
+        { status: 500 }
+      );
+    }
+
+    const result = await response.json();
+    const duration = Date.now() - startTime;
+    console.log(`Narrative generated in ${duration}ms`);
+
+    if (!result.choices || result.choices.length === 0) {
+      return NextResponse.json(
+        { success: false, error: 'No narrative generated' },
+        { status: 500 }
+      );
+    }
+
+    const narrative = result.choices[0].message.content.trim();
+
+    return NextResponse.json({
+      success: true,
+      narrative,
+    });
+  } catch (error) {
+    console.error('Unexpected error in enhance route:', error);
+    return NextResponse.json(
+      { 
+        success: false, 
+        error: error instanceof Error ? error.message : 'An unexpected error occurred' 
+      },
+      { status: 500 }
+    );
+  }
+}
+</file>
+
+<file path="app/api/generate-image/route.ts">
+import { NextRequest, NextResponse } from 'next/server';
+
+export const maxDuration = 120; // Image generation can take longer
+
+const OPENROUTER_API_URL = 'https://openrouter.ai/api/v1/chat/completions';
+const IMAGE_MODEL = 'black-forest-labs/flux-1.1-pro';
+
+interface GenerateImageRequest {
+  projectName: string;
+  industry: string;
+  location?: string | null;
+}
+
+interface GenerateImageResponse {
+  success: boolean;
+  imageUrl?: string;
+  error?: string;
+}
+
+export async function POST(request: NextRequest): Promise<NextResponse<GenerateImageResponse>> {
+  try {
+    const body: GenerateImageRequest = await request.json();
+
+    if (!body.projectName || !body.industry) {
+      return NextResponse.json(
+        { success: false, error: 'Missing project name or industry' },
+        { status: 400 }
+      );
+    }
+
+    const apiKey = process.env.OPENROUTER_API_KEY;
+
+    if (!apiKey) {
+      console.error('OPENROUTER_API_KEY is not configured');
+      return NextResponse.json(
+        { success: false, error: 'Server configuration error' },
+        { status: 500 }
+      );
+    }
+
+    // Build the image generation prompt
+    const locationContext = body.location ? ` in ${body.location}` : '';
+    const prompt = `Professional minimal illustration of ${body.industry.toLowerCase()} industry${locationContext}, abstract geometric style, navy blue (#1e293b) and white color scheme, clean lines, modern corporate aesthetic, suitable for business presentation header, no text, no people`;
+
+    console.log('Generating header image with prompt:', prompt);
+    const startTime = Date.now();
+
+    // Call OpenRouter with the image generation model
+    const response = await fetch(OPENROUTER_API_URL, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${apiKey}`,
+        'HTTP-Referer': 'https://olsenator.vercel.app',
+        'X-Title': 'The Olsenator',
+      },
+      body: JSON.stringify({
+        model: IMAGE_MODEL,
+        messages: [
+          {
+            role: 'user',
+            content: prompt,
+          },
+        ],
+      }),
+    });
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      console.error('OpenRouter API error:', response.status, errorText);
+      
+      // Return gracefully - image generation is optional
+      return NextResponse.json(
+        { success: false, error: 'Image generation unavailable' },
+        { status: 200 } // Return 200 so frontend doesn't treat as error
+      );
+    }
+
+    const result = await response.json();
+    const duration = Date.now() - startTime;
+    console.log(`Image generated in ${duration}ms`);
+
+    // Extract image URL from response
+    // OpenRouter returns images in different formats depending on the model
+    let imageUrl: string | undefined;
+
+    if (result.choices && result.choices[0]?.message?.content) {
+      const content = result.choices[0].message.content;
+      
+      // Check if content is a URL
+      if (typeof content === 'string' && content.startsWith('http')) {
+        imageUrl = content;
+      } else if (typeof content === 'string' && content.startsWith('data:image')) {
+        // Base64 data URL
+        imageUrl = content;
+      } else if (Array.isArray(content)) {
+        // Some models return content as array with image_url
+        const imageContent = content.find((c: { type: string }) => c.type === 'image_url');
+        if (imageContent?.image_url?.url) {
+          imageUrl = imageContent.image_url.url;
+        }
+      }
+    }
+
+    // Also check for image in response data directly
+    if (!imageUrl && result.data?.url) {
+      imageUrl = result.data.url;
+    }
+
+    if (!imageUrl) {
+      console.log('No image URL in response:', JSON.stringify(result, null, 2));
+      return NextResponse.json(
+        { success: false, error: 'No image generated' },
+        { status: 200 }
+      );
+    }
+
+    return NextResponse.json({
+      success: true,
+      imageUrl,
+    });
+  } catch (error) {
+    console.error('Unexpected error in generate-image route:', error);
+    // Return gracefully - image generation is optional
+    return NextResponse.json(
+      { 
+        success: false, 
+        error: error instanceof Error ? error.message : 'Image generation failed' 
+      },
+      { status: 200 }
+    );
+  }
+}
+</file>
+
+<file path="components/infographic/AssumptionsList.tsx">
+'use client';
+
+import { CriticalAssumption } from '@/lib/schema';
+import { colors, typography, getAssumptionColor, getAssumptionBgColor } from '@/lib/infographic-styles';
+
+interface AssumptionsListProps {
+  assumptions: CriticalAssumption[];
+}
+
+function getStatusIcon(status: string) {
+  switch (status) {
+    case 'validated':
+      return (
+        <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+          <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+        </svg>
+      );
+    case 'pending':
+      return (
+        <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+          <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clipRule="evenodd" />
+        </svg>
+      );
+    case 'at-risk':
+      return (
+        <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+          <path fillRule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
+        </svg>
+      );
+    default:
+      return null;
+  }
+}
+
+function getStatusLabel(status: string): string {
+  switch (status) {
+    case 'validated':
+      return 'Validated';
+    case 'pending':
+      return 'Pending';
+    case 'at-risk':
+      return 'At Risk';
+    default:
+      return status;
+  }
+}
+
+export function AssumptionsList({ assumptions }: AssumptionsListProps) {
+  if (assumptions.length === 0) return null;
+
+  // Group by status for better organization
+  const validated = assumptions.filter(a => a.status === 'validated');
+  const pending = assumptions.filter(a => a.status === 'pending');
+  const atRisk = assumptions.filter(a => a.status === 'at-risk');
+
+  return (
+    <div 
+      className="avoid-break rounded-lg p-6"
+      style={{ 
+        backgroundColor: colors.white,
+        border: `1px solid ${colors.slate[200]}`,
+      }}
+    >
+      <div className="flex items-center gap-2 mb-4">
+        <div 
+          className="w-1 h-6 rounded-full"
+          style={{ backgroundColor: colors.navy }}
+        />
+        <h2 
+          className="text-lg font-semibold"
+          style={{ 
+            color: colors.navy,
+            fontFamily: typography.fontFamily.sans,
+            fontWeight: typography.fontWeight.semibold,
+          }}
+        >
+          Critical Assumptions
+        </h2>
+      </div>
+
+      <p 
+        className="text-sm mb-4"
+        style={{ color: colors.slate[500] }}
+      >
+        What you would have to believe for this investment to succeed
+      </p>
+
+      <div className="space-y-2">
+        {/* At Risk First (most important) */}
+        {atRisk.map((assumption, index) => (
+          <AssumptionItem key={`at-risk-${index}`} assumption={assumption} />
+        ))}
+        
+        {/* Pending */}
+        {pending.map((assumption, index) => (
+          <AssumptionItem key={`pending-${index}`} assumption={assumption} />
+        ))}
+        
+        {/* Validated Last */}
+        {validated.map((assumption, index) => (
+          <AssumptionItem key={`validated-${index}`} assumption={assumption} />
+        ))}
+      </div>
+
+      {/* Summary Stats */}
+      <div 
+        className="flex items-center gap-4 mt-4 pt-4"
+        style={{ borderTop: `1px solid ${colors.slate[200]}` }}
+      >
+        <div className="flex items-center gap-2">
+          <span 
+            className="w-2 h-2 rounded-full"
+            style={{ backgroundColor: colors.assumption.validated }}
+          />
+          <span className="text-xs" style={{ color: colors.slate[500] }}>
+            {validated.length} Validated
+          </span>
+        </div>
+        <div className="flex items-center gap-2">
+          <span 
+            className="w-2 h-2 rounded-full"
+            style={{ backgroundColor: colors.assumption.pending }}
+          />
+          <span className="text-xs" style={{ color: colors.slate[500] }}>
+            {pending.length} Pending
+          </span>
+        </div>
+        <div className="flex items-center gap-2">
+          <span 
+            className="w-2 h-2 rounded-full"
+            style={{ backgroundColor: colors.assumption.atRisk }}
+          />
+          <span className="text-xs" style={{ color: colors.slate[500] }}>
+            {atRisk.length} At Risk
+          </span>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function AssumptionItem({ assumption }: { assumption: CriticalAssumption }) {
+  const statusColor = getAssumptionColor(assumption.status);
+  const statusBgColor = getAssumptionBgColor(assumption.status);
+
+  return (
+    <div 
+      className="flex items-start gap-3 p-3 rounded-lg"
+      style={{ backgroundColor: statusBgColor }}
+    >
+      <div 
+        className="flex-shrink-0 mt-0.5"
+        style={{ color: statusColor }}
+      >
+        {getStatusIcon(assumption.status)}
+      </div>
+      <div className="flex-1 min-w-0">
+        <span 
+          className="text-sm leading-relaxed"
+          style={{ 
+            color: colors.slate[700],
+            lineHeight: typography.lineHeight.relaxed,
+          }}
+        >
+          {assumption.assumption}
+        </span>
+      </div>
+      <span 
+        className="flex-shrink-0 text-xs font-medium px-2 py-0.5 rounded"
+        style={{ 
+          color: statusColor,
+          backgroundColor: colors.white,
+        }}
+      >
+        {getStatusLabel(assumption.status)}
+      </span>
+    </div>
+  );
+}
+</file>
+
+<file path="components/infographic/ChapterSummaries.tsx">
+'use client';
+
+import { useState } from 'react';
+import { Chapters } from '@/lib/schema';
+import { colors, typography } from '@/lib/infographic-styles';
+
+interface ChapterSummariesProps {
+  chapters: Chapters;
+}
+
+type ChapterTab = 'team' | 'opportunity' | 'path' | 'operations';
+
+export function ChapterSummaries({ chapters }: ChapterSummariesProps) {
+  const [activeTab, setActiveTab] = useState<ChapterTab>('team');
+
+  const tabs: { id: ChapterTab; label: string }[] = [
+    { id: 'team', label: 'Team' },
+    { id: 'opportunity', label: 'Opportunity' },
+    { id: 'path', label: 'Path to Success' },
+    { id: 'operations', label: 'Operations' },
+  ];
+
+  return (
+    <div 
+      className="page-break-before rounded-lg overflow-hidden"
+      style={{ 
+        backgroundColor: colors.white,
+        border: `1px solid ${colors.slate[200]}`,
+      }}
+    >
+      <div className="flex items-center gap-2 p-6 pb-4">
+        <div 
+          className="w-1 h-6 rounded-full"
+          style={{ backgroundColor: colors.navy }}
+        />
+        <h2 
+          className="text-lg font-semibold"
+          style={{ 
+            color: colors.navy,
+            fontFamily: typography.fontFamily.sans,
+            fontWeight: typography.fontWeight.semibold,
+          }}
+        >
+          Detailed Analysis
+        </h2>
+      </div>
+
+      {/* Tabs */}
+      <div 
+        className="flex border-b px-6 no-print"
+        style={{ borderColor: colors.slate[200] }}
+      >
+        {tabs.map((tab) => (
+          <button
+            key={tab.id}
+            onClick={() => setActiveTab(tab.id)}
+            className="px-4 py-3 text-sm font-medium transition-colors relative"
+            style={{ 
+              color: activeTab === tab.id ? colors.navy : colors.slate[500],
+            }}
+          >
+            {tab.label}
+            {activeTab === tab.id && (
+              <div 
+                className="absolute bottom-0 left-0 right-0 h-0.5"
+                style={{ backgroundColor: colors.navy }}
+              />
+            )}
+          </button>
+        ))}
+      </div>
+
+      {/* Tab Content - Screen View */}
+      <div className="p-6 no-print">
+        {activeTab === 'team' && <TeamChapter team={chapters.team} />}
+        {activeTab === 'opportunity' && <OpportunityChapter opportunity={chapters.opportunityValidation} />}
+        {activeTab === 'path' && <PathChapter path={chapters.pathToSuccess} />}
+        {activeTab === 'operations' && <OperationsChapter operations={chapters.operations} />}
+      </div>
+
+      {/* Print View - Show All */}
+      <div className="p-6 print-only hidden print:block">
+        <div className="space-y-8">
+          <div>
+            <h3 
+              className="text-sm font-semibold uppercase tracking-wider mb-4"
+              style={{ color: colors.navy }}
+            >
+              Team Analysis
+            </h3>
+            <TeamChapter team={chapters.team} />
+          </div>
+          <div>
+            <h3 
+              className="text-sm font-semibold uppercase tracking-wider mb-4"
+              style={{ color: colors.navy }}
+            >
+              Opportunity Validation
+            </h3>
+            <OpportunityChapter opportunity={chapters.opportunityValidation} />
+          </div>
+          <div>
+            <h3 
+              className="text-sm font-semibold uppercase tracking-wider mb-4"
+              style={{ color: colors.navy }}
+            >
+              Path to Success
+            </h3>
+            <PathChapter path={chapters.pathToSuccess} />
+          </div>
+          <div>
+            <h3 
+              className="text-sm font-semibold uppercase tracking-wider mb-4"
+              style={{ color: colors.navy }}
+            >
+              Operations
+            </h3>
+            <OperationsChapter operations={chapters.operations} />
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function TeamChapter({ team }: { team: Chapters['team'] }) {
+  return (
+    <div className="space-y-4">
+      <Section title="Capability Assessment" content={team.capabilityAssessment} />
+      {team.identifiedGaps.length > 0 && (
+        <Section title="Identified Gaps" items={team.identifiedGaps} />
+      )}
+      {team.dataPoints.length > 0 && (
+        <DataPoints items={team.dataPoints} />
+      )}
+    </div>
+  );
+}
+
+function OpportunityChapter({ opportunity }: { opportunity: Chapters['opportunityValidation'] }) {
+  return (
+    <div className="space-y-4">
+      <Section title="Problem Statement" content={opportunity.problemStatement} />
+      <Section title="Market Size" content={opportunity.marketSize} />
+      <Section title="Competitive Positioning" content={opportunity.competitivePositioning} />
+      {opportunity.dataPoints.length > 0 && (
+        <DataPoints items={opportunity.dataPoints} />
+      )}
+    </div>
+  );
+}
+
+function PathChapter({ path }: { path: Chapters['pathToSuccess'] }) {
+  return (
+    <div className="space-y-4">
+      <Section title="Product Requirements" content={path.productRequirements} />
+      <Section title="Go-to-Market" content={path.goToMarket} />
+      <Section title="Revenue Model" content={path.revenueModel} />
+      {path.dataPoints.length > 0 && (
+        <DataPoints items={path.dataPoints} />
+      )}
+    </div>
+  );
+}
+
+function OperationsChapter({ operations }: { operations: Chapters['operations'] }) {
+  const metrics = [
+    { label: 'IRR', value: operations.irr },
+    { label: 'Payback Period', value: operations.paybackPeriod },
+    { label: 'Margins', value: operations.margins },
+  ].filter(m => m.value);
+
+  return (
+    <div className="space-y-4">
+      {metrics.length > 0 && (
+        <div 
+          className="grid grid-cols-3 gap-4 p-4 rounded-lg"
+          style={{ backgroundColor: colors.slate[50] }}
+        >
+          {metrics.map((metric, index) => (
+            <div key={index}>
+              <span 
+                className="text-xs font-medium uppercase tracking-wider block mb-1"
+                style={{ color: colors.slate[500] }}
+              >
+                {metric.label}
+              </span>
+              <span 
+                className="text-lg font-semibold"
+                style={{ color: colors.navy }}
+              >
+                {metric.value}
+              </span>
+            </div>
+          ))}
+        </div>
+      )}
+      {operations.operationalRisks.length > 0 && (
+        <Section title="Operational Risks" items={operations.operationalRisks} isWarning />
+      )}
+      {operations.dataPoints.length > 0 && (
+        <DataPoints items={operations.dataPoints} />
+      )}
+    </div>
+  );
+}
+
+function Section({ 
+  title, 
+  content, 
+  items, 
+  isWarning 
+}: { 
+  title: string; 
+  content?: string; 
+  items?: string[]; 
+  isWarning?: boolean;
+}) {
+  return (
+    <div>
+      <h4 
+        className="text-xs font-medium uppercase tracking-wider mb-2"
+        style={{ color: colors.slate[500] }}
+      >
+        {title}
+      </h4>
+      {content && (
+        <p 
+          className="text-sm leading-relaxed"
+          style={{ 
+            color: colors.slate[600],
+            lineHeight: typography.lineHeight.relaxed,
+          }}
+        >
+          {content}
+        </p>
+      )}
+      {items && items.length > 0 && (
+        <ul className="space-y-1">
+          {items.map((item, index) => (
+            <li 
+              key={index}
+              className="flex items-start gap-2 text-sm"
+            >
+              <span 
+                className="flex-shrink-0 mt-1.5 w-1.5 h-1.5 rounded-full"
+                style={{ backgroundColor: isWarning ? colors.risk.amber : colors.slate[400] }}
+              />
+              <span 
+                style={{ 
+                  color: colors.slate[600],
+                  lineHeight: typography.lineHeight.relaxed,
+                }}
+              >
+                {item}
+              </span>
+            </li>
+          ))}
+        </ul>
+      )}
+    </div>
+  );
+}
+
+function DataPoints({ items }: { items: string[] }) {
+  if (items.length === 0) return null;
+  
+  return (
+    <div 
+      className="p-3 rounded-lg"
+      style={{ backgroundColor: colors.slate[50] }}
+    >
+      <h4 
+        className="text-xs font-medium uppercase tracking-wider mb-2"
+        style={{ color: colors.slate[500] }}
+      >
+        Supporting Data
+      </h4>
+      <ul className="space-y-1">
+        {items.map((item, index) => (
+          <li 
+            key={index}
+            className="text-xs"
+            style={{ color: colors.slate[500] }}
+          >
+            • {item}
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+</file>
+
+<file path="components/infographic/ExecutiveNarrative.tsx">
+'use client';
+
+import { colors, typography } from '@/lib/infographic-styles';
+
+interface ExecutiveNarrativeProps {
+  narrative: string;
+}
+
+export function ExecutiveNarrative({ narrative }: ExecutiveNarrativeProps) {
+  if (!narrative) return null;
+
+  return (
+    <div 
+      className="avoid-break rounded-lg p-6"
+      style={{ 
+        backgroundColor: colors.slate[50],
+        borderLeft: `4px solid ${colors.navy}`,
+      }}
+    >
+      <div className="flex items-center gap-2 mb-3">
+        <svg 
+          className="w-5 h-5" 
+          fill="none" 
+          stroke="currentColor" 
+          viewBox="0 0 24 24"
+          style={{ color: colors.navy }}
+        >
+          <path 
+            strokeLinecap="round" 
+            strokeLinejoin="round" 
+            strokeWidth={2} 
+            d="M11 5.882V19.24a1.76 1.76 0 01-3.417.592l-2.147-6.15M18 13a3 3 0 100-6M5.436 13.683A4.001 4.001 0 017 6h1.832c4.1 0 7.625-1.234 9.168-3v14c-1.543-1.766-5.067-3-9.168-3H7a3.988 3.988 0 01-1.564-.317z" 
+          />
+        </svg>
+        <h2 
+          className="text-sm font-semibold uppercase tracking-wider"
+          style={{ 
+            color: colors.navy,
+            fontFamily: typography.fontFamily.sans,
+            fontWeight: typography.fontWeight.semibold,
+          }}
+        >
+          Executive Summary
+        </h2>
+        <span 
+          className="text-xs px-2 py-0.5 rounded-full ml-auto"
+          style={{ 
+            backgroundColor: colors.navy,
+            color: colors.white,
+          }}
+        >
+          AI Generated
+        </span>
+      </div>
+      
+      <p 
+        className="text-base leading-relaxed"
+        style={{ 
+          color: colors.slate[700],
+          lineHeight: typography.lineHeight.relaxed,
+          fontStyle: 'italic',
+        }}
+      >
+        &ldquo;{narrative}&rdquo;
+      </p>
+    </div>
+  );
+}
+</file>
+
+<file path="components/infographic/HeaderBanner.tsx">
+'use client';
+
+import { colors } from '@/lib/infographic-styles';
+
+interface HeaderBannerProps {
+  imageUrl?: string;
+  projectName: string;
+  industry: string;
+}
+
+export function HeaderBanner({ imageUrl, projectName, industry }: HeaderBannerProps) {
+  if (!imageUrl) return null;
+
+  return (
+    <div 
+      className="w-full h-48 rounded-t-lg relative overflow-hidden"
+      style={{ backgroundColor: colors.slate[100] }}
+    >
+      <img
+        src={imageUrl}
+        alt={`${projectName} - ${industry}`}
+        className="w-full h-full object-cover"
+        onError={(e) => {
+          // Hide the banner if image fails to load
+          (e.target as HTMLElement).parentElement!.style.display = 'none';
+        }}
+      />
+      {/* Gradient overlay for text readability */}
+      <div 
+        className="absolute inset-0"
+        style={{ 
+          background: `linear-gradient(to bottom, transparent 50%, ${colors.navy}99 100%)`,
+        }}
+      />
+    </div>
+  );
+}
+</file>
+
+<file path="components/infographic/HighlightCards.tsx">
+'use client';
+
+import { Highlight } from '@/lib/schema';
+import { colors, typography } from '@/lib/infographic-styles';
+
+interface HighlightCardsProps {
+  highlights: Highlight[];
+}
+
+export function HighlightCards({ highlights }: HighlightCardsProps) {
+  if (highlights.length === 0) return null;
+
+  return (
+    <div className="avoid-break">
+      <div className="flex items-center gap-2 mb-4">
+        <div 
+          className="w-1 h-6 rounded-full"
+          style={{ backgroundColor: colors.navy }}
+        />
+        <h2 
+          className="text-lg font-semibold"
+          style={{ 
+            color: colors.navy,
+            fontFamily: typography.fontFamily.sans,
+            fontWeight: typography.fontWeight.semibold,
+          }}
+        >
+          Key Highlights
+        </h2>
+      </div>
+
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        {highlights.map((highlight, index) => (
+          <div
+            key={index}
+            className="rounded-lg p-4"
+            style={{ 
+              backgroundColor: colors.white,
+              border: `1px solid ${colors.slate[200]}`,
+            }}
+          >
+            {/* Metric Name */}
+            <span 
+              className="text-xs font-medium uppercase tracking-wider block mb-2"
+              style={{ color: colors.slate[500] }}
+            >
+              {highlight.metric}
+            </span>
+            
+            {/* Value */}
+            <span 
+              className="text-2xl font-bold block mb-2"
+              style={{ 
+                color: colors.navy,
+                fontWeight: typography.fontWeight.bold,
+              }}
+            >
+              {highlight.value}
+            </span>
+            
+            {/* Context */}
+            <span 
+              className="text-sm leading-relaxed"
+              style={{ 
+                color: colors.slate[500],
+                lineHeight: typography.lineHeight.relaxed,
+              }}
+            >
+              {highlight.context}
+            </span>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+</file>
+
+<file path="components/infographic/index.ts">
+/**
+ * Infographic Components Barrel Export
+ * 
+ * All components for rendering investment memo infographics.
+ */
+
+export { InfographicContainer } from './InfographicContainer';
+export { InfographicHeader } from './InfographicHeader';
+export { VerdictCard } from './VerdictCard';
+export { SixTRadar } from './SixTRadar';
+export { HighlightCards } from './HighlightCards';
+export { AssumptionsList } from './AssumptionsList';
+export { VerdictPair } from './VerdictPair';
+export { NextStepsTimeline } from './NextStepsTimeline';
+export { ChapterSummaries } from './ChapterSummaries';
+export { ExecutiveNarrative } from './ExecutiveNarrative';
+export { HeaderBanner } from './HeaderBanner';
+</file>
+
+<file path="components/infographic/InfographicContainer.tsx">
+'use client';
+
+import { useRef } from 'react';
+import { ExtractionResult } from '@/lib/schema';
+import { colors, typography } from '@/lib/infographic-styles';
+import { InfographicHeader } from './InfographicHeader';
+import { ExecutiveNarrative } from './ExecutiveNarrative';
+import { VerdictCard } from './VerdictCard';
+import { SixTRadar } from './SixTRadar';
+import { HighlightCards } from './HighlightCards';
+import { AssumptionsList } from './AssumptionsList';
+import { VerdictPair } from './VerdictPair';
+import { NextStepsTimeline } from './NextStepsTimeline';
+import { ChapterSummaries } from './ChapterSummaries';
+
+interface InfographicContainerProps {
+  data: ExtractionResult;
+  narrative?: string;
+  headerImage?: string;
+  onCopyHtml?: () => void;
+}
+
+export function InfographicContainer({ 
+  data, 
+  narrative, 
+  headerImage,
+  onCopyHtml,
+}: InfographicContainerProps) {
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  const handlePrint = () => {
+    window.print();
+  };
+
+  const handleCopyHtml = () => {
+    if (containerRef.current) {
+      const html = containerRef.current.outerHTML;
+      navigator.clipboard.writeText(html).then(() => {
+        onCopyHtml?.();
+      });
+    }
+  };
+
+  return (
+    <div className="w-full">
+      {/* Action Buttons - Hidden in Print */}
+      <div className="flex items-center justify-between mb-6 no-print">
+        <div className="flex items-center gap-2">
+          <span 
+            className="text-sm font-medium"
+            style={{ color: colors.slate[600] }}
+          >
+            Investment Infographic
+          </span>
+          <span 
+            className="text-xs px-2 py-0.5 rounded"
+            style={{ 
+              backgroundColor: colors.slate[100],
+              color: colors.slate[500],
+            }}
+          >
+            Confidence: {data.confidence}%
+          </span>
+        </div>
+        <div className="flex items-center gap-2">
+          <button
+            onClick={handleCopyHtml}
+            className="flex items-center gap-2 px-3 py-2 text-sm font-medium rounded-lg transition-colors"
+            style={{ 
+              backgroundColor: colors.white,
+              border: `1px solid ${colors.slate[300]}`,
+              color: colors.slate[700],
+            }}
+          >
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+            </svg>
+            Copy HTML
+          </button>
+          <button
+            onClick={handlePrint}
+            className="flex items-center gap-2 px-3 py-2 text-sm font-medium rounded-lg transition-colors"
+            style={{ 
+              backgroundColor: colors.navy,
+              color: colors.white,
+            }}
+          >
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
+            </svg>
+            Download as PDF
+          </button>
+        </div>
+      </div>
+
+      {/* Infographic Content */}
+      <div 
+        ref={containerRef}
+        className="infographic rounded-lg overflow-hidden"
+        style={{ 
+          backgroundColor: colors.white,
+          fontFamily: typography.fontFamily.sans,
+        }}
+      >
+        {/* Page 1: Header, Summary, Radar, Highlights */}
+        <div className="infographic-page-1">
+          {/* Header with optional banner image */}
+          <InfographicHeader 
+            metadata={data.metadata} 
+            headerImage={headerImage}
+          />
+
+          {/* Optional AI Narrative */}
+          {narrative && (
+            <div className="p-6 pt-0">
+              <div className="mt-6">
+                <ExecutiveNarrative narrative={narrative} />
+              </div>
+            </div>
+          )}
+
+          {/* Main Content Grid */}
+          <div className="p-6 space-y-6">
+            {/* Executive Summary */}
+            <VerdictCard executiveSummary={data.executiveSummary} />
+
+            {/* Strategic Fit */}
+            <div 
+              className="avoid-break rounded-lg p-4"
+              style={{ 
+                backgroundColor: colors.slate[50],
+                border: `1px solid ${colors.slate[200]}`,
+              }}
+            >
+              <div className="flex items-center justify-between">
+                <div>
+                  <span 
+                    className="text-xs font-medium uppercase tracking-wider block mb-1"
+                    style={{ color: colors.slate[500] }}
+                  >
+                    Strategic Fit Assessment
+                  </span>
+                  <p 
+                    className="text-sm"
+                    style={{ color: colors.slate[700] }}
+                  >
+                    {data.strategicFit.assessment}
+                  </p>
+                </div>
+                <span 
+                  className="px-3 py-1 rounded-full text-xs font-medium flex-shrink-0 ml-4"
+                  style={{ 
+                    backgroundColor: data.strategicFit.confidenceLevel === 'High' 
+                      ? colors.risk.greenLight 
+                      : data.strategicFit.confidenceLevel === 'Medium'
+                        ? colors.risk.amberLight
+                        : colors.risk.redLight,
+                    color: data.strategicFit.confidenceLevel === 'High' 
+                      ? colors.risk.green 
+                      : data.strategicFit.confidenceLevel === 'Medium'
+                        ? colors.risk.amber
+                        : colors.risk.red,
+                  }}
+                >
+                  {data.strategicFit.confidenceLevel} Confidence
+                </span>
+              </div>
+            </div>
+
+            {/* Six-T Radar */}
+            <SixTRadar risks={data.sixTRisks} />
+
+            {/* Highlights */}
+            <HighlightCards highlights={data.highlights} />
+          </div>
+        </div>
+
+        {/* Page 2: Assumptions, Verdicts, Next Steps, Chapters */}
+        <div className="infographic-page-2 page-break-before">
+          <div className="p-6 space-y-6">
+            {/* Critical Assumptions */}
+            <AssumptionsList assumptions={data.criticalAssumptions} />
+
+            {/* Verdict Pair */}
+            <VerdictPair 
+              shouldWeDoIt={data.shouldWeDoIt} 
+              canWeDoIt={data.canWeDoIt} 
+            />
+
+            {/* Next Steps */}
+            <NextStepsTimeline nextSteps={data.nextSteps} />
+
+            {/* Chapter Summaries */}
+            <ChapterSummaries chapters={data.chapters} />
+          </div>
+        </div>
+
+        {/* Footer */}
+        <div 
+          className="px-6 py-4 mt-6"
+          style={{ 
+            backgroundColor: colors.slate[50],
+            borderTop: `1px solid ${colors.slate[200]}`,
+          }}
+        >
+          <div className="flex items-center justify-between text-xs" style={{ color: colors.slate[500] }}>
+            <span>Generated by The Olsenator — Innovera Investment Analysis Platform</span>
+            <span>{new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+</file>
+
+<file path="components/infographic/InfographicHeader.tsx">
+'use client';
+
+import { ProjectMetadata } from '@/lib/schema';
+import { colors, typography, getDecisionColor, getDecisionBgColor } from '@/lib/infographic-styles';
+
+interface InfographicHeaderProps {
+  metadata: ProjectMetadata;
+  headerImage?: string;
+}
+
+export function InfographicHeader({ metadata, headerImage }: InfographicHeaderProps) {
+  const decisionColor = getDecisionColor(metadata.decision);
+  const decisionBgColor = getDecisionBgColor(metadata.decision);
+
+  return (
+    <div className="infographic-header avoid-break">
+      {/* Optional AI-generated header image */}
+      {headerImage && (
+        <div 
+          className="w-full h-32 bg-cover bg-center rounded-t-lg"
+          style={{ 
+            backgroundImage: `url(${headerImage})`,
+            backgroundColor: colors.slate[100],
+          }}
+        />
+      )}
+      
+      <div 
+        className="p-6 rounded-lg"
+        style={{ 
+          backgroundColor: colors.navy,
+          borderTopLeftRadius: headerImage ? 0 : undefined,
+          borderTopRightRadius: headerImage ? 0 : undefined,
+        }}
+      >
+        <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4">
+          {/* Project Info */}
+          <div className="flex-1">
+            <h1 
+              className="text-3xl font-bold mb-2"
+              style={{ 
+                color: colors.white,
+                fontFamily: typography.fontFamily.sans,
+                fontWeight: typography.fontWeight.bold,
+              }}
+            >
+              {metadata.projectName}
+            </h1>
+            
+            <div className="flex flex-wrap items-center gap-3 mt-3">
+              {/* Stage Badge */}
+              <span 
+                className="px-3 py-1 rounded-full text-sm font-medium"
+                style={{ 
+                  backgroundColor: 'rgba(255, 255, 255, 0.15)',
+                  color: colors.white,
+                }}
+              >
+                {metadata.stage}
+              </span>
+              
+              {/* Industry */}
+              <span 
+                className="text-sm"
+                style={{ color: colors.slate[300] }}
+              >
+                {metadata.industry}
+              </span>
+              
+              {/* Location */}
+              {metadata.location && (
+                <>
+                  <span style={{ color: colors.slate[500] }}>•</span>
+                  <span 
+                    className="text-sm"
+                    style={{ color: colors.slate[300] }}
+                  >
+                    {metadata.location}
+                  </span>
+                </>
+              )}
+            </div>
+          </div>
+          
+          {/* Decision Indicator */}
+          <div 
+            className="flex flex-col items-center justify-center px-6 py-4 rounded-lg min-w-[160px]"
+            style={{ backgroundColor: decisionBgColor }}
+          >
+            <span 
+              className="text-xs font-medium uppercase tracking-wider mb-1"
+              style={{ color: colors.slate[500] }}
+            >
+              Recommendation
+            </span>
+            <span 
+              className="text-lg font-bold"
+              style={{ 
+                color: decisionColor,
+                fontWeight: typography.fontWeight.bold,
+              }}
+            >
+              {metadata.decision}
+            </span>
+          </div>
+        </div>
+        
+        {/* Recommendation Text */}
+        {metadata.recommendation && (
+          <p 
+            className="mt-4 text-sm leading-relaxed"
+            style={{ 
+              color: colors.slate[300],
+              lineHeight: typography.lineHeight.relaxed,
+            }}
+          >
+            {metadata.recommendation}
+          </p>
+        )}
+      </div>
+    </div>
+  );
+}
+</file>
+
+<file path="components/infographic/NextStepsTimeline.tsx">
+'use client';
+
+import { NextStep } from '@/lib/schema';
+import { colors, typography } from '@/lib/infographic-styles';
+
+interface NextStepsTimelineProps {
+  nextSteps: NextStep[];
+}
+
+export function NextStepsTimeline({ nextSteps }: NextStepsTimelineProps) {
+  if (nextSteps.length === 0) return null;
+
+  return (
+    <div 
+      className="avoid-break rounded-lg p-6"
+      style={{ 
+        backgroundColor: colors.white,
+        border: `1px solid ${colors.slate[200]}`,
+      }}
+    >
+      <div className="flex items-center gap-2 mb-4">
+        <div 
+          className="w-1 h-6 rounded-full"
+          style={{ backgroundColor: colors.navy }}
+        />
+        <h2 
+          className="text-lg font-semibold"
+          style={{ 
+            color: colors.navy,
+            fontFamily: typography.fontFamily.sans,
+            fontWeight: typography.fontWeight.semibold,
+          }}
+        >
+          Recommended Next Steps
+        </h2>
+      </div>
+
+      <div className="relative">
+        {nextSteps.map((step, index) => (
+          <div 
+            key={index}
+            className="relative pl-8 pb-6 last:pb-0"
+          >
+            {/* Timeline Line */}
+            {index < nextSteps.length - 1 && (
+              <div 
+                className="absolute left-3 top-6 bottom-0 w-0.5"
+                style={{ backgroundColor: colors.slate[200] }}
+              />
+            )}
+            
+            {/* Timeline Node */}
+            <div 
+              className="absolute left-0 top-0 w-6 h-6 rounded-full flex items-center justify-center text-xs font-semibold"
+              style={{ 
+                backgroundColor: colors.navy,
+                color: colors.white,
+              }}
+            >
+              {index + 1}
+            </div>
+
+            {/* Content */}
+            <div 
+              className="rounded-lg p-4 ml-2"
+              style={{ backgroundColor: colors.slate[50] }}
+            >
+              {/* Action */}
+              <h4 
+                className="text-sm font-semibold mb-2"
+                style={{ 
+                  color: colors.slate[700],
+                  fontWeight: typography.fontWeight.semibold,
+                }}
+              >
+                {step.action}
+              </h4>
+
+              {/* Rationale */}
+              {step.rationale && (
+                <p 
+                  className="text-sm mb-3"
+                  style={{ 
+                    color: colors.slate[600],
+                    lineHeight: typography.lineHeight.relaxed,
+                  }}
+                >
+                  {step.rationale}
+                </p>
+              )}
+
+              {/* Success Gate */}
+              <div 
+                className="flex items-start gap-2 pt-2"
+                style={{ borderTop: `1px solid ${colors.slate[200]}` }}
+              >
+                <svg 
+                  className="w-4 h-4 flex-shrink-0 mt-0.5" 
+                  fill="none" 
+                  stroke="currentColor" 
+                  viewBox="0 0 24 24"
+                  style={{ color: colors.risk.green }}
+                >
+                  <path 
+                    strokeLinecap="round" 
+                    strokeLinejoin="round" 
+                    strokeWidth={2} 
+                    d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" 
+                  />
+                </svg>
+                <div>
+                  <span 
+                    className="text-xs font-medium uppercase tracking-wider block mb-0.5"
+                    style={{ color: colors.slate[500] }}
+                  >
+                    Success Gate
+                  </span>
+                  <span 
+                    className="text-sm"
+                    style={{ color: colors.slate[600] }}
+                  >
+                    {step.successGate}
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+</file>
+
+<file path="components/infographic/SixTRadar.tsx">
+'use client';
+
+import { SixTRisks, RiskRating } from '@/lib/schema';
+import { colors, typography, radarConfig, getRiskColor } from '@/lib/infographic-styles';
+
+interface SixTRadarProps {
+  risks: SixTRisks;
+}
+
+// Calculate point on hexagon at given angle and radius
+function getPoint(centerX: number, centerY: number, angle: number, radius: number): { x: number; y: number } {
+  // Offset by -90 degrees so first axis points up
+  const adjustedAngle = angle - Math.PI / 2;
+  return {
+    x: centerX + radius * Math.cos(adjustedAngle),
+    y: centerY + radius * Math.sin(adjustedAngle),
+  };
+}
+
+// Generate hexagon path
+function generateHexagonPath(centerX: number, centerY: number, radius: number): string {
+  const points: { x: number; y: number }[] = [];
+  for (let i = 0; i < 6; i++) {
+    const angle = (i * Math.PI * 2) / 6;
+    points.push(getPoint(centerX, centerY, angle, radius));
+  }
+  return points.map((p, i) => `${i === 0 ? 'M' : 'L'} ${p.x} ${p.y}`).join(' ') + ' Z';
+}
+
+// Generate radar polygon based on ratings
+function generateRadarPolygon(
+  centerX: number, 
+  centerY: number, 
+  maxRadius: number, 
+  ratings: RiskRating[]
+): string {
+  const points: { x: number; y: number }[] = [];
+  for (let i = 0; i < 6; i++) {
+    const angle = (i * Math.PI * 2) / 6;
+    const rating = ratings[i];
+    const radiusMultiplier = radarConfig.ratingToRadius[rating];
+    const radius = maxRadius * radiusMultiplier;
+    points.push(getPoint(centerX, centerY, angle, radius));
+  }
+  return points.map((p, i) => `${i === 0 ? 'M' : 'L'} ${p.x} ${p.y}`).join(' ') + ' Z';
+}
+
+export function SixTRadar({ risks }: SixTRadarProps) {
+  const { size, centerX, centerY, maxRadius, axes } = radarConfig;
+  
+  // Map risks to array in correct order
+  const riskEntries: { name: string; rating: RiskRating; summary: string }[] = [
+    { name: 'Team', rating: risks.team.rating, summary: risks.team.summary },
+    { name: 'TAM', rating: risks.tam.rating, summary: risks.tam.summary },
+    { name: 'Technology', rating: risks.technology.rating, summary: risks.technology.summary },
+    { name: 'Traction', rating: risks.traction.rating, summary: risks.traction.summary },
+    { name: 'Terms', rating: risks.terms.rating, summary: risks.terms.summary },
+    { name: 'Trends', rating: risks.trends.rating, summary: risks.trends.summary },
+  ];
+  
+  const ratings = riskEntries.map(r => r.rating);
+  
+  // Calculate label positions (slightly outside the hexagon)
+  const labelRadius = maxRadius + 30;
+  const labelPositions = axes.map((_, i) => {
+    const angle = (i * Math.PI * 2) / 6;
+    return getPoint(centerX, centerY, angle, labelRadius);
+  });
+
+  return (
+    <div 
+      className="avoid-break rounded-lg p-6"
+      style={{ 
+        backgroundColor: colors.white,
+        border: `1px solid ${colors.slate[200]}`,
+      }}
+    >
+      <div className="flex items-center gap-2 mb-4">
+        <div 
+          className="w-1 h-6 rounded-full"
+          style={{ backgroundColor: colors.navy }}
+        />
+        <h2 
+          className="text-lg font-semibold"
+          style={{ 
+            color: colors.navy,
+            fontFamily: typography.fontFamily.sans,
+            fontWeight: typography.fontWeight.semibold,
+          }}
+        >
+          Six-T Risk Analysis
+        </h2>
+      </div>
+
+      <div className="flex flex-col lg:flex-row items-center gap-6">
+        {/* SVG Radar Chart */}
+        <div className="relative flex-shrink-0">
+          <svg 
+            width={size} 
+            height={size} 
+            viewBox={`0 0 ${size} ${size}`}
+            className="overflow-visible"
+          >
+            {/* Background hexagons (grid lines) */}
+            {[1, 0.6, 0.3].map((scale, i) => (
+              <path
+                key={i}
+                d={generateHexagonPath(centerX, centerY, maxRadius * scale)}
+                fill="none"
+                stroke={colors.slate[200]}
+                strokeWidth={1}
+              />
+            ))}
+            
+            {/* Axis lines */}
+            {axes.map((_, i) => {
+              const angle = (i * Math.PI * 2) / 6;
+              const endPoint = getPoint(centerX, centerY, angle, maxRadius);
+              return (
+                <line
+                  key={i}
+                  x1={centerX}
+                  y1={centerY}
+                  x2={endPoint.x}
+                  y2={endPoint.y}
+                  stroke={colors.slate[200]}
+                  strokeWidth={1}
+                />
+              );
+            })}
+            
+            {/* Radar fill polygon */}
+            <path
+              d={generateRadarPolygon(centerX, centerY, maxRadius, ratings)}
+              fill={colors.navy}
+              fillOpacity={0.15}
+              stroke={colors.navy}
+              strokeWidth={2}
+            />
+            
+            {/* Data points with color indicators */}
+            {riskEntries.map((entry, i) => {
+              const angle = (i * Math.PI * 2) / 6;
+              const radiusMultiplier = radarConfig.ratingToRadius[entry.rating];
+              const radius = maxRadius * radiusMultiplier;
+              const point = getPoint(centerX, centerY, angle, radius);
+              const riskColor = getRiskColor(entry.rating);
+              
+              return (
+                <g key={i}>
+                  {/* Outer ring */}
+                  <circle
+                    cx={point.x}
+                    cy={point.y}
+                    r={10}
+                    fill={colors.white}
+                    stroke={riskColor}
+                    strokeWidth={3}
+                  />
+                  {/* Inner dot */}
+                  <circle
+                    cx={point.x}
+                    cy={point.y}
+                    r={4}
+                    fill={riskColor}
+                  />
+                </g>
+              );
+            })}
+            
+            {/* Axis labels */}
+            {axes.map((label, i) => {
+              const pos = labelPositions[i];
+              // Determine text anchor based on position
+              let textAnchor: 'start' | 'middle' | 'end' = 'middle';
+              if (i === 1 || i === 2) textAnchor = 'start';
+              if (i === 4 || i === 5) textAnchor = 'end';
+              
+              return (
+                <text
+                  key={i}
+                  x={pos.x}
+                  y={pos.y}
+                  textAnchor={textAnchor}
+                  dominantBaseline="middle"
+                  fill={colors.slate[600]}
+                  fontSize="12"
+                  fontWeight="500"
+                  fontFamily={typography.fontFamily.sans}
+                >
+                  {label}
+                </text>
+              );
+            })}
+          </svg>
+        </div>
+        
+        {/* Risk Summaries */}
+        <div className="flex-1 grid grid-cols-1 sm:grid-cols-2 gap-3">
+          {riskEntries.map((entry, i) => {
+            const riskColor = getRiskColor(entry.rating);
+            return (
+              <div 
+                key={i}
+                className="flex items-start gap-3 p-3 rounded-lg"
+                style={{ backgroundColor: colors.slate[50] }}
+              >
+                <div 
+                  className="flex-shrink-0 w-3 h-3 rounded-full mt-1"
+                  style={{ backgroundColor: riskColor }}
+                />
+                <div>
+                  <span 
+                    className="text-sm font-medium block"
+                    style={{ color: colors.slate[700] }}
+                  >
+                    {entry.name}
+                  </span>
+                  <span 
+                    className="text-xs leading-relaxed"
+                    style={{ color: colors.slate[500] }}
+                  >
+                    {entry.summary}
+                  </span>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+      
+      {/* Legend */}
+      <div 
+        className="flex items-center justify-center gap-6 mt-6 pt-4"
+        style={{ borderTop: `1px solid ${colors.slate[200]}` }}
+      >
+        <div className="flex items-center gap-2">
+          <div 
+            className="w-3 h-3 rounded-full"
+            style={{ backgroundColor: colors.risk.green }}
+          />
+          <span className="text-xs" style={{ color: colors.slate[500] }}>Low Risk</span>
+        </div>
+        <div className="flex items-center gap-2">
+          <div 
+            className="w-3 h-3 rounded-full"
+            style={{ backgroundColor: colors.risk.amber }}
+          />
+          <span className="text-xs" style={{ color: colors.slate[500] }}>Medium Risk</span>
+        </div>
+        <div className="flex items-center gap-2">
+          <div 
+            className="w-3 h-3 rounded-full"
+            style={{ backgroundColor: colors.risk.red }}
+          />
+          <span className="text-xs" style={{ color: colors.slate[500] }}>High Risk</span>
+        </div>
+      </div>
+    </div>
+  );
+}
+</file>
+
+<file path="components/infographic/VerdictCard.tsx">
+'use client';
+
+import { ExecutiveSummary } from '@/lib/schema';
+import { colors, typography, spacing } from '@/lib/infographic-styles';
+
+interface VerdictCardProps {
+  executiveSummary: ExecutiveSummary;
+}
+
+export function VerdictCard({ executiveSummary }: VerdictCardProps) {
+  return (
+    <div 
+      className="avoid-break rounded-lg p-6"
+      style={{ 
+        backgroundColor: colors.white,
+        border: `1px solid ${colors.slate[200]}`,
+      }}
+    >
+      <div className="flex items-center gap-2 mb-4">
+        <div 
+          className="w-1 h-6 rounded-full"
+          style={{ backgroundColor: colors.navy }}
+        />
+        <h2 
+          className="text-lg font-semibold"
+          style={{ 
+            color: colors.navy,
+            fontFamily: typography.fontFamily.sans,
+            fontWeight: typography.fontWeight.semibold,
+          }}
+        >
+          Tell It To Me Straight
+        </h2>
+      </div>
+      
+      {/* Main Verdict */}
+      <p 
+        className="text-xl font-medium leading-relaxed mb-6"
+        style={{ 
+          color: colors.slate[700],
+          fontWeight: typography.fontWeight.medium,
+          lineHeight: typography.lineHeight.relaxed,
+        }}
+      >
+        {executiveSummary.verdict}
+      </p>
+      
+      {/* Core Reasoning Points */}
+      {executiveSummary.coreReasoning.length > 0 && (
+        <div>
+          <h3 
+            className="text-sm font-medium uppercase tracking-wider mb-3"
+            style={{ color: colors.slate[500] }}
+          >
+            Key Takeaways
+          </h3>
+          <ul className="space-y-2">
+            {executiveSummary.coreReasoning.map((reason, index) => (
+              <li 
+                key={index}
+                className="flex items-start gap-3"
+              >
+                <span 
+                  className="flex-shrink-0 w-5 h-5 rounded-full flex items-center justify-center text-xs font-medium mt-0.5"
+                  style={{ 
+                    backgroundColor: colors.slate[100],
+                    color: colors.slate[600],
+                  }}
+                >
+                  {index + 1}
+                </span>
+                <span 
+                  className="text-sm leading-relaxed"
+                  style={{ 
+                    color: colors.slate[600],
+                    lineHeight: typography.lineHeight.relaxed,
+                  }}
+                >
+                  {reason}
+                </span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+    </div>
+  );
+}
+</file>
+
+<file path="components/infographic/VerdictPair.tsx">
+'use client';
+
+import { Verdict } from '@/lib/schema';
+import { colors, typography, getConfidenceColor } from '@/lib/infographic-styles';
+
+interface VerdictPairProps {
+  shouldWeDoIt: Verdict;
+  canWeDoIt: Verdict;
+}
+
+export function VerdictPair({ shouldWeDoIt, canWeDoIt }: VerdictPairProps) {
+  return (
+    <div className="avoid-break">
+      <div className="flex items-center gap-2 mb-4">
+        <div 
+          className="w-1 h-6 rounded-full"
+          style={{ backgroundColor: colors.navy }}
+        />
+        <h2 
+          className="text-lg font-semibold"
+          style={{ 
+            color: colors.navy,
+            fontFamily: typography.fontFamily.sans,
+            fontWeight: typography.fontWeight.semibold,
+          }}
+        >
+          Investment Assessment
+        </h2>
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <VerdictPanel 
+          title="Should We Do It?" 
+          verdict={shouldWeDoIt}
+          icon={
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+          }
+        />
+        <VerdictPanel 
+          title="Can We Do It?" 
+          verdict={canWeDoIt}
+          icon={
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+            </svg>
+          }
+        />
+      </div>
+    </div>
+  );
+}
+
+interface VerdictPanelProps {
+  title: string;
+  verdict: Verdict;
+  icon: React.ReactNode;
+}
+
+function VerdictPanel({ title, verdict, icon }: VerdictPanelProps) {
+  const confidenceColor = getConfidenceColor(verdict.confidenceLevel);
+
+  return (
+    <div 
+      className="rounded-lg p-5"
+      style={{ 
+        backgroundColor: colors.white,
+        border: `1px solid ${colors.slate[200]}`,
+      }}
+    >
+      {/* Header */}
+      <div className="flex items-center justify-between mb-4">
+        <div className="flex items-center gap-2">
+          <span style={{ color: colors.navy }}>{icon}</span>
+          <h3 
+            className="text-sm font-semibold"
+            style={{ 
+              color: colors.navy,
+              fontWeight: typography.fontWeight.semibold,
+            }}
+          >
+            {title}
+          </h3>
+        </div>
+        
+        {/* Confidence Badge */}
+        <span 
+          className="px-2 py-1 rounded text-xs font-medium"
+          style={{ 
+            backgroundColor: `${confidenceColor}15`,
+            color: confidenceColor,
+          }}
+        >
+          {verdict.confidenceLevel} Confidence
+        </span>
+      </div>
+
+      {/* Verdict */}
+      <p 
+        className="text-base font-medium mb-4"
+        style={{ 
+          color: colors.slate[700],
+          fontWeight: typography.fontWeight.medium,
+          lineHeight: typography.lineHeight.relaxed,
+        }}
+      >
+        {verdict.verdict}
+      </p>
+
+      {/* Supporting Factors */}
+      {verdict.supportingFactors.length > 0 && (
+        <div>
+          <h4 
+            className="text-xs font-medium uppercase tracking-wider mb-2"
+            style={{ color: colors.slate[500] }}
+          >
+            Supporting Factors
+          </h4>
+          <ul className="space-y-2">
+            {verdict.supportingFactors.map((factor, index) => (
+              <li 
+                key={index}
+                className="flex items-start gap-2 text-sm"
+              >
+                <span 
+                  className="flex-shrink-0 mt-1.5 w-1.5 h-1.5 rounded-full"
+                  style={{ backgroundColor: colors.slate[400] }}
+                />
+                <span 
+                  style={{ 
+                    color: colors.slate[600],
+                    lineHeight: typography.lineHeight.relaxed,
+                  }}
+                >
+                  {factor}
+                </span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+    </div>
+  );
+}
+</file>
+
+<file path="lib/infographic-styles.ts">
+/**
+ * Design System for Infographic Rendering
+ * 
+ * Strict design system for visual consistency across all generated infographics.
+ * Optimized for both screen viewing and print-to-PDF output.
+ */
+
+export const colors = {
+  // Primary colors
+  navy: '#1e293b',
+  white: '#ffffff',
+  
+  // Slate hierarchy for text
+  slate: {
+    900: '#0f172a',  // Darkest headings
+    700: '#334155',  // Primary body text
+    600: '#475569',  // Secondary body text
+    500: '#64748b',  // Tertiary text
+    400: '#94a3b8',  // Muted text
+    300: '#cbd5e1',  // Borders
+    200: '#e2e8f0',  // Light borders
+    100: '#f1f5f9',  // Background accent
+    50: '#f8fafc',   // Lightest background
+  },
+  
+  // Risk indicator colors (Six-T)
+  risk: {
+    red: '#ef4444',
+    redLight: '#fef2f2',
+    redBorder: '#fecaca',
+    amber: '#f59e0b',
+    amberLight: '#fffbeb',
+    amberBorder: '#fde68a',
+    green: '#22c55e',
+    greenLight: '#f0fdf4',
+    greenBorder: '#bbf7d0',
+  },
+  
+  // Confidence level colors
+  confidence: {
+    high: '#22c55e',
+    medium: '#f59e0b',
+    low: '#ef4444',
+  },
+  
+  // Decision colors
+  decision: {
+    proceed: '#22c55e',
+    proceedBg: '#f0fdf4',
+    conditional: '#f59e0b',
+    conditionalBg: '#fffbeb',
+    doNotProceed: '#ef4444',
+    doNotProceedBg: '#fef2f2',
+  },
+  
+  // Assumption status colors
+  assumption: {
+    validated: '#22c55e',
+    validatedBg: '#f0fdf4',
+    pending: '#f59e0b',
+    pendingBg: '#fffbeb',
+    atRisk: '#ef4444',
+    atRiskBg: '#fef2f2',
+  },
+} as const;
+
+export const spacing = {
+  xs: 4,
+  sm: 8,
+  md: 16,
+  lg: 24,
+  xl: 32,
+  '2xl': 48,
+  '3xl': 64,
+} as const;
+
+export const typography = {
+  fontFamily: {
+    sans: 'Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
+    mono: 'ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace',
+  },
+  fontSize: {
+    xs: '0.75rem',     // 12px
+    sm: '0.875rem',    // 14px
+    base: '1rem',      // 16px
+    lg: '1.125rem',    // 18px
+    xl: '1.25rem',     // 20px
+    '2xl': '1.5rem',   // 24px
+    '3xl': '1.875rem', // 30px
+    '4xl': '2.25rem',  // 36px
+  },
+  fontWeight: {
+    normal: 400,
+    medium: 500,
+    semibold: 600,
+    bold: 700,
+  },
+  lineHeight: {
+    tight: 1.25,
+    normal: 1.5,
+    relaxed: 1.75,
+  },
+} as const;
+
+export const borderRadius = {
+  sm: '4px',
+  md: '8px',
+  lg: '12px',
+  xl: '16px',
+  full: '9999px',
+} as const;
+
+export const shadows = {
+  sm: '0 1px 2px 0 rgb(0 0 0 / 0.05)',
+  md: '0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1)',
+  lg: '0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1)',
+} as const;
+
+// Six-T radar chart configuration
+export const radarConfig = {
+  size: 300,
+  centerX: 150,
+  centerY: 150,
+  maxRadius: 120,
+  axes: ['Team', 'TAM', 'Technology', 'Traction', 'Terms', 'Trends'] as const,
+  ratingToRadius: {
+    green: 1.0,   // 100% of maxRadius
+    yellow: 0.6,  // 60% of maxRadius
+    red: 0.3,     // 30% of maxRadius
+  },
+} as const;
+
+// Helper functions
+export function getDecisionColor(decision: string): string {
+  switch (decision) {
+    case 'Proceed':
+      return colors.decision.proceed;
+    case 'Do Not Proceed':
+      return colors.decision.doNotProceed;
+    case 'Conditional':
+      return colors.decision.conditional;
+    default:
+      return colors.slate[500];
+  }
+}
+
+export function getDecisionBgColor(decision: string): string {
+  switch (decision) {
+    case 'Proceed':
+      return colors.decision.proceedBg;
+    case 'Do Not Proceed':
+      return colors.decision.doNotProceedBg;
+    case 'Conditional':
+      return colors.decision.conditionalBg;
+    default:
+      return colors.slate[100];
+  }
+}
+
+export function getRiskColor(rating: string): string {
+  switch (rating) {
+    case 'green':
+      return colors.risk.green;
+    case 'yellow':
+      return colors.risk.amber;
+    case 'red':
+      return colors.risk.red;
+    default:
+      return colors.slate[400];
+  }
+}
+
+export function getConfidenceColor(level: string): string {
+  switch (level) {
+    case 'High':
+      return colors.confidence.high;
+    case 'Medium':
+      return colors.confidence.medium;
+    case 'Low':
+      return colors.confidence.low;
+    default:
+      return colors.slate[400];
+  }
+}
+
+export function getAssumptionColor(status: string): string {
+  switch (status) {
+    case 'validated':
+      return colors.assumption.validated;
+    case 'pending':
+      return colors.assumption.pending;
+    case 'at-risk':
+      return colors.assumption.atRisk;
+    default:
+      return colors.slate[400];
+  }
+}
+
+export function getAssumptionBgColor(status: string): string {
+  switch (status) {
+    case 'validated':
+      return colors.assumption.validatedBg;
+    case 'pending':
+      return colors.assumption.pendingBg;
+    case 'at-risk':
+      return colors.assumption.atRiskBg;
+    default:
+      return colors.slate[100];
+  }
+}
 </file>
 
 <file path=".gitignore">
@@ -97,7 +2271,7 @@ yarn-debug.log*
 yarn-error.log*
 
 # local env files
-.env*.local
+.env*
 
 # vercel
 .vercel
@@ -230,6 +2404,164 @@ textarea {
   scrollbar-width: thin;
   scrollbar-color: var(--border) var(--surface);
 }
+
+/* ==========================================================================
+   Print Styles for Infographic Export
+   ========================================================================== */
+
+@media print {
+  /* Reset background and colors for print */
+  body {
+    background: white !important;
+    color: black !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  /* Hide UI chrome - header, footer, buttons, navigation */
+  .no-print,
+  header,
+  footer,
+  button,
+  .no-print-bg {
+    display: none !important;
+  }
+
+  /* Ensure infographic backgrounds print correctly */
+  .infographic,
+  .infographic * {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  /* Page setup */
+  @page {
+    size: A4;
+    margin: 15mm 10mm;
+  }
+
+  /* Page break controls */
+  .page-break-before {
+    page-break-before: always !important;
+    break-before: page !important;
+  }
+
+  .page-break-after {
+    page-break-after: always !important;
+    break-after: page !important;
+  }
+
+  .avoid-break {
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+  }
+
+  /* Infographic container - full width for print */
+  .infographic {
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    box-shadow: none !important;
+    border: none !important;
+  }
+
+  /* Ensure SVG radar chart prints correctly */
+  svg {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  /* Force colored backgrounds to print */
+  [style*="background"] {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  /* Grid layouts for print */
+  .grid {
+    display: grid !important;
+  }
+
+  /* Ensure links don't show URLs */
+  a[href]:after {
+    content: none !important;
+  }
+
+  /* Print-only content */
+  .print-only {
+    display: block !important;
+  }
+
+  /* Hide interactive elements */
+  .no-print button,
+  .no-print input,
+  .no-print textarea,
+  .no-print select {
+    display: none !important;
+  }
+
+  /* Improve text rendering */
+  * {
+    text-shadow: none !important;
+  }
+
+  /* Ensure images print */
+  img {
+    max-width: 100% !important;
+    page-break-inside: avoid !important;
+  }
+
+  /* Header section - keep together */
+  .infographic-header {
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+  }
+
+  /* Page 1 content */
+  .infographic-page-1 {
+    page-break-after: auto;
+  }
+
+  /* Page 2 content */
+  .infographic-page-2 {
+    page-break-before: always !important;
+  }
+
+  /* Cards should not break */
+  [class*="Card"],
+  [class*="card"] {
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+  }
+
+  /* Timeline items should not break */
+  .timeline-item {
+    page-break-inside: avoid !important;
+  }
+
+  /* Ensure proper spacing */
+  .space-y-6 > * + * {
+    margin-top: 1.5rem !important;
+  }
+
+  /* Fix flexbox for print */
+  .flex {
+    display: flex !important;
+  }
+
+  /* Ensure rounded corners show in print */
+  .rounded-lg {
+    border-radius: 0.5rem !important;
+  }
+}
+
+/* Screen-only content (hidden in print) */
+@media screen {
+  .print-only {
+    display: none !important;
+  }
+}
 </file>
 
 <file path="app/layout.tsx">
@@ -272,9 +2604,10 @@ export default function RootLayout({
 <file path="app/page.tsx">
 'use client';
 
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { MemoInput } from '@/components/MemoInput';
 import { JsonOutput } from '@/components/JsonOutput';
+import { InfographicContainer } from '@/components/infographic';
 import { ExtractionResult } from '@/lib/schema';
 
 interface ApiResponse {
@@ -292,6 +2625,17 @@ export default function Home() {
   const [isLoading, setIsLoading] = useState(false);
   const [duration, setDuration] = useState<number | undefined>();
   const [retried, setRetried] = useState<boolean | undefined>();
+  
+  // Stage 2 State
+  const [showInfographic, setShowInfographic] = useState(false);
+  const [enhanceEnabled, setEnhanceEnabled] = useState(false);
+  const [narrative, setNarrative] = useState<string | undefined>();
+  const [headerImage, setHeaderImage] = useState<string | undefined>();
+  const [isGeneratingNarrative, setIsGeneratingNarrative] = useState(false);
+  const [isGeneratingImage, setIsGeneratingImage] = useState(false);
+  const [copySuccess, setCopySuccess] = useState(false);
+  
+  const infographicRef = useRef<HTMLDivElement>(null);
 
   const handleExtract = async () => {
     if (memo.trim().length < 100) {
@@ -304,6 +2648,9 @@ export default function Home() {
     setExtractedData(null);
     setDuration(undefined);
     setRetried(undefined);
+    setShowInfographic(false);
+    setNarrative(undefined);
+    setHeaderImage(undefined);
 
     try {
       const response = await fetch('/api/extract', {
@@ -341,12 +2688,76 @@ export default function Home() {
     setError(null);
     setDuration(undefined);
     setRetried(undefined);
+    setShowInfographic(false);
+    setNarrative(undefined);
+    setHeaderImage(undefined);
+  };
+
+  const handleGenerateInfographic = async () => {
+    if (!extractedData) return;
+    
+    setShowInfographic(true);
+    
+    // If enhance is enabled, generate narrative
+    if (enhanceEnabled) {
+      setIsGeneratingNarrative(true);
+      try {
+        const response = await fetch('/api/enhance', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ data: extractedData }),
+        });
+        const result = await response.json();
+        if (result.success && result.narrative) {
+          setNarrative(result.narrative);
+        }
+      } catch (err) {
+        console.error('Failed to generate narrative:', err);
+      } finally {
+        setIsGeneratingNarrative(false);
+      }
+    }
+
+    // Scroll to infographic
+    setTimeout(() => {
+      infographicRef.current?.scrollIntoView({ behavior: 'smooth' });
+    }, 100);
+  };
+
+  const handleGenerateHeaderImage = async () => {
+    if (!extractedData) return;
+    
+    setIsGeneratingImage(true);
+    try {
+      const response = await fetch('/api/generate-image', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          projectName: extractedData.metadata.projectName,
+          industry: extractedData.metadata.industry,
+          location: extractedData.metadata.location,
+        }),
+      });
+      const result = await response.json();
+      if (result.success && result.imageUrl) {
+        setHeaderImage(result.imageUrl);
+      }
+    } catch (err) {
+      console.error('Failed to generate header image:', err);
+    } finally {
+      setIsGeneratingImage(false);
+    }
+  };
+
+  const handleCopyHtml = () => {
+    setCopySuccess(true);
+    setTimeout(() => setCopySuccess(false), 2000);
   };
 
   return (
     <main className="min-h-screen bg-[var(--background)]">
       {/* Header */}
-      <header className="border-b border-[var(--border)]">
+      <header className="border-b border-[var(--border)] no-print">
         <div className="max-w-7xl mx-auto px-6 py-6">
           <div className="flex items-center gap-4">
             <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-[var(--accent)] to-blue-700 flex items-center justify-center">
@@ -369,7 +2780,7 @@ export default function Home() {
                 The Olsenator
               </h1>
               <p className="text-sm text-[var(--muted)]">
-                Extraction Engine
+                Extraction & Visualization Engine
               </p>
             </div>
           </div>
@@ -377,7 +2788,7 @@ export default function Home() {
       </header>
 
       {/* Main Content */}
-      <div className="max-w-7xl mx-auto px-6 py-8">
+      <div className="max-w-7xl mx-auto px-6 py-8 no-print">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           {/* Left Column - Input */}
           <div className="space-y-4">
@@ -437,7 +2848,7 @@ export default function Home() {
           </div>
 
           {/* Right Column - Output */}
-          <div>
+          <div className="space-y-4">
             <JsonOutput
               data={extractedData}
               error={error}
@@ -445,42 +2856,135 @@ export default function Home() {
               duration={duration}
               retried={retried}
             />
+            
+            {/* Generate Infographic Button */}
+            {extractedData && !showInfographic && (
+              <div className="space-y-3">
+                {/* Enhance Toggle */}
+                <div className="flex items-center justify-between p-4 bg-[var(--surface)] border border-[var(--border)] rounded-lg">
+                  <div className="flex items-center gap-3">
+                    <svg className="w-5 h-5 text-[var(--muted)]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                    </svg>
+                    <div>
+                      <span className="text-sm font-medium text-[var(--foreground)]">Enhance with AI</span>
+                      <p className="text-xs text-[var(--muted)]">Generate executive narrative summary</p>
+                    </div>
+                  </div>
+                  <button
+                    onClick={() => setEnhanceEnabled(!enhanceEnabled)}
+                    className={`relative w-11 h-6 rounded-full transition-colors ${
+                      enhanceEnabled ? 'bg-[var(--accent)]' : 'bg-[var(--border)]'
+                    }`}
+                  >
+                    <span
+                      className={`absolute top-1 left-1 w-4 h-4 rounded-full bg-white transition-transform ${
+                        enhanceEnabled ? 'translate-x-5' : 'translate-x-0'
+                      }`}
+                    />
+                  </button>
+                </div>
+
+                <button
+                  onClick={handleGenerateInfographic}
+                  className="w-full px-6 py-4 bg-gradient-to-r from-[#1e293b] to-[#334155]
+                             hover:from-[#334155] hover:to-[#475569]
+                             text-white font-semibold rounded-lg
+                             transition-all duration-200
+                             flex items-center justify-center gap-3"
+                >
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 17V7m0 10a2 2 0 01-2 2H5a2 2 0 01-2-2V7a2 2 0 012-2h2a2 2 0 012 2m0 10a2 2 0 002 2h2a2 2 0 002-2M9 7a2 2 0 012-2h2a2 2 0 012 2m0 10V7m0 10a2 2 0 002 2h2a2 2 0 002-2V7a2 2 0 00-2-2h-2a2 2 0 00-2 2" />
+                  </svg>
+                  Generate Infographic
+                </button>
+              </div>
+            )}
           </div>
         </div>
 
         {/* Stage Disclaimer */}
-        <div className="mt-12 border-t border-[var(--border)] pt-6">
-          <div className="flex items-start gap-3 text-sm text-[var(--muted)]">
-            <svg
-              className="w-5 h-5 flex-shrink-0 mt-0.5"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-              />
-            </svg>
-            <div>
-              <p className="font-medium text-[var(--foreground)]">Stage 1 — Extraction Engine</p>
-              <p className="mt-1">
-                This is the data extraction phase of The Olsenator. The JSON output produced here 
-                will be consumed by Stage 2&apos;s rendering engine to generate visual infographics. 
-                Copy the extracted JSON for use in downstream visualization workflows.
-              </p>
+        {!showInfographic && (
+          <div className="mt-12 border-t border-[var(--border)] pt-6">
+            <div className="flex items-start gap-3 text-sm text-[var(--muted)]">
+              <svg
+                className="w-5 h-5 flex-shrink-0 mt-0.5"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                />
+              </svg>
+              <div>
+                <p className="font-medium text-[var(--foreground)]">Stage 2 — Rendering Engine</p>
+                <p className="mt-1">
+                  Extract data from your investment memo, then generate a visual infographic 
+                  optimized for executive review and print-to-PDF export.
+                </p>
+              </div>
             </div>
           </div>
-        </div>
+        )}
       </div>
 
+      {/* Infographic Section */}
+      {showInfographic && extractedData && (
+        <div ref={infographicRef} className="border-t border-[var(--border)] bg-slate-100 no-print-bg">
+          <div className="max-w-5xl mx-auto px-6 py-8">
+            {/* Loading States */}
+            {(isGeneratingNarrative || isGeneratingImage) && (
+              <div className="mb-4 p-4 bg-blue-50 border border-blue-200 rounded-lg flex items-center gap-3 no-print">
+                <div className="w-4 h-4 border-2 border-blue-300 border-t-blue-600 rounded-full animate-spin" />
+                <span className="text-sm text-blue-700">
+                  {isGeneratingNarrative && 'Generating executive narrative...'}
+                  {isGeneratingImage && 'Generating header image...'}
+                </span>
+              </div>
+            )}
+
+            {/* Generate Header Image Button */}
+            {!headerImage && !isGeneratingImage && (
+              <div className="mb-4 no-print">
+                <button
+                  onClick={handleGenerateHeaderImage}
+                  className="px-4 py-2 text-sm font-medium text-slate-600 bg-white border border-slate-300 rounded-lg hover:bg-slate-50 transition-colors flex items-center gap-2"
+                >
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                  </svg>
+                  Generate Header Image (AI)
+                </button>
+              </div>
+            )}
+
+            {/* Copy Success Toast */}
+            {copySuccess && (
+              <div className="fixed bottom-4 right-4 px-4 py-2 bg-green-600 text-white rounded-lg shadow-lg z-50 no-print">
+                HTML copied to clipboard!
+              </div>
+            )}
+
+            {/* Infographic */}
+            <InfographicContainer
+              data={extractedData}
+              narrative={narrative}
+              headerImage={headerImage}
+              onCopyHtml={handleCopyHtml}
+            />
+          </div>
+        </div>
+      )}
+
       {/* Footer */}
-      <footer className="border-t border-[var(--border)] mt-auto">
+      <footer className="border-t border-[var(--border)] mt-auto no-print">
         <div className="max-w-7xl mx-auto px-6 py-4">
           <p className="text-xs text-[var(--muted)] text-center">
-            Built for Innovera.ai — Transforming investment memos into structured data
+            Built for Innovera.ai — Transforming investment memos into visual insights
           </p>
         </div>
       </footer>
@@ -1548,6 +4052,9 @@ Make sure to set `OPENROUTER_API_KEY` in your Vercel project environment variabl
 ## License
 
 Built for Innovera.ai
+
+#   o l s e n a t o r  
+ 
 </file>
 
 <file path="tailwind.config.ts">
