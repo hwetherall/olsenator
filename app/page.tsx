@@ -231,7 +231,7 @@ export default function Home() {
               onPrefill={handlePrefill}
             />
             
-            {/* Kajima Feature Toggle - Before Extraction */}
+            {/* Japanese Mode Toggle - Before Extraction */}
             <div className="flex items-center justify-between p-4 bg-white border border-[var(--border)] rounded-2xl shadow-sm">
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 rounded-xl bg-rose-500/10 flex items-center justify-center">
@@ -240,7 +240,7 @@ export default function Home() {
                   </svg>
                 </div>
                 <div>
-                  <span className="text-sm font-semibold text-[var(--foreground)]">Kajima Feature</span>
+                  <span className="text-sm font-semibold text-[var(--foreground)]">Japanese Mode</span>
                   <p className="text-xs text-[var(--muted)]">Remove team data & translate to Japanese</p>
                 </div>
               </div>
