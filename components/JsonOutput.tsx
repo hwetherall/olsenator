@@ -1,5 +1,6 @@
 'use client';
 
+import { useState, useEffect } from 'react';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { oneLight } from 'react-syntax-highlighter/dist/esm/styles/prism';
 import { CopyButton } from './CopyButton';
@@ -12,18 +13,73 @@ interface JsonOutputProps {
   retried?: boolean;
 }
 
+function CountdownTimer() {
+  const [timeLeft, setTimeLeft] = useState(15);
+  const totalTime = 15;
+  
+  useEffect(() => {
+    if (timeLeft <= 0) return;
+    
+    const timer = setInterval(() => {
+      setTimeLeft((prev) => Math.max(0, prev - 1));
+    }, 1000);
+    
+    return () => clearInterval(timer);
+  }, [timeLeft]);
+  
+  const progress = ((totalTime - timeLeft) / totalTime) * 100;
+  const circumference = 2 * Math.PI * 54; // radius = 54
+  const strokeDashoffset = circumference - (progress / 100) * circumference;
+  
+  return (
+    <div className="relative w-32 h-32">
+      {/* Background circle */}
+      <svg className="w-32 h-32 transform -rotate-90">
+        <circle
+          cx="64"
+          cy="64"
+          r="54"
+          stroke="currentColor"
+          strokeWidth="8"
+          fill="none"
+          className="text-gray-100"
+        />
+        {/* Progress circle */}
+        <circle
+          cx="64"
+          cy="64"
+          r="54"
+          stroke="currentColor"
+          strokeWidth="8"
+          fill="none"
+          strokeLinecap="round"
+          className="text-[var(--accent)] transition-all duration-1000 ease-linear"
+          style={{
+            strokeDasharray: circumference,
+            strokeDashoffset: strokeDashoffset,
+          }}
+        />
+      </svg>
+      {/* Countdown number */}
+      <div className="absolute inset-0 flex items-center justify-center">
+        <span className="text-4xl font-light text-[var(--foreground)] tabular-nums">
+          {timeLeft}
+        </span>
+      </div>
+    </div>
+  );
+}
+
 export function JsonOutput({ data, error, isLoading, duration, retried }: JsonOutputProps) {
   const jsonString = data ? JSON.stringify(data, null, 2) : '';
 
   if (isLoading) {
     return (
-      <div className="w-full h-[500px] bg-white border-2 border-[var(--border)] rounded-2xl flex flex-col items-center justify-center gap-4 shadow-sm">
-        <div className="relative">
-          <div className="w-14 h-14 border-4 border-[var(--border)] border-t-[var(--accent)] rounded-full animate-spin" />
-        </div>
+      <div className="w-full h-[500px] bg-white border-2 border-[var(--border)] rounded-2xl flex flex-col items-center justify-center gap-6 shadow-sm">
+        <CountdownTimer />
         <div className="text-center">
           <p className="text-[var(--foreground)] font-semibold">Extracting memo data...</p>
-          <p className="text-sm text-[var(--muted)] mt-2">This may take up to 30 seconds</p>
+          <p className="text-sm text-[var(--muted)] mt-2">Analyzing your investment memo</p>
         </div>
       </div>
     );
