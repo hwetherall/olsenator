@@ -1,24 +1,35 @@
 'use client';
 
-import { useState } from 'react';
-import { Chapters } from '@/lib/schema';
+import { useState, useEffect } from 'react';
+import { Chapters, KajimaChapters } from '@/lib/schema';
 import { colors, typography } from '@/lib/infographic-styles';
 
 interface ChapterSummariesProps {
-  chapters: Chapters;
+  chapters: Chapters | KajimaChapters;
+  kajimaMode?: boolean;
 }
 
 type ChapterTab = 'team' | 'opportunity' | 'path' | 'operations';
 
-export function ChapterSummaries({ chapters }: ChapterSummariesProps) {
-  const [activeTab, setActiveTab] = useState<ChapterTab>('team');
+export function ChapterSummaries({ chapters, kajimaMode = false }: ChapterSummariesProps) {
+  const [activeTab, setActiveTab] = useState<ChapterTab>(kajimaMode ? 'opportunity' : 'team');
 
-  const tabs: { id: ChapterTab; label: string }[] = [
+  // Update default tab when kajimaMode changes
+  useEffect(() => {
+    if (kajimaMode && activeTab === 'team') {
+      setActiveTab('opportunity');
+    }
+  }, [kajimaMode, activeTab]);
+
+  const allTabs: { id: ChapterTab; label: string }[] = [
     { id: 'team', label: 'Team' },
     { id: 'opportunity', label: 'Opportunity' },
     { id: 'path', label: 'Path to Success' },
     { id: 'operations', label: 'Operations' },
   ];
+
+  // Filter out team tab in Kajima mode
+  const tabs = kajimaMode ? allTabs.filter(tab => tab.id !== 'team') : allTabs;
 
   return (
     <div 
@@ -72,7 +83,7 @@ export function ChapterSummaries({ chapters }: ChapterSummariesProps) {
 
       {/* Tab Content - Screen View */}
       <div className="p-6 no-print">
-        {activeTab === 'team' && <TeamChapter team={chapters.team} />}
+        {activeTab === 'team' && !kajimaMode && <TeamChapter team={(chapters as Chapters).team} />}
         {activeTab === 'opportunity' && <OpportunityChapter opportunity={chapters.opportunityValidation} />}
         {activeTab === 'path' && <PathChapter path={chapters.pathToSuccess} />}
         {activeTab === 'operations' && <OperationsChapter operations={chapters.operations} />}
@@ -81,15 +92,17 @@ export function ChapterSummaries({ chapters }: ChapterSummariesProps) {
       {/* Print View - Show All */}
       <div className="p-6 print-only hidden print:block">
         <div className="space-y-8">
-          <div>
-            <h3 
-              className="text-sm font-semibold uppercase tracking-wider mb-4"
-              style={{ color: colors.navy }}
-            >
-              Team Analysis
-            </h3>
-            <TeamChapter team={chapters.team} />
-          </div>
+          {!kajimaMode && (
+            <div>
+              <h3 
+                className="text-sm font-semibold uppercase tracking-wider mb-4"
+                style={{ color: colors.navy }}
+              >
+                Team Analysis
+              </h3>
+              <TeamChapter team={(chapters as Chapters).team} />
+            </div>
+          )}
           <div>
             <h3 
               className="text-sm font-semibold uppercase tracking-wider mb-4"

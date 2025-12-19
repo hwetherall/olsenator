@@ -1,7 +1,7 @@
 'use client';
 
 import { useRef } from 'react';
-import { ExtractionResult } from '@/lib/schema';
+import { ExtractionResult, KajimaExtractionResult } from '@/lib/schema';
 import { colors, typography } from '@/lib/infographic-styles';
 import { InfographicHeader } from './InfographicHeader';
 import { ExecutiveNarrative } from './ExecutiveNarrative';
@@ -14,10 +14,11 @@ import { NextStepsTimeline } from './NextStepsTimeline';
 import { ChapterSummaries } from './ChapterSummaries';
 
 interface InfographicContainerProps {
-  data: ExtractionResult;
+  data: ExtractionResult | KajimaExtractionResult;
   narrative?: string;
   headerImage?: string;
   onCopyHtml?: () => void;
+  kajimaMode?: boolean;
 }
 
 export function InfographicContainer({ 
@@ -25,6 +26,7 @@ export function InfographicContainer({
   narrative, 
   headerImage,
   onCopyHtml,
+  kajimaMode = false,
 }: InfographicContainerProps) {
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -168,7 +170,7 @@ export function InfographicContainer({
             </div>
 
             {/* Six-T Radar */}
-            <SixTRadar risks={data.sixTRisks} />
+            <SixTRadar risks={data.sixTRisks} kajimaMode={kajimaMode} />
 
             {/* Highlights */}
             <HighlightCards highlights={data.highlights} />
@@ -191,7 +193,7 @@ export function InfographicContainer({
             <NextStepsTimeline nextSteps={data.nextSteps} />
 
             {/* Chapter Summaries */}
-            <ChapterSummaries chapters={data.chapters} />
+            <ChapterSummaries chapters={data.chapters} kajimaMode={kajimaMode} />
           </div>
         </div>
 

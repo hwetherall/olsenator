@@ -228,6 +228,34 @@ export const EXTRACTION_SCHEMA_JSON = `{
  * Validates that an object matches the ExtractionResult structure
  * Returns true if valid, false otherwise
  */
+/**
+ * Five-T Risks structure (without Team) for Kajima mode
+ */
+export interface FiveTRisks {
+  tam: RiskAssessment;
+  technology: RiskAssessment;
+  traction: RiskAssessment;
+  terms: RiskAssessment;
+  trends: RiskAssessment;
+}
+
+/**
+ * Kajima Chapters structure (without Team chapter)
+ */
+export interface KajimaChapters {
+  opportunityValidation: OpportunityValidationChapter;
+  pathToSuccess: PathToSuccessChapter;
+  operations: OperationsChapter;
+}
+
+/**
+ * Modified ExtractionResult for Kajima mode (no team references)
+ */
+export interface KajimaExtractionResult extends Omit<ExtractionResult, 'sixTRisks' | 'chapters'> {
+  sixTRisks: FiveTRisks;
+  chapters: KajimaChapters;
+}
+
 export function validateExtractionResult(data: unknown): data is ExtractionResult {
   if (!data || typeof data !== 'object') return false;
   

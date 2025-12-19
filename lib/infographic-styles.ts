@@ -130,6 +130,20 @@ export const radarConfig = {
   },
 } as const;
 
+// Five-T radar chart configuration (Kajima mode - no Team)
+export const pentagonRadarConfig = {
+  size: 300,
+  centerX: 150,
+  centerY: 150,
+  maxRadius: 120,
+  axes: ['TAM', 'Technology', 'Traction', 'Terms', 'Trends'] as const,
+  ratingToRadius: {
+    green: 1.0,   // 100% of maxRadius
+    yellow: 0.6,  // 60% of maxRadius
+    red: 0.3,     // 30% of maxRadius
+  },
+} as const;
+
 // Helper functions
 export function getDecisionColor(decision: string): string {
   switch (decision) {

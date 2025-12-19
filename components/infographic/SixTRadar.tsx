@@ -1,10 +1,11 @@
 'use client';
 
-import { SixTRisks, RiskRating } from '@/lib/schema';
-import { colors, typography, radarConfig, getRiskColor } from '@/lib/infographic-styles';
+import { SixTRisks, RiskRating, FiveTRisks } from '@/lib/schema';
+import { colors, typography, radarConfig, pentagonRadarConfig, getRiskColor } from '@/lib/infographic-styles';
 
 interface SixTRadarProps {
-  risks: SixTRisks;
+  risks: SixTRisks | FiveTRisks;
+  kajimaMode?: boolean;
 }
 
 // Calculate point on hexagon at given angle and radius
@@ -17,11 +18,11 @@ function getPoint(centerX: number, centerY: number, angle: number, radius: numbe
   };
 }
 
-// Generate hexagon path
-function generateHexagonPath(centerX: number, centerY: number, radius: number): string {
+// Generate polygon path for n sides
+function generatePolygonPath(centerX: number, centerY: number, radius: number, sides: number): string {
   const points: { x: number; y: number }[] = [];
-  for (let i = 0; i < 6; i++) {
-    const angle = (i * Math.PI * 2) / 6;
+  for (let i = 0; i < sides; i++) {
+    const angle = (i * Math.PI * 2) / sides;
     points.push(getPoint(centerX, centerY, angle, radius));
   }
   return points.map((p, i) => `${i === 0 ? 'M' : 'L'} ${p.x} ${p.y}`).join(' ') + ' Z';
@@ -32,38 +33,51 @@ function generateRadarPolygon(
   centerX: number, 
   centerY: number, 
   maxRadius: number, 
-  ratings: RiskRating[]
+  ratings: RiskRating[],
+  ratingToRadius: Record<string, number>
 ): string {
+  const sides = ratings.length;
   const points: { x: number; y: number }[] = [];
-  for (let i = 0; i < 6; i++) {
-    const angle = (i * Math.PI * 2) / 6;
+  for (let i = 0; i < sides; i++) {
+    const angle = (i * Math.PI * 2) / sides;
     const rating = ratings[i];
-    const radiusMultiplier = radarConfig.ratingToRadius[rating];
+    const radiusMultiplier = ratingToRadius[rating];
     const radius = maxRadius * radiusMultiplier;
     points.push(getPoint(centerX, centerY, angle, radius));
   }
   return points.map((p, i) => `${i === 0 ? 'M' : 'L'} ${p.x} ${p.y}`).join(' ') + ' Z';
 }
 
-export function SixTRadar({ risks }: SixTRadarProps) {
-  const { size, centerX, centerY, maxRadius, axes } = radarConfig;
+export function SixTRadar({ risks, kajimaMode = false }: SixTRadarProps) {
+  // Choose config based on mode
+  const config = kajimaMode ? pentagonRadarConfig : radarConfig;
+  const { size, centerX, centerY, maxRadius, axes, ratingToRadius } = config;
+  const numSides = axes.length;
   
   // Map risks to array in correct order
-  const riskEntries: { name: string; rating: RiskRating; summary: string }[] = [
-    { name: 'Team', rating: risks.team.rating, summary: risks.team.summary },
-    { name: 'TAM', rating: risks.tam.rating, summary: risks.tam.summary },
-    { name: 'Technology', rating: risks.technology.rating, summary: risks.technology.summary },
-    { name: 'Traction', rating: risks.traction.rating, summary: risks.traction.summary },
-    { name: 'Terms', rating: risks.terms.rating, summary: risks.terms.summary },
-    { name: 'Trends', rating: risks.trends.rating, summary: risks.trends.summary },
-  ];
+  const riskEntries: { name: string; rating: RiskRating; summary: string }[] = kajimaMode
+    ? [
+        { name: 'TAM', rating: risks.tam.rating, summary: risks.tam.summary },
+        { name: 'Technology', rating: risks.technology.rating, summary: risks.technology.summary },
+        { name: 'Traction', rating: risks.traction.rating, summary: risks.traction.summary },
+        { name: 'Terms', rating: risks.terms.rating, summary: risks.terms.summary },
+        { name: 'Trends', rating: risks.trends.rating, summary: risks.trends.summary },
+      ]
+    : [
+        { name: 'Team', rating: (risks as SixTRisks).team.rating, summary: (risks as SixTRisks).team.summary },
+        { name: 'TAM', rating: risks.tam.rating, summary: risks.tam.summary },
+        { name: 'Technology', rating: risks.technology.rating, summary: risks.technology.summary },
+        { name: 'Traction', rating: risks.traction.rating, summary: risks.traction.summary },
+        { name: 'Terms', rating: risks.terms.rating, summary: risks.terms.summary },
+        { name: 'Trends', rating: risks.trends.rating, summary: risks.trends.summary },
+      ];
   
   const ratings = riskEntries.map(r => r.rating);
   
-  // Calculate label positions (slightly outside the hexagon)
+  // Calculate label positions (slightly outside the polygon)
   const labelRadius = maxRadius + 30;
   const labelPositions = axes.map((_, i) => {
-    const angle = (i * Math.PI * 2) / 6;
+    const angle = (i * Math.PI * 2) / numSides;
     return getPoint(centerX, centerY, angle, labelRadius);
   });
 
@@ -88,7 +102,7 @@ export function SixTRadar({ risks }: SixTRadarProps) {
             fontWeight: typography.fontWeight.semibold,
           }}
         >
-          Six-T Risk Analysis
+          {kajimaMode ? 'Five-T Risk Analysis' : 'Six-T Risk Analysis'}
         </h2>
       </div>
 
@@ -101,11 +115,11 @@ export function SixTRadar({ risks }: SixTRadarProps) {
             viewBox={`0 0 ${size} ${size}`}
             className="overflow-visible"
           >
-            {/* Background hexagons (grid lines) */}
+            {/* Background polygons (grid lines) */}
             {[1, 0.6, 0.3].map((scale, i) => (
               <path
                 key={i}
-                d={generateHexagonPath(centerX, centerY, maxRadius * scale)}
+                d={generatePolygonPath(centerX, centerY, maxRadius * scale, numSides)}
                 fill="none"
                 stroke={colors.slate[200]}
                 strokeWidth={1}
@@ -114,7 +128,7 @@ export function SixTRadar({ risks }: SixTRadarProps) {
             
             {/* Axis lines */}
             {axes.map((_, i) => {
-              const angle = (i * Math.PI * 2) / 6;
+              const angle = (i * Math.PI * 2) / numSides;
               const endPoint = getPoint(centerX, centerY, angle, maxRadius);
               return (
                 <line
@@ -131,7 +145,7 @@ export function SixTRadar({ risks }: SixTRadarProps) {
             
             {/* Radar fill polygon */}
             <path
-              d={generateRadarPolygon(centerX, centerY, maxRadius, ratings)}
+              d={generateRadarPolygon(centerX, centerY, maxRadius, ratings, ratingToRadius)}
               fill={colors.navy}
               fillOpacity={0.15}
               stroke={colors.navy}
@@ -140,8 +154,8 @@ export function SixTRadar({ risks }: SixTRadarProps) {
             
             {/* Data points with color indicators */}
             {riskEntries.map((entry, i) => {
-              const angle = (i * Math.PI * 2) / 6;
-              const radiusMultiplier = radarConfig.ratingToRadius[entry.rating];
+              const angle = (i * Math.PI * 2) / numSides;
+              const radiusMultiplier = ratingToRadius[entry.rating];
               const radius = maxRadius * radiusMultiplier;
               const point = getPoint(centerX, centerY, angle, radius);
               const riskColor = getRiskColor(entry.rating);
@@ -171,10 +185,11 @@ export function SixTRadar({ risks }: SixTRadarProps) {
             {/* Axis labels */}
             {axes.map((label, i) => {
               const pos = labelPositions[i];
-              // Determine text anchor based on position
+              // Determine text anchor based on position relative to center
               let textAnchor: 'start' | 'middle' | 'end' = 'middle';
-              if (i === 1 || i === 2) textAnchor = 'start';
-              if (i === 4 || i === 5) textAnchor = 'end';
+              const xDiff = pos.x - centerX;
+              if (xDiff > 10) textAnchor = 'start';
+              else if (xDiff < -10) textAnchor = 'end';
               
               return (
                 <text
