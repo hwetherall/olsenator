@@ -26,10 +26,7 @@ export default function Home() {
   
   // Stage 2 State
   const [showInfographic, setShowInfographic] = useState(false);
-  const [enhanceEnabled, setEnhanceEnabled] = useState(false);
   const [kajimaEnabled, setKajimaEnabled] = useState(false);
-  const [narrative, setNarrative] = useState<string | undefined>();
-  const [isGeneratingNarrative, setIsGeneratingNarrative] = useState(false);
   const [isTranslating, setIsTranslating] = useState(false);
   const [copySuccess, setCopySuccess] = useState(false);
   const [displayData, setDisplayData] = useState<ExtractionResult | KajimaExtractionResult | null>(null);
@@ -49,7 +46,6 @@ export default function Home() {
     setDuration(undefined);
     setRetried(undefined);
     setShowInfographic(false);
-    setNarrative(undefined);
 
     const startTime = Date.now();
 
@@ -129,7 +125,6 @@ export default function Home() {
     setDuration(undefined);
     setRetried(undefined);
     setShowInfographic(false);
-    setNarrative(undefined);
     setKajimaEnabled(false);
     setDisplayData(null);
   };
@@ -142,26 +137,6 @@ export default function Home() {
     if (!displayData) return;
     
     setShowInfographic(true);
-    
-    // If enhance is enabled, generate narrative (use original data for better English narrative)
-    if (enhanceEnabled) {
-      setIsGeneratingNarrative(true);
-      try {
-        const response = await fetch('/api/enhance', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ data: extractedData || displayData }),
-        });
-        const result = await response.json();
-        if (result.success && result.narrative) {
-          setNarrative(result.narrative);
-        }
-      } catch (err) {
-        console.error('Failed to generate narrative:', err);
-      } finally {
-        setIsGeneratingNarrative(false);
-      }
-    }
 
     // Scroll to infographic
     setTimeout(() => {
@@ -316,50 +291,21 @@ export default function Home() {
             
             {/* Generate Infographic Button */}
             {displayData && !showInfographic && (
-              <div className="space-y-4">
-                {/* Enhance Toggle */}
-                <div className="flex items-center justify-between p-5 bg-white border border-[var(--border)] rounded-2xl shadow-sm">
-                  <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-xl bg-[var(--accent)]/10 flex items-center justify-center">
-                      <svg className="w-5 h-5 text-[var(--accent)]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
-                      </svg>
-                    </div>
-                    <div>
-                      <span className="text-sm font-semibold text-[var(--foreground)]">Enhance with AI</span>
-                      <p className="text-xs text-[var(--muted)]">Generate executive narrative summary</p>
-                    </div>
-                  </div>
-                  <button
-                    onClick={() => setEnhanceEnabled(!enhanceEnabled)}
-                    className={`relative w-12 h-7 rounded-full transition-colors ${
-                      enhanceEnabled ? 'bg-[var(--accent)]' : 'bg-gray-200'
-                    }`}
-                  >
-                    <span
-                      className={`absolute top-1 left-1 w-5 h-5 rounded-full bg-white shadow-sm transition-transform ${
-                        enhanceEnabled ? 'translate-x-5' : 'translate-x-0'
-                      }`}
-                    />
-                  </button>
-                </div>
-
-                <button
-                  onClick={handleGenerateInfographic}
-                  className="w-full px-8 py-5 bg-gradient-to-r from-[#1e293b] to-[#334155]
-                             hover:from-[#334155] hover:to-[#475569]
-                             text-white font-semibold rounded-full
-                             transition-all duration-300 ease-out
-                             flex items-center justify-center gap-3
-                             shadow-lg hover:shadow-xl
-                             tracking-wide uppercase text-sm"
-                >
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 17V7m0 10a2 2 0 01-2 2H5a2 2 0 01-2-2V7a2 2 0 012-2h2a2 2 0 012 2m0 10a2 2 0 002 2h2a2 2 0 002-2M9 7a2 2 0 012-2h2a2 2 0 012 2m0 10V7m0 10a2 2 0 002 2h2a2 2 0 002-2V7a2 2 0 00-2-2h-2a2 2 0 00-2 2" />
-                  </svg>
-                  Generate Infographic
-                </button>
-              </div>
+              <button
+                onClick={handleGenerateInfographic}
+                className="w-full px-8 py-5 bg-gradient-to-r from-[#1e293b] to-[#334155]
+                           hover:from-[#334155] hover:to-[#475569]
+                           text-white font-semibold rounded-full
+                           transition-all duration-300 ease-out
+                           flex items-center justify-center gap-3
+                           shadow-lg hover:shadow-xl
+                           tracking-wide uppercase text-sm"
+              >
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 17V7m0 10a2 2 0 01-2 2H5a2 2 0 01-2-2V7a2 2 0 012-2h2a2 2 0 012 2m0 10a2 2 0 002 2h2a2 2 0 002-2M9 7a2 2 0 012-2h2a2 2 0 012 2m0 10V7m0 10a2 2 0 002 2h2a2 2 0 002-2V7a2 2 0 00-2-2h-2a2 2 0 00-2 2" />
+                </svg>
+                Generate Infographic
+              </button>
             )}
           </div>
         </div>
@@ -400,12 +346,11 @@ export default function Home() {
         <div ref={infographicRef} className="border-t border-[var(--border)] bg-slate-100 no-print-bg">
           <div className="max-w-5xl mx-auto px-6 py-8">
             {/* Loading States */}
-            {(isGeneratingNarrative || isTranslating) && (
+            {isTranslating && (
               <div className="mb-4 p-4 bg-blue-50 border border-blue-200 rounded-lg flex items-center gap-3 no-print">
                 <div className="w-4 h-4 border-2 border-blue-300 border-t-blue-600 rounded-full animate-spin" />
                 <span className="text-sm text-blue-700">
-                  {isTranslating && 'Translating to Japanese...'}
-                  {isGeneratingNarrative && 'Generating executive narrative...'}
+                  Translating to Japanese...
                 </span>
               </div>
             )}
@@ -420,7 +365,6 @@ export default function Home() {
             {/* Infographic */}
             <InfographicContainer
               data={displayData}
-              narrative={narrative}
               onCopyHtml={handleCopyHtml}
               kajimaMode={kajimaEnabled}
             />
