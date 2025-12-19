@@ -4,17 +4,34 @@ interface MemoInputProps {
   value: string;
   onChange: (value: string) => void;
   disabled?: boolean;
+  onPrefill?: () => void;
 }
 
-export function MemoInput({ value, onChange, disabled }: MemoInputProps) {
+export function MemoInput({ value, onChange, disabled, onPrefill }: MemoInputProps) {
   return (
     <div className="w-full">
-      <label 
-        htmlFor="memo-input" 
-        className="block text-sm font-semibold text-[var(--foreground)] mb-3 tracking-wide"
-      >
-        Investment Memo
-      </label>
+      <div className="flex items-center justify-between mb-3">
+        <label 
+          htmlFor="memo-input" 
+          className="block text-sm font-semibold text-[var(--foreground)] tracking-wide"
+        >
+          Investment Memo
+        </label>
+        {onPrefill && (
+          <button
+            onClick={onPrefill}
+            disabled={disabled}
+            className="px-4 py-1.5 text-xs font-medium text-[var(--accent)] 
+                     border border-[var(--accent)] rounded-lg
+                     hover:bg-[var(--accent)] hover:text-white
+                     disabled:opacity-50 disabled:cursor-not-allowed
+                     transition-all duration-200 ease-out
+                     tracking-wide uppercase"
+          >
+            Example Text
+          </button>
+        )}
+      </div>
       <textarea
         id="memo-input"
         value={value}

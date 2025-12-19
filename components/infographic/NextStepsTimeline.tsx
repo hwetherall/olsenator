@@ -2,12 +2,15 @@
 
 import { NextStep } from '@/lib/schema';
 import { colors, typography } from '@/lib/infographic-styles';
+import { getLabels } from '@/lib/kajima-labels';
 
 interface NextStepsTimelineProps {
   nextSteps: NextStep[];
+  kajimaMode?: boolean;
 }
 
-export function NextStepsTimeline({ nextSteps }: NextStepsTimelineProps) {
+export function NextStepsTimeline({ nextSteps, kajimaMode = false }: NextStepsTimelineProps) {
+  const labels = getLabels(kajimaMode);
   if (nextSteps.length === 0) return null;
 
   return (
@@ -31,7 +34,7 @@ export function NextStepsTimeline({ nextSteps }: NextStepsTimelineProps) {
             fontWeight: typography.fontWeight.semibold,
           }}
         >
-          Recommended Next Steps
+          {labels.recommendedNextSteps}
         </h2>
       </div>
 
@@ -113,7 +116,7 @@ export function NextStepsTimeline({ nextSteps }: NextStepsTimelineProps) {
                     className="text-xs font-medium uppercase tracking-wider block mb-0.5"
                     style={{ color: colors.slate[500] }}
                   >
-                    Success Gate
+                    {labels.successGate}
                   </span>
                   <span 
                     className="text-sm"

@@ -2,35 +2,24 @@
 
 import { ProjectMetadata } from '@/lib/schema';
 import { colors, typography, getDecisionColor, getDecisionBgColor } from '@/lib/infographic-styles';
+import { getLabels } from '@/lib/kajima-labels';
 
 interface InfographicHeaderProps {
   metadata: ProjectMetadata;
-  headerImage?: string;
+  kajimaMode?: boolean;
 }
 
-export function InfographicHeader({ metadata, headerImage }: InfographicHeaderProps) {
+export function InfographicHeader({ metadata, kajimaMode = false }: InfographicHeaderProps) {
+  const labels = getLabels(kajimaMode);
   const decisionColor = getDecisionColor(metadata.decision);
   const decisionBgColor = getDecisionBgColor(metadata.decision);
 
   return (
     <div className="infographic-header avoid-break">
-      {/* Optional AI-generated header image */}
-      {headerImage && (
-        <div 
-          className="w-full h-32 bg-cover bg-center rounded-t-lg"
-          style={{ 
-            backgroundImage: `url(${headerImage})`,
-            backgroundColor: colors.slate[100],
-          }}
-        />
-      )}
-      
       <div 
         className="p-6 rounded-lg"
         style={{ 
           backgroundColor: colors.navy,
-          borderTopLeftRadius: headerImage ? 0 : undefined,
-          borderTopRightRadius: headerImage ? 0 : undefined,
         }}
       >
         <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4">
@@ -91,7 +80,7 @@ export function InfographicHeader({ metadata, headerImage }: InfographicHeaderPr
               className="text-xs font-medium uppercase tracking-wider mb-1"
               style={{ color: colors.slate[500] }}
             >
-              Recommendation
+              {labels.recommendation}
             </span>
             <span 
               className="text-lg font-bold"
@@ -100,7 +89,12 @@ export function InfographicHeader({ metadata, headerImage }: InfographicHeaderPr
                 fontWeight: typography.fontWeight.bold,
               }}
             >
-              {metadata.decision}
+              {kajimaMode 
+                ? (metadata.decision === 'Proceed' ? labels.proceed 
+                   : metadata.decision === 'Do Not Proceed' ? labels.doNotProceed 
+                   : labels.conditional)
+                : metadata.decision
+              }
             </span>
           </div>
         </div>

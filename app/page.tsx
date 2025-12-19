@@ -6,6 +6,7 @@ import { JsonOutput } from '@/components/JsonOutput';
 import { InfographicContainer } from '@/components/infographic';
 import { ExtractionResult, KajimaExtractionResult } from '@/lib/schema';
 import { removeTeamReferences } from '@/lib/kajima-transform';
+import { PREFILL_TEXT } from '@/lib/prefill';
 
 interface ApiResponse {
   success: boolean;
@@ -28,9 +29,7 @@ export default function Home() {
   const [enhanceEnabled, setEnhanceEnabled] = useState(false);
   const [kajimaEnabled, setKajimaEnabled] = useState(false);
   const [narrative, setNarrative] = useState<string | undefined>();
-  const [headerImage, setHeaderImage] = useState<string | undefined>();
   const [isGeneratingNarrative, setIsGeneratingNarrative] = useState(false);
-  const [isGeneratingImage, setIsGeneratingImage] = useState(false);
   const [isTranslating, setIsTranslating] = useState(false);
   const [copySuccess, setCopySuccess] = useState(false);
   const [displayData, setDisplayData] = useState<ExtractionResult | KajimaExtractionResult | null>(null);
@@ -46,13 +45,16 @@ export default function Home() {
     setIsLoading(true);
     setError(null);
     setExtractedData(null);
+    setDisplayData(null);
     setDuration(undefined);
     setRetried(undefined);
     setShowInfographic(false);
     setNarrative(undefined);
-    setHeaderImage(undefined);
+
+    const startTime = Date.now();
 
     try {
+      // Step 1: Extract data from memo
       const response = await fetch('/api/extract', {
         method: 'POST',
         headers: {
@@ -63,14 +65,51 @@ export default function Home() {
 
       const result: ApiResponse = await response.json();
 
-      if (result.success && result.data) {
-        setExtractedData(result.data);
-        setDuration(result.duration);
-        setRetried(result.retried);
-      } else {
+      if (!result.success || !result.data) {
         setError(result.error || 'Unknown error occurred');
         setRetried(result.retried);
+        setIsLoading(false);
+        return;
       }
+
+      let finalData: ExtractionResult | KajimaExtractionResult = result.data;
+      setRetried(result.retried);
+
+      // Step 2 & 3: If Kajima mode, remove team and translate
+      if (kajimaEnabled) {
+        setIsLoading(false);
+        setIsTranslating(true);
+
+        // Step 2: Remove team references
+        const dataWithoutTeam = removeTeamReferences(result.data);
+
+        // Step 3: Translate to Japanese
+        try {
+          const translateResponse = await fetch('/api/translate', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ data: dataWithoutTeam }),
+          });
+          const translateResult = await translateResponse.json();
+          
+          if (translateResult.success && translateResult.data) {
+            finalData = translateResult.data;
+          } else {
+            // If translation fails, still use the team-removed data
+            console.error('Translation failed:', translateResult.error);
+            finalData = dataWithoutTeam;
+          }
+        } catch (err) {
+          console.error('Failed to translate:', err);
+          finalData = dataWithoutTeam;
+        }
+      }
+
+      const totalDuration = Date.now() - startTime;
+      setExtractedData(result.data); // Keep original for reference
+      setDisplayData(finalData); // This is what we show (possibly translated)
+      setDuration(totalDuration);
+
     } catch (err) {
       setError(
         err instanceof Error 
@@ -79,6 +118,7 @@ export default function Home() {
       );
     } finally {
       setIsLoading(false);
+      setIsTranslating(false);
     }
   };
 
@@ -90,52 +130,27 @@ export default function Home() {
     setRetried(undefined);
     setShowInfographic(false);
     setNarrative(undefined);
-    setHeaderImage(undefined);
     setKajimaEnabled(false);
     setDisplayData(null);
   };
 
+  const handlePrefill = () => {
+    setMemo(PREFILL_TEXT);
+  };
+
   const handleGenerateInfographic = async () => {
-    if (!extractedData) return;
+    if (!displayData) return;
     
     setShowInfographic(true);
     
-    // Process data for Kajima mode if enabled
-    let processedData: ExtractionResult | KajimaExtractionResult = extractedData;
-    
-    if (kajimaEnabled) {
-      // Step 1: Remove team references
-      processedData = removeTeamReferences(extractedData);
-      
-      // Step 2: Translate to Japanese
-      setIsTranslating(true);
-      try {
-        const translateResponse = await fetch('/api/translate', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ data: processedData }),
-        });
-        const translateResult = await translateResponse.json();
-        if (translateResult.success && translateResult.data) {
-          processedData = translateResult.data;
-        }
-      } catch (err) {
-        console.error('Failed to translate:', err);
-      } finally {
-        setIsTranslating(false);
-      }
-    }
-    
-    setDisplayData(processedData);
-    
-    // If enhance is enabled, generate narrative
+    // If enhance is enabled, generate narrative (use original data for better English narrative)
     if (enhanceEnabled) {
       setIsGeneratingNarrative(true);
       try {
         const response = await fetch('/api/enhance', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ data: extractedData }),
+          body: JSON.stringify({ data: extractedData || displayData }),
         });
         const result = await response.json();
         if (result.success && result.narrative) {
@@ -152,31 +167,6 @@ export default function Home() {
     setTimeout(() => {
       infographicRef.current?.scrollIntoView({ behavior: 'smooth' });
     }, 100);
-  };
-
-  const handleGenerateHeaderImage = async () => {
-    if (!extractedData) return;
-    
-    setIsGeneratingImage(true);
-    try {
-      const response = await fetch('/api/generate-image', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          projectName: extractedData.metadata.projectName,
-          industry: extractedData.metadata.industry,
-          location: extractedData.metadata.location,
-        }),
-      });
-      const result = await response.json();
-      if (result.success && result.imageUrl) {
-        setHeaderImage(result.imageUrl);
-      }
-    } catch (err) {
-      console.error('Failed to generate header image:', err);
-    } finally {
-      setIsGeneratingImage(false);
-    }
   };
 
   const handleCopyHtml = () => {
@@ -237,13 +227,42 @@ export default function Home() {
             <MemoInput
               value={memo}
               onChange={setMemo}
-              disabled={isLoading}
+              disabled={isLoading || isTranslating}
+              onPrefill={handlePrefill}
             />
+            
+            {/* Kajima Feature Toggle - Before Extraction */}
+            <div className="flex items-center justify-between p-4 bg-white border border-[var(--border)] rounded-2xl shadow-sm">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-xl bg-rose-500/10 flex items-center justify-center">
+                  <svg className="w-5 h-5 text-rose-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                </div>
+                <div>
+                  <span className="text-sm font-semibold text-[var(--foreground)]">Kajima Feature</span>
+                  <p className="text-xs text-[var(--muted)]">Remove team data & translate to Japanese</p>
+                </div>
+              </div>
+              <button
+                onClick={() => setKajimaEnabled(!kajimaEnabled)}
+                disabled={isLoading || isTranslating}
+                className={`relative w-12 h-7 rounded-full transition-colors disabled:opacity-50 ${
+                  kajimaEnabled ? 'bg-rose-500' : 'bg-gray-200'
+                }`}
+              >
+                <span
+                  className={`absolute top-1 left-1 w-5 h-5 rounded-full bg-white shadow-sm transition-transform ${
+                    kajimaEnabled ? 'translate-x-5' : 'translate-x-0'
+                  }`}
+                />
+              </button>
+            </div>
             
             <div className="flex gap-3">
               <button
                 onClick={handleExtract}
-                disabled={isLoading || memo.trim().length < 100}
+                disabled={isLoading || isTranslating || memo.trim().length < 100}
                 className="flex-1 px-8 py-4 bg-[var(--accent)] hover:bg-[var(--accent-hover)]
                            text-white font-semibold rounded-full
                            disabled:opacity-50 disabled:cursor-not-allowed
@@ -257,14 +276,19 @@ export default function Home() {
                     <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
                     Extracting...
                   </>
+                ) : isTranslating ? (
+                  <>
+                    <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                    Translating to Japanese...
+                  </>
                 ) : (
-                  'Extract Data'
+                  kajimaEnabled ? 'Extract & Translate' : 'Extract Data'
                 )}
               </button>
               
               <button
                 onClick={handleClear}
-                disabled={isLoading || (!memo && !extractedData && !error)}
+                disabled={isLoading || isTranslating || (!memo && !extractedData && !error)}
                 className="px-6 py-4 bg-transparent border-2 border-[var(--border)]
                            hover:border-[var(--accent)] hover:text-[var(--accent)] text-[var(--foreground)]
                            font-medium rounded-full
@@ -280,43 +304,19 @@ export default function Home() {
           {/* Right Column - Output */}
           <div className="space-y-5">
             <JsonOutput
-              data={showInfographic && displayData ? displayData : extractedData}
+              data={displayData}
               error={error}
-              isLoading={isLoading}
+              isLoading={isLoading || isTranslating}
+              loadingMessage={isTranslating ? 'Translating to Japanese...' : 'Extracting memo data...'}
+              loadingSubtext={isTranslating ? 'Converting to consulting-grade Japanese' : 'Analyzing your investment memo'}
               duration={duration}
               retried={retried}
+              countdownDuration={kajimaEnabled ? 30 : 15}
             />
             
             {/* Generate Infographic Button */}
-            {extractedData && !showInfographic && (
+            {displayData && !showInfographic && (
               <div className="space-y-4">
-                {/* Kajima Feature Toggle */}
-                <div className="flex items-center justify-between p-5 bg-white border border-[var(--border)] rounded-2xl shadow-sm">
-                  <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-xl bg-rose-500/10 flex items-center justify-center">
-                      <svg className="w-5 h-5 text-rose-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                      </svg>
-                    </div>
-                    <div>
-                      <span className="text-sm font-semibold text-[var(--foreground)]">Kajima Feature</span>
-                      <p className="text-xs text-[var(--muted)]">Remove team data & translate to Japanese</p>
-                    </div>
-                  </div>
-                  <button
-                    onClick={() => setKajimaEnabled(!kajimaEnabled)}
-                    className={`relative w-12 h-7 rounded-full transition-colors ${
-                      kajimaEnabled ? 'bg-rose-500' : 'bg-gray-200'
-                    }`}
-                  >
-                    <span
-                      className={`absolute top-1 left-1 w-5 h-5 rounded-full bg-white shadow-sm transition-transform ${
-                        kajimaEnabled ? 'translate-x-5' : 'translate-x-0'
-                      }`}
-                    />
-                  </button>
-                </div>
-
                 {/* Enhance Toggle */}
                 <div className="flex items-center justify-between p-5 bg-white border border-[var(--border)] rounded-2xl shadow-sm">
                   <div className="flex items-center gap-3">
@@ -400,29 +400,13 @@ export default function Home() {
         <div ref={infographicRef} className="border-t border-[var(--border)] bg-slate-100 no-print-bg">
           <div className="max-w-5xl mx-auto px-6 py-8">
             {/* Loading States */}
-            {(isGeneratingNarrative || isGeneratingImage || isTranslating) && (
+            {(isGeneratingNarrative || isTranslating) && (
               <div className="mb-4 p-4 bg-blue-50 border border-blue-200 rounded-lg flex items-center gap-3 no-print">
                 <div className="w-4 h-4 border-2 border-blue-300 border-t-blue-600 rounded-full animate-spin" />
                 <span className="text-sm text-blue-700">
                   {isTranslating && 'Translating to Japanese...'}
                   {isGeneratingNarrative && 'Generating executive narrative...'}
-                  {isGeneratingImage && 'Generating header image...'}
                 </span>
-              </div>
-            )}
-
-            {/* Generate Header Image Button */}
-            {!headerImage && !isGeneratingImage && (
-              <div className="mb-4 no-print">
-                <button
-                  onClick={handleGenerateHeaderImage}
-                  className="px-4 py-2 text-sm font-medium text-slate-600 bg-white border border-slate-300 rounded-lg hover:bg-slate-50 transition-colors flex items-center gap-2"
-                >
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                  </svg>
-                  Generate Header Image (AI)
-                </button>
               </div>
             )}
 
@@ -437,7 +421,6 @@ export default function Home() {
             <InfographicContainer
               data={displayData}
               narrative={narrative}
-              headerImage={headerImage}
               onCopyHtml={handleCopyHtml}
               kajimaMode={kajimaEnabled}
             />

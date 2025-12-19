@@ -2,13 +2,16 @@
 
 import { Verdict } from '@/lib/schema';
 import { colors, typography, getConfidenceColor } from '@/lib/infographic-styles';
+import { getLabels } from '@/lib/kajima-labels';
 
 interface VerdictPairProps {
   shouldWeDoIt: Verdict;
   canWeDoIt: Verdict;
+  kajimaMode?: boolean;
 }
 
-export function VerdictPair({ shouldWeDoIt, canWeDoIt }: VerdictPairProps) {
+export function VerdictPair({ shouldWeDoIt, canWeDoIt, kajimaMode = false }: VerdictPairProps) {
+  const labels = getLabels(kajimaMode);
   return (
     <div className="avoid-break">
       <div className="flex items-center gap-2 mb-4">
@@ -24,14 +27,15 @@ export function VerdictPair({ shouldWeDoIt, canWeDoIt }: VerdictPairProps) {
             fontWeight: typography.fontWeight.semibold,
           }}
         >
-          Investment Assessment
+          {labels.investmentAssessment}
         </h2>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <VerdictPanel 
-          title="Should We Do It?" 
+          title={labels.shouldWeDoIt} 
           verdict={shouldWeDoIt}
+          kajimaMode={kajimaMode}
           icon={
             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -39,8 +43,9 @@ export function VerdictPair({ shouldWeDoIt, canWeDoIt }: VerdictPairProps) {
           }
         />
         <VerdictPanel 
-          title="Can We Do It?" 
+          title={labels.canWeDoIt} 
           verdict={canWeDoIt}
+          kajimaMode={kajimaMode}
           icon={
             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
@@ -56,9 +61,11 @@ interface VerdictPanelProps {
   title: string;
   verdict: Verdict;
   icon: React.ReactNode;
+  kajimaMode: boolean;
 }
 
-function VerdictPanel({ title, verdict, icon }: VerdictPanelProps) {
+function VerdictPanel({ title, verdict, icon, kajimaMode }: VerdictPanelProps) {
+  const labels = getLabels(kajimaMode);
   const confidenceColor = getConfidenceColor(verdict.confidenceLevel);
 
   return (
@@ -92,7 +99,12 @@ function VerdictPanel({ title, verdict, icon }: VerdictPanelProps) {
             color: confidenceColor,
           }}
         >
-          {verdict.confidenceLevel} Confidence
+          {kajimaMode 
+            ? (verdict.confidenceLevel === 'High' ? labels.highConfidence 
+               : verdict.confidenceLevel === 'Medium' ? labels.mediumConfidence 
+               : labels.lowConfidence)
+            : `${verdict.confidenceLevel} Confidence`
+          }
         </span>
       </div>
 
@@ -115,7 +127,7 @@ function VerdictPanel({ title, verdict, icon }: VerdictPanelProps) {
             className="text-xs font-medium uppercase tracking-wider mb-2"
             style={{ color: colors.slate[500] }}
           >
-            Supporting Factors
+            {labels.supportingFactors}
           </h4>
           <ul className="space-y-2">
             {verdict.supportingFactors.map((factor, index) => (

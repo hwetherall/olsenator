@@ -2,6 +2,7 @@
 
 import { SixTRisks, RiskRating, FiveTRisks } from '@/lib/schema';
 import { colors, typography, radarConfig, pentagonRadarConfig, getRiskColor } from '@/lib/infographic-styles';
+import { getLabels } from '@/lib/kajima-labels';
 
 interface SixTRadarProps {
   risks: SixTRisks | FiveTRisks;
@@ -49,6 +50,8 @@ function generateRadarPolygon(
 }
 
 export function SixTRadar({ risks, kajimaMode = false }: SixTRadarProps) {
+  const labels = getLabels(kajimaMode);
+  
   // Choose config based on mode
   const config = kajimaMode ? pentagonRadarConfig : radarConfig;
   const { size, centerX, centerY, maxRadius, axes, ratingToRadius } = config;
@@ -57,19 +60,19 @@ export function SixTRadar({ risks, kajimaMode = false }: SixTRadarProps) {
   // Map risks to array in correct order
   const riskEntries: { name: string; rating: RiskRating; summary: string }[] = kajimaMode
     ? [
-        { name: 'TAM', rating: risks.tam.rating, summary: risks.tam.summary },
-        { name: 'Technology', rating: risks.technology.rating, summary: risks.technology.summary },
-        { name: 'Traction', rating: risks.traction.rating, summary: risks.traction.summary },
-        { name: 'Terms', rating: risks.terms.rating, summary: risks.terms.summary },
-        { name: 'Trends', rating: risks.trends.rating, summary: risks.trends.summary },
+        { name: labels.tam, rating: risks.tam.rating, summary: risks.tam.summary },
+        { name: labels.technology, rating: risks.technology.rating, summary: risks.technology.summary },
+        { name: labels.traction, rating: risks.traction.rating, summary: risks.traction.summary },
+        { name: labels.terms, rating: risks.terms.rating, summary: risks.terms.summary },
+        { name: labels.trends, rating: risks.trends.rating, summary: risks.trends.summary },
       ]
     : [
-        { name: 'Team', rating: (risks as SixTRisks).team.rating, summary: (risks as SixTRisks).team.summary },
-        { name: 'TAM', rating: risks.tam.rating, summary: risks.tam.summary },
-        { name: 'Technology', rating: risks.technology.rating, summary: risks.technology.summary },
-        { name: 'Traction', rating: risks.traction.rating, summary: risks.traction.summary },
-        { name: 'Terms', rating: risks.terms.rating, summary: risks.terms.summary },
-        { name: 'Trends', rating: risks.trends.rating, summary: risks.trends.summary },
+        { name: labels.team, rating: (risks as SixTRisks).team.rating, summary: (risks as SixTRisks).team.summary },
+        { name: labels.tam, rating: risks.tam.rating, summary: risks.tam.summary },
+        { name: labels.technology, rating: risks.technology.rating, summary: risks.technology.summary },
+        { name: labels.traction, rating: risks.traction.rating, summary: risks.traction.summary },
+        { name: labels.terms, rating: risks.terms.rating, summary: risks.terms.summary },
+        { name: labels.trends, rating: risks.trends.rating, summary: risks.trends.summary },
       ];
   
   const ratings = riskEntries.map(r => r.rating);
@@ -102,7 +105,7 @@ export function SixTRadar({ risks, kajimaMode = false }: SixTRadarProps) {
             fontWeight: typography.fontWeight.semibold,
           }}
         >
-          {kajimaMode ? 'Five-T Risk Analysis' : 'Six-T Risk Analysis'}
+          {kajimaMode ? labels.fiveTRiskAnalysis : labels.sixTRiskAnalysis}
         </h2>
       </div>
 
@@ -254,21 +257,21 @@ export function SixTRadar({ risks, kajimaMode = false }: SixTRadarProps) {
             className="w-3 h-3 rounded-full"
             style={{ backgroundColor: colors.risk.green }}
           />
-          <span className="text-xs" style={{ color: colors.slate[500] }}>Low Risk</span>
+          <span className="text-xs" style={{ color: colors.slate[500] }}>{labels.lowRisk}</span>
         </div>
         <div className="flex items-center gap-2">
           <div 
             className="w-3 h-3 rounded-full"
             style={{ backgroundColor: colors.risk.amber }}
           />
-          <span className="text-xs" style={{ color: colors.slate[500] }}>Medium Risk</span>
+          <span className="text-xs" style={{ color: colors.slate[500] }}>{labels.mediumRisk}</span>
         </div>
         <div className="flex items-center gap-2">
           <div 
             className="w-3 h-3 rounded-full"
             style={{ backgroundColor: colors.risk.red }}
           />
-          <span className="text-xs" style={{ color: colors.slate[500] }}>High Risk</span>
+          <span className="text-xs" style={{ color: colors.slate[500] }}>{labels.highRisk}</span>
         </div>
       </div>
     </div>

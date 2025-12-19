@@ -4,7 +4,7 @@ import { ExtractionResult } from '@/lib/schema';
 export const maxDuration = 120; // Allow up to 120 seconds for translation
 
 const OPENROUTER_API_URL = 'https://openrouter.ai/api/v1/chat/completions';
-const MODEL = 'openai/gpt-4.5-preview'; // Using gpt-4.5-preview as gpt-5.2 may not be available yet
+const MODEL = 'google/gemini-3-flash-preview';
 
 interface TranslateRequest {
   data: ExtractionResult;
@@ -16,48 +16,21 @@ interface TranslateResponse {
   error?: string;
 }
 
-const TRANSLATION_SYSTEM_PROMPT = `Role: 
-You are a professional translator specializing in management consulting, corporate strategy, and technology for Japanese enterprise clients. 
+const TRANSLATION_SYSTEM_PROMPT = `You are a professional translator specializing in management consulting, corporate strategy, and technology for Japanese enterprise clients.
 
-Objective: 
-Translate English text into high-quality, natural Japanese suitable for board presentations, strategy decks, feasibility studies, and executive reports.
+Your task: Translate English strings to high-quality, natural Japanese suitable for board presentations, strategy decks, and executive reports.
 
 Translation Rules:
+1. Use clear, concise, formal consulting-grade Japanese (McKinsey/BCG/Kajima style)
+2. Translate meaning, not words - use natural consulting phrasing
+3. Use Japanese business terms: 戦略的示唆, 推奨方針, 市場機会, 実行可能性, 事業化, パイロット導入, 統合リスク, 確信度, ガバナンス
+4. Keep standard English/katakana terms: KPI, ROI, BMS, データドリブン, プラットフォーム, ソリューション
 
-1. Tone & Style
-- Use clear, concise, formal consulting-grade Japanese.
-- Avoid literal translations.
-- Write as if preparing materials for:
-  - McKinsey Japan
-  - BCG Tokyo
-  - Accenture Strategy Japan
-  - NRI / Mitsubishi Research Institute
-  - Kajima / Mitsubishi / large Japanese corporates
-
-2. Business-Natural Terminology
-Use Japanese terms commonly used in consulting decks:
-- 戦略的示唆
-- 推奨方針
-- 市場機会
-- 実行可能性
-- 事業化
-- パイロット導入
-- 統合リスク
-- 確信度
-- ガバナンス
-- エコシステム
-- ソリューション
-- プラットフォーム
-
-Typical English business terms should remain in English or katakana when that is standard in Japan (e.g., KPI, ROI, BMS, WTP, APPI, データドリブン).
-
-3. Translation Approach
-- Translate meaning, not words.
-- Use natural consulting phrasing, even if the English is casual or dense.
-- When English concepts lack a direct Japanese equivalent, choose the closest business-appropriate expression.
-
-4. Output Format
-You will receive a JSON object with English text values. Return the SAME JSON structure with all string values translated to Japanese. Preserve all keys, numbers, and structure exactly as provided. Only translate string values.`;
+CRITICAL OUTPUT FORMAT:
+- You will receive a JSON array of English strings
+- Return ONLY a valid JSON array with the Japanese translations
+- Same number of elements, same order
+- No explanation, no markdown, just the raw JSON array`;
 
 /**
  * Recursively translate all string values in an object
@@ -89,13 +62,14 @@ async function translateObject(
     return obj;
   }
 
+  console.log(`Translating ${strings.length} strings...`);
+
   // Translate all strings in a single API call
-  const userPrompt = `Translate the following JSON array of English strings to Japanese. Return ONLY a JSON array with the same number of elements, where each element is the Japanese translation of the corresponding English string. Maintain the exact order.
+  const userPrompt = `Translate these ${strings.length} English strings to Japanese. Return ONLY a JSON array with exactly ${strings.length} Japanese translations in the same order.
 
-English strings to translate:
-${JSON.stringify(strings, null, 2)}
+${JSON.stringify(strings)}
 
-Return only the JSON array of translated strings, no explanation.`;
+Output only the JSON array, nothing else.`;
 
   const response = await fetch(OPENROUTER_API_URL, {
     method: 'POST',
@@ -111,41 +85,78 @@ Return only the JSON array of translated strings, no explanation.`;
         { role: 'system', content: TRANSLATION_SYSTEM_PROMPT },
         { role: 'user', content: userPrompt },
       ],
-      temperature: 0.3,
+      temperature: 0.2,
       max_tokens: 16000,
     }),
   });
 
   if (!response.ok) {
-    throw new Error(`Translation API failed with status ${response.status}`);
+    const errorText = await response.text();
+    console.error('Translation API error:', response.status, errorText);
+    throw new Error(`Translation API failed with status ${response.status}: ${errorText}`);
   }
 
   const result = await response.json();
   
+  if (result.error) {
+    console.error('OpenRouter error:', result.error);
+    throw new Error(`OpenRouter error: ${result.error.message || JSON.stringify(result.error)}`);
+  }
+  
   if (!result.choices || result.choices.length === 0) {
+    console.error('No choices in response:', JSON.stringify(result));
     throw new Error('No translation response generated');
   }
 
   let translatedStrings: string[];
+  const content = result.choices[0].message.content.trim();
+  console.log('Raw translation response (first 500 chars):', content.substring(0, 500));
+  
   try {
-    const content = result.choices[0].message.content.trim();
-    // Try to extract JSON array from response
-    const jsonMatch = content.match(/\[[\s\S]*\]/);
+    // Try to extract JSON array from response - handle various formats
+    // Remove markdown code blocks if present
+    let cleanContent = content;
+    if (cleanContent.includes('```')) {
+      const codeBlockMatch = cleanContent.match(/```(?:json)?\s*([\s\S]*?)```/);
+      if (codeBlockMatch) {
+        cleanContent = codeBlockMatch[1].trim();
+      }
+    }
+    
+    // Try to find JSON array
+    const jsonMatch = cleanContent.match(/\[[\s\S]*\]/);
     if (jsonMatch) {
       translatedStrings = JSON.parse(jsonMatch[0]);
     } else {
-      throw new Error('Could not find JSON array in response');
+      // Maybe the whole content is the array
+      translatedStrings = JSON.parse(cleanContent);
     }
   } catch (e) {
     console.error('Failed to parse translation response:', e);
-    throw new Error('Failed to parse translation response');
+    console.error('Full response content:', content);
+    throw new Error('Failed to parse translation response as JSON array');
+  }
+
+  if (!Array.isArray(translatedStrings)) {
+    console.error('Parsed result is not an array:', typeof translatedStrings);
+    throw new Error('Translation response is not an array');
   }
 
   if (translatedStrings.length !== strings.length) {
-    console.error(`Translation mismatch: expected ${strings.length}, got ${translatedStrings.length}`);
-    // Fall back to original strings if counts don't match
-    translatedStrings = strings;
+    console.warn(`Translation count mismatch: expected ${strings.length}, got ${translatedStrings.length}`);
+    // Try to use what we got, padding with originals if needed
+    if (translatedStrings.length < strings.length) {
+      const padded = [...translatedStrings];
+      for (let i = translatedStrings.length; i < strings.length; i++) {
+        padded.push(strings[i]);
+      }
+      translatedStrings = padded;
+    } else {
+      translatedStrings = translatedStrings.slice(0, strings.length);
+    }
   }
+  
+  console.log(`Successfully translated ${translatedStrings.length} strings`);
 
   // Apply translations back to object
   const translatedObj = JSON.parse(JSON.stringify(obj));

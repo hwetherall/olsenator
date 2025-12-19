@@ -4,7 +4,7 @@ import { ExtractionResult } from '@/lib/schema';
 export const maxDuration = 60;
 
 const OPENROUTER_API_URL = 'https://openrouter.ai/api/v1/chat/completions';
-const MODEL = 'google/gemini-2.5-pro-preview';
+const MODEL = 'google/gemini-3-flash-preview';
 
 interface EnhanceRequest {
   data: ExtractionResult;

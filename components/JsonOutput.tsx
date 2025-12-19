@@ -9,13 +9,21 @@ interface JsonOutputProps {
   data: object | null;
   error?: string | null;
   isLoading?: boolean;
+  loadingMessage?: string;
+  loadingSubtext?: string;
   duration?: number;
   retried?: boolean;
+  countdownDuration?: number;
 }
 
-function CountdownTimer() {
-  const [timeLeft, setTimeLeft] = useState(15);
-  const totalTime = 15;
+function CountdownTimer({ duration = 15 }: { duration?: number }) {
+  const [timeLeft, setTimeLeft] = useState(duration);
+  const totalTime = duration;
+  
+  useEffect(() => {
+    // Reset timer when duration changes
+    setTimeLeft(duration);
+  }, [duration]);
   
   useEffect(() => {
     if (timeLeft <= 0) return;
@@ -70,16 +78,25 @@ function CountdownTimer() {
   );
 }
 
-export function JsonOutput({ data, error, isLoading, duration, retried }: JsonOutputProps) {
+export function JsonOutput({ 
+  data, 
+  error, 
+  isLoading, 
+  loadingMessage = 'Extracting memo data...', 
+  loadingSubtext = 'Analyzing your investment memo',
+  duration, 
+  retried,
+  countdownDuration = 15
+}: JsonOutputProps) {
   const jsonString = data ? JSON.stringify(data, null, 2) : '';
 
   if (isLoading) {
     return (
       <div className="w-full h-[500px] bg-white border-2 border-[var(--border)] rounded-2xl flex flex-col items-center justify-center gap-6 shadow-sm">
-        <CountdownTimer />
+        <CountdownTimer duration={countdownDuration} />
         <div className="text-center">
-          <p className="text-[var(--foreground)] font-semibold">Extracting memo data...</p>
-          <p className="text-sm text-[var(--muted)] mt-2">Analyzing your investment memo</p>
+          <p className="text-[var(--foreground)] font-semibold">{loadingMessage}</p>
+          <p className="text-sm text-[var(--muted)] mt-2">{loadingSubtext}</p>
         </div>
       </div>
     );

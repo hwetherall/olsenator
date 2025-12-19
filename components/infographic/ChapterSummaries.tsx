@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { Chapters, KajimaChapters } from '@/lib/schema';
 import { colors, typography } from '@/lib/infographic-styles';
+import { getLabels } from '@/lib/kajima-labels';
 
 interface ChapterSummariesProps {
   chapters: Chapters | KajimaChapters;
@@ -12,6 +13,7 @@ interface ChapterSummariesProps {
 type ChapterTab = 'team' | 'opportunity' | 'path' | 'operations';
 
 export function ChapterSummaries({ chapters, kajimaMode = false }: ChapterSummariesProps) {
+  const labels = getLabels(kajimaMode);
   const [activeTab, setActiveTab] = useState<ChapterTab>(kajimaMode ? 'opportunity' : 'team');
 
   // Update default tab when kajimaMode changes
@@ -22,10 +24,10 @@ export function ChapterSummaries({ chapters, kajimaMode = false }: ChapterSummar
   }, [kajimaMode, activeTab]);
 
   const allTabs: { id: ChapterTab; label: string }[] = [
-    { id: 'team', label: 'Team' },
-    { id: 'opportunity', label: 'Opportunity' },
-    { id: 'path', label: 'Path to Success' },
-    { id: 'operations', label: 'Operations' },
+    { id: 'team', label: labels.team },
+    { id: 'opportunity', label: kajimaMode ? labels.opportunityValidation : 'Opportunity' },
+    { id: 'path', label: labels.pathToSuccess },
+    { id: 'operations', label: labels.operations },
   ];
 
   // Filter out team tab in Kajima mode
@@ -52,7 +54,7 @@ export function ChapterSummaries({ chapters, kajimaMode = false }: ChapterSummar
             fontWeight: typography.fontWeight.semibold,
           }}
         >
-          Detailed Analysis
+          {labels.detailedAnalysis}
         </h2>
       </div>
 
@@ -83,10 +85,10 @@ export function ChapterSummaries({ chapters, kajimaMode = false }: ChapterSummar
 
       {/* Tab Content - Screen View */}
       <div className="p-6 no-print">
-        {activeTab === 'team' && !kajimaMode && <TeamChapter team={(chapters as Chapters).team} />}
-        {activeTab === 'opportunity' && <OpportunityChapter opportunity={chapters.opportunityValidation} />}
-        {activeTab === 'path' && <PathChapter path={chapters.pathToSuccess} />}
-        {activeTab === 'operations' && <OperationsChapter operations={chapters.operations} />}
+        {activeTab === 'team' && !kajimaMode && <TeamChapter team={(chapters as Chapters).team} kajimaMode={kajimaMode} />}
+        {activeTab === 'opportunity' && <OpportunityChapter opportunity={chapters.opportunityValidation} kajimaMode={kajimaMode} />}
+        {activeTab === 'path' && <PathChapter path={chapters.pathToSuccess} kajimaMode={kajimaMode} />}
+        {activeTab === 'operations' && <OperationsChapter operations={chapters.operations} kajimaMode={kajimaMode} />}
       </div>
 
       {/* Print View - Show All */}
@@ -98,9 +100,9 @@ export function ChapterSummaries({ chapters, kajimaMode = false }: ChapterSummar
                 className="text-sm font-semibold uppercase tracking-wider mb-4"
                 style={{ color: colors.navy }}
               >
-                Team Analysis
+                {labels.teamAnalysis}
               </h3>
-              <TeamChapter team={(chapters as Chapters).team} />
+              <TeamChapter team={(chapters as Chapters).team} kajimaMode={kajimaMode} />
             </div>
           )}
           <div>
@@ -108,27 +110,27 @@ export function ChapterSummaries({ chapters, kajimaMode = false }: ChapterSummar
               className="text-sm font-semibold uppercase tracking-wider mb-4"
               style={{ color: colors.navy }}
             >
-              Opportunity Validation
+              {labels.opportunityValidation}
             </h3>
-            <OpportunityChapter opportunity={chapters.opportunityValidation} />
+            <OpportunityChapter opportunity={chapters.opportunityValidation} kajimaMode={kajimaMode} />
           </div>
           <div>
             <h3 
               className="text-sm font-semibold uppercase tracking-wider mb-4"
               style={{ color: colors.navy }}
             >
-              Path to Success
+              {labels.pathToSuccess}
             </h3>
-            <PathChapter path={chapters.pathToSuccess} />
+            <PathChapter path={chapters.pathToSuccess} kajimaMode={kajimaMode} />
           </div>
           <div>
             <h3 
               className="text-sm font-semibold uppercase tracking-wider mb-4"
               style={{ color: colors.navy }}
             >
-              Operations
+              {labels.operations}
             </h3>
-            <OperationsChapter operations={chapters.operations} />
+            <OperationsChapter operations={chapters.operations} kajimaMode={kajimaMode} />
           </div>
         </div>
       </div>
@@ -136,51 +138,55 @@ export function ChapterSummaries({ chapters, kajimaMode = false }: ChapterSummar
   );
 }
 
-function TeamChapter({ team }: { team: Chapters['team'] }) {
+function TeamChapter({ team, kajimaMode }: { team: Chapters['team']; kajimaMode: boolean }) {
+  const labels = getLabels(kajimaMode);
   return (
     <div className="space-y-4">
-      <Section title="Capability Assessment" content={team.capabilityAssessment} />
+      <Section title={labels.capabilityAssessment} content={team.capabilityAssessment} />
       {team.identifiedGaps.length > 0 && (
-        <Section title="Identified Gaps" items={team.identifiedGaps} />
+        <Section title={labels.identifiedGaps} items={team.identifiedGaps} />
       )}
       {team.dataPoints.length > 0 && (
-        <DataPoints items={team.dataPoints} />
+        <DataPoints items={team.dataPoints} kajimaMode={kajimaMode} />
       )}
     </div>
   );
 }
 
-function OpportunityChapter({ opportunity }: { opportunity: Chapters['opportunityValidation'] }) {
+function OpportunityChapter({ opportunity, kajimaMode }: { opportunity: Chapters['opportunityValidation']; kajimaMode: boolean }) {
+  const labels = getLabels(kajimaMode);
   return (
     <div className="space-y-4">
-      <Section title="Problem Statement" content={opportunity.problemStatement} />
-      <Section title="Market Size" content={opportunity.marketSize} />
-      <Section title="Competitive Positioning" content={opportunity.competitivePositioning} />
+      <Section title={labels.problemStatement} content={opportunity.problemStatement} />
+      <Section title={labels.marketSize} content={opportunity.marketSize} />
+      <Section title={labels.competitivePositioning} content={opportunity.competitivePositioning} />
       {opportunity.dataPoints.length > 0 && (
-        <DataPoints items={opportunity.dataPoints} />
+        <DataPoints items={opportunity.dataPoints} kajimaMode={kajimaMode} />
       )}
     </div>
   );
 }
 
-function PathChapter({ path }: { path: Chapters['pathToSuccess'] }) {
+function PathChapter({ path, kajimaMode }: { path: Chapters['pathToSuccess']; kajimaMode: boolean }) {
+  const labels = getLabels(kajimaMode);
   return (
     <div className="space-y-4">
-      <Section title="Product Requirements" content={path.productRequirements} />
-      <Section title="Go-to-Market" content={path.goToMarket} />
-      <Section title="Revenue Model" content={path.revenueModel} />
+      <Section title={labels.productRequirements} content={path.productRequirements} />
+      <Section title={labels.goToMarket} content={path.goToMarket} />
+      <Section title={labels.revenueModel} content={path.revenueModel} />
       {path.dataPoints.length > 0 && (
-        <DataPoints items={path.dataPoints} />
+        <DataPoints items={path.dataPoints} kajimaMode={kajimaMode} />
       )}
     </div>
   );
 }
 
-function OperationsChapter({ operations }: { operations: Chapters['operations'] }) {
+function OperationsChapter({ operations, kajimaMode }: { operations: Chapters['operations']; kajimaMode: boolean }) {
+  const labels = getLabels(kajimaMode);
   const metrics = [
-    { label: 'IRR', value: operations.irr },
-    { label: 'Payback Period', value: operations.paybackPeriod },
-    { label: 'Margins', value: operations.margins },
+    { label: labels.irr, value: operations.irr },
+    { label: labels.paybackPeriod, value: operations.paybackPeriod },
+    { label: labels.margins, value: operations.margins },
   ].filter(m => m.value);
 
   return (
@@ -209,10 +215,10 @@ function OperationsChapter({ operations }: { operations: Chapters['operations'] 
         </div>
       )}
       {operations.operationalRisks.length > 0 && (
-        <Section title="Operational Risks" items={operations.operationalRisks} isWarning />
+        <Section title={labels.operationalRisks} items={operations.operationalRisks} isWarning />
       )}
       {operations.dataPoints.length > 0 && (
-        <DataPoints items={operations.dataPoints} />
+        <DataPoints items={operations.dataPoints} kajimaMode={kajimaMode} />
       )}
     </div>
   );
@@ -275,7 +281,8 @@ function Section({
   );
 }
 
-function DataPoints({ items }: { items: string[] }) {
+function DataPoints({ items, kajimaMode }: { items: string[]; kajimaMode: boolean }) {
+  const labels = getLabels(kajimaMode);
   if (items.length === 0) return null;
   
   return (
@@ -287,7 +294,7 @@ function DataPoints({ items }: { items: string[] }) {
         className="text-xs font-medium uppercase tracking-wider mb-2"
         style={{ color: colors.slate[500] }}
       >
-        Supporting Data
+        {labels.supportingData}
       </h4>
       <ul className="space-y-1">
         {items.map((item, index) => (

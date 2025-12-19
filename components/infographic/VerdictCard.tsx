@@ -2,12 +2,15 @@
 
 import { ExecutiveSummary } from '@/lib/schema';
 import { colors, typography, spacing } from '@/lib/infographic-styles';
+import { getLabels } from '@/lib/kajima-labels';
 
 interface VerdictCardProps {
   executiveSummary: ExecutiveSummary;
+  kajimaMode?: boolean;
 }
 
-export function VerdictCard({ executiveSummary }: VerdictCardProps) {
+export function VerdictCard({ executiveSummary, kajimaMode = false }: VerdictCardProps) {
+  const labels = getLabels(kajimaMode);
   return (
     <div 
       className="avoid-break rounded-lg p-6"
@@ -29,7 +32,7 @@ export function VerdictCard({ executiveSummary }: VerdictCardProps) {
             fontWeight: typography.fontWeight.semibold,
           }}
         >
-          Tell It To Me Straight
+          {labels.tellItToMeStraight}
         </h2>
       </div>
       
@@ -52,7 +55,7 @@ export function VerdictCard({ executiveSummary }: VerdictCardProps) {
             className="text-sm font-medium uppercase tracking-wider mb-3"
             style={{ color: colors.slate[500] }}
           >
-            Key Takeaways
+            {labels.keyTakeaways}
           </h3>
           <ul className="space-y-2">
             {executiveSummary.coreReasoning.map((reason, index) => (

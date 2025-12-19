@@ -1,12 +1,15 @@
 'use client';
 
 import { colors, typography } from '@/lib/infographic-styles';
+import { getLabels } from '@/lib/kajima-labels';
 
 interface ExecutiveNarrativeProps {
   narrative: string;
+  kajimaMode?: boolean;
 }
 
-export function ExecutiveNarrative({ narrative }: ExecutiveNarrativeProps) {
+export function ExecutiveNarrative({ narrative, kajimaMode = false }: ExecutiveNarrativeProps) {
+  const labels = getLabels(kajimaMode);
   if (!narrative) return null;
 
   return (
@@ -40,7 +43,7 @@ export function ExecutiveNarrative({ narrative }: ExecutiveNarrativeProps) {
             fontWeight: typography.fontWeight.semibold,
           }}
         >
-          Executive Summary
+          {labels.executiveNarrative}
         </h2>
         <span 
           className="text-xs px-2 py-0.5 rounded-full ml-auto"
@@ -49,7 +52,7 @@ export function ExecutiveNarrative({ narrative }: ExecutiveNarrativeProps) {
             color: colors.white,
           }}
         >
-          AI Generated
+          {kajimaMode ? 'AI生成' : 'AI Generated'}
         </span>
       </div>
       

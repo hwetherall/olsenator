@@ -2,7 +2,7 @@ import { ExtractionResult, validateExtractionResult } from './schema';
 import { EXTRACTION_SYSTEM_PROMPT, SIMPLIFIED_EXTRACTION_PROMPT, createUserPrompt } from './prompts';
 
 const OPENROUTER_API_URL = 'https://openrouter.ai/api/v1/chat/completions';
-const MODEL = 'google/gemini-2.5-pro-preview';
+const MODEL = 'google/gemini-3-flash-preview';
 
 interface OpenRouterMessage {
   role: 'system' | 'user' | 'assistant';

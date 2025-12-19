@@ -231,7 +231,7 @@ import { NextRequest, NextResponse } from 'next/server';
 export const maxDuration = 120; // Image generation can take longer
 
 const OPENROUTER_API_URL = 'https://openrouter.ai/api/v1/chat/completions';
-const IMAGE_MODEL = 'black-forest-labs/flux-1.1-pro';
+const IMAGE_MODEL = 'google/gemini-2.5-flash-image';
 
 interface GenerateImageRequest {
   projectName: string;
@@ -4053,7 +4053,8 @@ Make sure to set `OPENROUTER_API_KEY` in your Vercel project environment variabl
 
 Built for Innovera.ai
 
-#   o l s e n a t o r  
+#   o l s e n a t o r 
+ 
  
 </file>
 

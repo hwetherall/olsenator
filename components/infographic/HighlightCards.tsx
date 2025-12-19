@@ -2,12 +2,15 @@
 
 import { Highlight } from '@/lib/schema';
 import { colors, typography } from '@/lib/infographic-styles';
+import { getLabels } from '@/lib/kajima-labels';
 
 interface HighlightCardsProps {
   highlights: Highlight[];
+  kajimaMode?: boolean;
 }
 
-export function HighlightCards({ highlights }: HighlightCardsProps) {
+export function HighlightCards({ highlights, kajimaMode = false }: HighlightCardsProps) {
+  const labels = getLabels(kajimaMode);
   if (highlights.length === 0) return null;
 
   return (
@@ -25,7 +28,7 @@ export function HighlightCards({ highlights }: HighlightCardsProps) {
             fontWeight: typography.fontWeight.semibold,
           }}
         >
-          Key Highlights
+          {labels.keyHighlights}
         </h2>
       </div>
 

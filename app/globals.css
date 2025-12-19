@@ -70,9 +70,15 @@ textarea {
   .no-print,
   header,
   footer,
-  button,
-  .no-print-bg {
+  button {
     display: none !important;
+  }
+
+  /* Remove background colors for printing but keep content visible */
+  .no-print-bg {
+    background: transparent !important;
+    background-color: transparent !important;
+    border-color: transparent !important;
   }
 
   /* Ensure infographic backgrounds print correctly */

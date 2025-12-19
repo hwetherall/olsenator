@@ -3,6 +3,7 @@
 import { useRef } from 'react';
 import { ExtractionResult, KajimaExtractionResult } from '@/lib/schema';
 import { colors, typography } from '@/lib/infographic-styles';
+import { getLabels } from '@/lib/kajima-labels';
 import { InfographicHeader } from './InfographicHeader';
 import { ExecutiveNarrative } from './ExecutiveNarrative';
 import { VerdictCard } from './VerdictCard';
@@ -16,7 +17,6 @@ import { ChapterSummaries } from './ChapterSummaries';
 interface InfographicContainerProps {
   data: ExtractionResult | KajimaExtractionResult;
   narrative?: string;
-  headerImage?: string;
   onCopyHtml?: () => void;
   kajimaMode?: boolean;
 }
@@ -24,10 +24,10 @@ interface InfographicContainerProps {
 export function InfographicContainer({ 
   data, 
   narrative, 
-  headerImage,
   onCopyHtml,
   kajimaMode = false,
 }: InfographicContainerProps) {
+  const labels = getLabels(kajimaMode);
   const containerRef = useRef<HTMLDivElement>(null);
 
   const handlePrint = () => {
@@ -52,7 +52,7 @@ export function InfographicContainer({
             className="text-sm font-medium"
             style={{ color: colors.slate[600] }}
           >
-            Investment Infographic
+            {labels.investmentInfographic}
           </span>
           <span 
             className="text-xs px-2 py-0.5 rounded"
@@ -61,7 +61,7 @@ export function InfographicContainer({
               color: colors.slate[500],
             }}
           >
-            Confidence: {data.confidence}%
+            {labels.confidence}: {data.confidence}%
           </span>
         </div>
         <div className="flex items-center gap-2">
@@ -106,17 +106,17 @@ export function InfographicContainer({
       >
         {/* Page 1: Header, Summary, Radar, Highlights */}
         <div className="infographic-page-1">
-          {/* Header with optional banner image */}
+          {/* Header */}
           <InfographicHeader 
             metadata={data.metadata} 
-            headerImage={headerImage}
+            kajimaMode={kajimaMode}
           />
 
           {/* Optional AI Narrative */}
           {narrative && (
             <div className="p-6 pt-0">
               <div className="mt-6">
-                <ExecutiveNarrative narrative={narrative} />
+                <ExecutiveNarrative narrative={narrative} kajimaMode={kajimaMode} />
               </div>
             </div>
           )}
@@ -124,7 +124,7 @@ export function InfographicContainer({
           {/* Main Content Grid */}
           <div className="p-6 space-y-6">
             {/* Executive Summary */}
-            <VerdictCard executiveSummary={data.executiveSummary} />
+            <VerdictCard executiveSummary={data.executiveSummary} kajimaMode={kajimaMode} />
 
             {/* Strategic Fit */}
             <div 
@@ -140,7 +140,7 @@ export function InfographicContainer({
                     className="text-xs font-medium uppercase tracking-wider block mb-1"
                     style={{ color: colors.slate[500] }}
                   >
-                    Strategic Fit Assessment
+                    {labels.strategicFitAssessment}
                   </span>
                   <p 
                     className="text-sm"
@@ -164,7 +164,12 @@ export function InfographicContainer({
                         : colors.risk.red,
                   }}
                 >
-                  {data.strategicFit.confidenceLevel} Confidence
+                  {kajimaMode 
+                    ? (data.strategicFit.confidenceLevel === 'High' ? labels.highConfidence 
+                       : data.strategicFit.confidenceLevel === 'Medium' ? labels.mediumConfidence 
+                       : labels.lowConfidence)
+                    : `${data.strategicFit.confidenceLevel} Confidence`
+                  }
                 </span>
               </div>
             </div>
@@ -173,7 +178,7 @@ export function InfographicContainer({
             <SixTRadar risks={data.sixTRisks} kajimaMode={kajimaMode} />
 
             {/* Highlights */}
-            <HighlightCards highlights={data.highlights} />
+            <HighlightCards highlights={data.highlights} kajimaMode={kajimaMode} />
           </div>
         </div>
 
@@ -181,16 +186,17 @@ export function InfographicContainer({
         <div className="infographic-page-2 page-break-before">
           <div className="p-6 space-y-6">
             {/* Critical Assumptions */}
-            <AssumptionsList assumptions={data.criticalAssumptions} />
+            <AssumptionsList assumptions={data.criticalAssumptions} kajimaMode={kajimaMode} />
 
             {/* Verdict Pair */}
             <VerdictPair 
               shouldWeDoIt={data.shouldWeDoIt} 
-              canWeDoIt={data.canWeDoIt} 
+              canWeDoIt={data.canWeDoIt}
+              kajimaMode={kajimaMode}
             />
 
             {/* Next Steps */}
-            <NextStepsTimeline nextSteps={data.nextSteps} />
+            <NextStepsTimeline nextSteps={data.nextSteps} kajimaMode={kajimaMode} />
 
             {/* Chapter Summaries */}
             <ChapterSummaries chapters={data.chapters} kajimaMode={kajimaMode} />
@@ -206,8 +212,8 @@ export function InfographicContainer({
           }}
         >
           <div className="flex items-center justify-between text-xs" style={{ color: colors.slate[500] }}>
-            <span>Generated by The Olsenator — Innovera Investment Analysis Platform</span>
-            <span>{new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</span>
+            <span>{labels.generatedBy}</span>
+            <span>{new Date().toLocaleDateString(kajimaMode ? 'ja-JP' : 'en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</span>
           </div>
         </div>
       </div>
