@@ -32,6 +32,14 @@ CRITICAL OUTPUT FORMAT:
 - Same number of elements, same order
 - No explanation, no markdown, just the raw JSON array`;
 
+// Fields that should NOT be translated (enum values that must remain in English)
+const EXCLUDED_FIELDS = new Set([
+  'rating',           // "red" | "yellow" | "green"
+  'status',           // "validated" | "pending" | "at-risk"
+  'decision',         // "Proceed" | "Do Not Proceed" | "Conditional"
+  'confidenceLevel',  // "High" | "Medium" | "Low"
+]);
+
 /**
  * Recursively translate all string values in an object
  */
@@ -44,6 +52,12 @@ async function translateObject(
   const paths: (string | number)[][] = [];
 
   function collectStrings(value: unknown, path: (string | number)[] = []): void {
+    // Skip fields that are enum values and should not be translated
+    const lastKey = path[path.length - 1];
+    if (typeof lastKey === 'string' && EXCLUDED_FIELDS.has(lastKey)) {
+      return; // Skip this field entirely
+    }
+    
     if (typeof value === 'string' && value.trim().length > 0) {
       strings.push(value);
       paths.push([...path]);
