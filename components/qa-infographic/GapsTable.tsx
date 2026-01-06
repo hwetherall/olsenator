@@ -11,35 +11,19 @@ export function GapsTable({ gaps }: GapsTableProps) {
   if (gaps.length === 0) return null;
 
   return (
-    <div className="avoid-break">
-      <div className="flex items-center gap-2 mb-4">
-        <div 
-          className="w-1 h-6 rounded-full"
-          style={{ backgroundColor: colors.risk.red }}
-        />
+    <div className="avoid-break mb-8">
+      <div className="flex flex-col gap-2 mb-6">
         <h2 
-          className="text-lg font-semibold"
-          style={{ 
-            color: colors.navy,
-            fontFamily: typography.fontFamily.sans,
-            fontWeight: typography.fontWeight.semibold,
-          }}
+          className="text-2xl font-light"
+          style={{ color: colors.navy }}
         >
           Identified Gaps
         </h2>
-        <span 
-          className="ml-2 px-2 py-0.5 rounded-full text-xs font-medium"
-          style={{ 
-            backgroundColor: colors.risk.redLight,
-            color: colors.risk.red,
-          }}
-        >
-          {gaps.length} item{gaps.length !== 1 ? 's' : ''} requiring attention
-        </span>
+        <div className="w-12 h-0.5" style={{ backgroundColor: colors.risk.red }} />
       </div>
 
       <div 
-        className="rounded-lg overflow-hidden"
+        className="overflow-hidden"
         style={{ 
           backgroundColor: colors.white,
           border: `1px solid ${colors.slate[200]}`,
@@ -47,43 +31,30 @@ export function GapsTable({ gaps }: GapsTableProps) {
       >
         <table className="w-full">
           <thead>
-            <tr style={{ backgroundColor: colors.slate[50] }}>
+            <tr style={{ backgroundColor: colors.slate[50], borderBottom: `1px solid ${colors.slate[200]}` }}>
               <th 
-                className="text-left px-4 py-3 text-xs font-semibold uppercase tracking-wider"
-                style={{ 
-                  color: colors.slate[500],
-                  borderBottom: `1px solid ${colors.slate[200]}`,
-                  width: '80px',
-                }}
+                className="text-left px-6 py-4 text-xs font-bold uppercase tracking-wider"
+                style={{ color: colors.slate[500], width: '120px' }}
               >
                 Priority
               </th>
               <th 
-                className="text-left px-4 py-3 text-xs font-semibold uppercase tracking-wider"
-                style={{ 
-                  color: colors.slate[500],
-                  borderBottom: `1px solid ${colors.slate[200]}`,
-                }}
+                className="text-left px-6 py-4 text-xs font-bold uppercase tracking-wider"
+                style={{ color: colors.slate[500] }}
               >
-                Question
+                Topic
               </th>
               <th 
-                className="text-left px-4 py-3 text-xs font-semibold uppercase tracking-wider"
-                style={{ 
-                  color: colors.slate[500],
-                  borderBottom: `1px solid ${colors.slate[200]}`,
-                }}
+                className="text-left px-6 py-4 text-xs font-bold uppercase tracking-wider"
+                style={{ color: colors.slate[500] }}
               >
-                What's Missing
+                Missing Information
               </th>
               <th 
-                className="text-left px-4 py-3 text-xs font-semibold uppercase tracking-wider"
-                style={{ 
-                  color: colors.slate[500],
-                  borderBottom: `1px solid ${colors.slate[200]}`,
-                }}
+                className="text-left px-6 py-4 text-xs font-bold uppercase tracking-wider"
+                style={{ color: colors.slate[500] }}
               >
-                Action Required
+                Action
               </th>
             </tr>
           </thead>
@@ -96,47 +67,49 @@ export function GapsTable({ gaps }: GapsTableProps) {
                   style={{ 
                     borderBottom: index < gaps.length - 1 ? `1px solid ${colors.slate[100]}` : 'none',
                   }}
+                  className="hover:bg-slate-50 transition-colors"
                 >
-                  <td className="px-4 py-3">
+                  <td className="px-6 py-4 align-top">
                     <span 
-                      className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium"
-                      style={{ backgroundColor: priority.bgColor, color: priority.color }}
+                      className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider"
+                      style={{ 
+                        color: priority.color,
+                      }}
                     >
-                      {gap.priority === 'critical' && (
-                        <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
-                          <path fillRule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
-                        </svg>
-                      )}
+                      <span className="w-2 h-2 rounded-full" style={{ backgroundColor: priority.color }}></span>
                       {priority.label}
                     </span>
                   </td>
                   <td 
-                    className="px-4 py-3 text-sm font-medium"
-                    style={{ color: colors.slate[700] }}
+                    className="px-6 py-4 text-sm font-semibold align-top"
+                    style={{ color: colors.navy }}
                   >
                     {gap.question}
                   </td>
                   <td 
-                    className="px-4 py-3 text-sm"
-                    style={{ color: colors.slate[600] }}
+                    className="px-6 py-4 text-sm align-top"
+                    style={{ 
+                        color: colors.slate[600],
+                        lineHeight: typography.lineHeight.relaxed 
+                    }}
                   >
                     {gap.whatsMissing}
                   </td>
                   <td 
-                    className="px-4 py-3 text-sm"
-                    style={{ color: colors.slate[600] }}
+                    className="px-6 py-4 text-sm align-top"
+                    style={{ color: colors.slate[700] }}
                   >
                     <div className="flex items-start gap-2">
-                      <svg 
-                        className="w-4 h-4 flex-shrink-0 mt-0.5" 
-                        fill="none" 
-                        stroke="currentColor" 
-                        viewBox="0 0 24 24"
-                        style={{ color: colors.teal }}
-                      >
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 9l3 3m0 0l-3 3m3-3H8m13 0a9 9 0 11-18 0 9 9 0 0118 0z" />
-                      </svg>
-                      {gap.recommendedAction}
+                        <svg 
+                            className="w-4 h-4 flex-shrink-0 mt-0.5" 
+                            fill="none" 
+                            stroke="currentColor" 
+                            viewBox="0 0 24 24"
+                            style={{ color: colors.accent }}
+                        >
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 9l3 3m0 0l-3 3m3-3H8m13 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                        <span className="font-medium">{gap.recommendedAction}</span>
                     </div>
                   </td>
                 </tr>

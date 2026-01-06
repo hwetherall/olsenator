@@ -12,86 +12,84 @@ export function QAHeader({ metadata }: QAHeaderProps) {
     <div
       className="relative overflow-hidden"
       style={{
-        background: `linear-gradient(135deg, ${colors.navy} 0%, #1e3a5f 100%)`,
+        backgroundColor: colors.white,
+        paddingBottom: '2rem',
       }}
     >
-      {/* Decorative Pattern */}
-      <div 
-        className="absolute inset-0 opacity-10"
-        style={{
-          backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.4'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
-        }}
-      />
-
-      <div className="relative px-8 py-8">
+      <div className="relative px-8 pt-8">
         {/* Top Row - Logo and Document Type */}
-        <div className="flex items-center justify-between mb-6">
+        <div className="flex items-center justify-between mb-12">
           <div className="flex items-center gap-3">
-            <div 
-              className="w-10 h-10 rounded-lg flex items-center justify-center"
-              style={{ backgroundColor: 'rgba(255,255,255,0.15)' }}
-            >
-              <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-              </svg>
-            </div>
+            {/* Innovera Logo Style */}
             <span 
-              className="text-lg tracking-[0.15em] font-light"
-              style={{ color: 'rgba(255,255,255,0.9)' }}
+              className="text-2xl font-light tracking-[0.1em]"
+              style={{ color: colors.navy }}
             >
-              INNOV<span style={{ color: colors.teal }}>E</span>RA
+              INNOVER<span style={{ color: colors.accent }}>A</span>
             </span>
           </div>
           
           <div 
-            className="px-4 py-2 rounded-full text-sm font-medium"
+            className="px-3 py-1 text-xs uppercase tracking-wider font-semibold"
             style={{ 
-              backgroundColor: 'rgba(255,255,255,0.15)',
-              color: colors.white,
+              color: colors.slate[500],
+              border: `1px solid ${colors.slate[200]}`,
+              borderRadius: '2px',
             }}
           >
-            Q&A Response Analysis
+            Q&A Analysis
           </div>
         </div>
 
-        {/* Main Title */}
-        <div className="mb-6">
-          <h1 
-            className="text-3xl font-bold mb-2"
-            style={{ 
-              color: colors.white,
-              fontFamily: typography.fontFamily.sans,
-              fontWeight: typography.fontWeight.bold,
-            }}
-          >
-            {metadata.projectName}
-          </h1>
-          <p 
-            className="text-lg opacity-80"
-            style={{ color: colors.white }}
-          >
-            {metadata.documentTitle}
-          </p>
+        {/* Main Title Section - Aligned with "What if..." style */}
+        <div className="mb-12">
+          <div className="flex flex-col gap-4">
+            <h1 
+              className="text-5xl font-light leading-tight tracking-tight"
+              style={{ 
+                color: colors.navy,
+                fontFamily: typography.fontFamily.sans,
+              }}
+            >
+              {metadata.projectName}
+            </h1>
+            
+            {/* Orange line divider */}
+            <div 
+              className="w-16 h-1 my-2"
+              style={{ backgroundColor: colors.accent }}
+            />
+
+            <p 
+              className="text-xl font-light"
+              style={{ color: colors.slate[500] }}
+            >
+              {metadata.documentTitle}
+            </p>
+          </div>
         </div>
 
-        {/* Stats Row */}
-        <div className="flex items-center gap-6">
-          <div className="flex items-center gap-2">
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" style={{ color: colors.teal }}>
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
-            </svg>
-            <span className="text-white text-sm font-medium">
-              {metadata.questionCount} Questions
+        {/* Stats Row - Minimalist */}
+        <div 
+          className="flex items-center gap-12 pt-6"
+          style={{ borderTop: `1px solid ${colors.slate[100]}` }}
+        >
+          <div className="flex flex-col">
+            <span style={{ color: colors.navy }} className="font-bold text-3xl">
+              {metadata.questionCount}
+            </span>
+            <span className="text-xs uppercase tracking-wide font-medium" style={{ color: colors.slate[400] }}>
+              Questions
             </span>
           </div>
           
           {metadata.date && (
-            <div className="flex items-center gap-2">
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" style={{ color: colors.teal }}>
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-              </svg>
-              <span className="text-white text-sm font-medium">
-                {metadata.date}
+            <div className="flex flex-col">
+              <span style={{ color: colors.navy }} className="font-bold text-3xl">
+                {new Date(metadata.date).getDate()}
+              </span>
+              <span className="text-xs uppercase tracking-wide font-medium" style={{ color: colors.slate[400] }}>
+                {new Date(metadata.date).toLocaleString('default', { month: 'short', year: 'numeric' })}
               </span>
             </div>
           )}

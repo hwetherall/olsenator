@@ -2,18 +2,20 @@
  * Design System for Infographic Rendering
  * 
  * Strict design system for visual consistency across all generated infographics.
- * Optimized for both screen viewing and print-to-PDF output.
+ * Aligned with Innovera's Corporate Identity (Website).
  */
 
 export const colors = {
-  // Primary colors
-  navy: '#1e293b',
+  // Primary colors - Innovera Brand
+  // Dark Navy from the footer/header images
+  navy: '#0f172a',    // Deep slate/navy (darker than before)
   white: '#ffffff',
-  teal: '#14b8a6',  // Accent color for highlights
+  // Vibrant Orange from the "bottom line impact" text and logo
+  accent: '#f97316',  // Bright orange
   
   // Slate hierarchy for text
   slate: {
-    900: '#0f172a',  // Darkest headings
+    900: '#0f172a',  // Darkest headings (matches navy)
     700: '#334155',  // Primary body text
     600: '#475569',  // Secondary body text
     500: '#64748b',  // Tertiary text
@@ -28,26 +30,26 @@ export const colors = {
   risk: {
     red: '#ef4444',
     redLight: '#fef2f2',
-    redBorder: '#fecaca',
+    redBorder: '#fee2e2',
     amber: '#f59e0b',
     amberLight: '#fffbeb',
-    amberBorder: '#fde68a',
-    green: '#22c55e',
-    greenLight: '#f0fdf4',
-    greenBorder: '#bbf7d0',
+    amberBorder: '#fef3c7',
+    green: '#10b981', 
+    greenLight: '#ecfdf5',
+    greenBorder: '#d1fae5',
   },
   
   // Confidence level colors
   confidence: {
-    high: '#22c55e',
+    high: '#10b981',
     medium: '#f59e0b',
     low: '#ef4444',
   },
   
   // Decision colors
   decision: {
-    proceed: '#22c55e',
-    proceedBg: '#f0fdf4',
+    proceed: '#10b981',
+    proceedBg: '#ecfdf5',
     conditional: '#f59e0b',
     conditionalBg: '#fffbeb',
     doNotProceed: '#ef4444',
@@ -56,8 +58,8 @@ export const colors = {
   
   // Assumption status colors
   assumption: {
-    validated: '#22c55e',
-    validatedBg: '#f0fdf4',
+    validated: '#10b981',
+    validatedBg: '#ecfdf5',
     pending: '#f59e0b',
     pendingBg: '#fffbeb',
     atRisk: '#ef4444',
@@ -89,6 +91,7 @@ export const typography = {
     '2xl': '1.5rem',   // 24px
     '3xl': '1.875rem', // 30px
     '4xl': '2.25rem',  // 36px
+    '5xl': '3rem',     // 48px
   },
   fontWeight: {
     normal: 400,
@@ -104,10 +107,10 @@ export const typography = {
 } as const;
 
 export const borderRadius = {
-  sm: '4px',
-  md: '8px',
-  lg: '12px',
-  xl: '16px',
+  sm: '2px',         // Sharper corners based on the "technical" feel
+  md: '4px',
+  lg: '8px',
+  xl: '12px',
   full: '9999px',
 } as const;
 
@@ -223,4 +226,3 @@ export function getAssumptionBgColor(status: string): string {
       return colors.slate[100];
   }
 }
-

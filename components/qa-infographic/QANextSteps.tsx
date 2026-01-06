@@ -17,26 +17,19 @@ export function QANextSteps({ nextSteps }: QANextStepsProps) {
   );
 
   return (
-    <div className="avoid-break">
-      <div className="flex items-center gap-2 mb-4">
-        <div 
-          className="w-1 h-6 rounded-full"
-          style={{ backgroundColor: colors.navy }}
-        />
+    <div className="avoid-break mb-8">
+      <div className="flex flex-col gap-2 mb-6">
         <h2 
-          className="text-lg font-semibold"
-          style={{ 
-            color: colors.navy,
-            fontFamily: typography.fontFamily.sans,
-            fontWeight: typography.fontWeight.semibold,
-          }}
+          className="text-2xl font-light"
+          style={{ color: colors.navy }}
         >
           Recommended Next Steps
         </h2>
+        <div className="w-12 h-0.5" style={{ backgroundColor: colors.accent }} />
       </div>
 
       <div 
-        className="rounded-lg overflow-hidden"
+        className="overflow-hidden"
         style={{ 
           backgroundColor: colors.white,
           border: `1px solid ${colors.slate[200]}`,
@@ -44,42 +37,28 @@ export function QANextSteps({ nextSteps }: QANextStepsProps) {
       >
         <table className="w-full">
           <thead>
-            <tr style={{ backgroundColor: colors.slate[50] }}>
+            <tr style={{ backgroundColor: colors.slate[50], borderBottom: `1px solid ${colors.slate[200]}` }}>
               <th 
-                className="text-left px-4 py-3 text-xs font-semibold uppercase tracking-wider"
-                style={{ 
-                  color: colors.slate[500],
-                  borderBottom: `1px solid ${colors.slate[200]}`,
-                  width: '90px',
-                }}
+                className="text-left px-6 py-4 text-xs font-bold uppercase tracking-wider"
+                style={{ color: colors.slate[500], width: '120px' }}
               >
                 Priority
               </th>
               <th 
-                className="text-left px-4 py-3 text-xs font-semibold uppercase tracking-wider"
-                style={{ 
-                  color: colors.slate[500],
-                  borderBottom: `1px solid ${colors.slate[200]}`,
-                }}
+                className="text-left px-6 py-4 text-xs font-bold uppercase tracking-wider"
+                style={{ color: colors.slate[500] }}
               >
-                Action
+                Action Item
               </th>
               <th 
-                className="text-left px-4 py-3 text-xs font-semibold uppercase tracking-wider"
-                style={{ 
-                  color: colors.slate[500],
-                  borderBottom: `1px solid ${colors.slate[200]}`,
-                }}
+                className="text-left px-6 py-4 text-xs font-bold uppercase tracking-wider"
+                style={{ color: colors.slate[500] }}
               >
                 Rationale
               </th>
               <th 
-                className="text-left px-4 py-3 text-xs font-semibold uppercase tracking-wider"
-                style={{ 
-                  color: colors.slate[500],
-                  borderBottom: `1px solid ${colors.slate[200]}`,
-                  width: '150px',
-                }}
+                className="text-left px-6 py-4 text-xs font-bold uppercase tracking-wider"
+                style={{ color: colors.slate[500], width: '160px' }}
               >
                 Owner
               </th>
@@ -94,28 +73,27 @@ export function QANextSteps({ nextSteps }: QANextStepsProps) {
                   style={{ 
                     borderBottom: index < sortedSteps.length - 1 ? `1px solid ${colors.slate[100]}` : 'none',
                   }}
+                  className="hover:bg-slate-50 transition-colors"
                 >
-                  <td className="px-4 py-3">
-                    <span 
-                      className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium"
-                      style={{ backgroundColor: priority.bgColor, color: priority.color }}
+                  <td className="px-6 py-4 align-top">
+                     <span 
+                      className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider"
+                      style={{ 
+                        color: priority.color,
+                      }}
                     >
-                      {(step.priority === 'critical' || step.priority === 'high') && (
-                        <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
-                          <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-8.707l-3-3a1 1 0 00-1.414 0l-3 3a1 1 0 001.414 1.414L9 9.414V13a1 1 0 102 0V9.414l1.293 1.293a1 1 0 001.414-1.414z" clipRule="evenodd" />
-                        </svg>
-                      )}
+                      <span className="w-2 h-2 rounded-full" style={{ backgroundColor: priority.color }}></span>
                       {priority.label}
                     </span>
                   </td>
                   <td 
-                    className="px-4 py-3 text-sm font-medium"
-                    style={{ color: colors.slate[700] }}
+                    className="px-6 py-4 text-sm font-semibold align-top"
+                    style={{ color: colors.navy }}
                   >
                     {step.action}
                   </td>
                   <td 
-                    className="px-4 py-3 text-sm"
+                    className="px-6 py-4 text-sm align-top"
                     style={{ 
                       color: colors.slate[600],
                       lineHeight: typography.lineHeight.relaxed,
@@ -123,17 +101,14 @@ export function QANextSteps({ nextSteps }: QANextStepsProps) {
                   >
                     {step.rationale}
                   </td>
-                  <td className="px-4 py-3">
+                  <td className="px-6 py-4 align-top">
                     <span 
-                      className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded text-xs font-medium"
+                      className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded text-xs font-bold uppercase tracking-wider"
                       style={{ 
                         backgroundColor: colors.slate[100],
-                        color: colors.slate[700],
+                        color: colors.slate[600],
                       }}
                     >
-                      <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                      </svg>
                       {step.owner}
                     </span>
                   </td>

@@ -22,33 +22,32 @@ export function QuestionCard({ question, showCommentary = true }: QuestionCardPr
 
   return (
     <div 
-      className="rounded-lg overflow-hidden"
+      className="transition-all hover:bg-slate-50"
       style={{ 
         backgroundColor: colors.white,
-        border: `1px solid ${colors.slate[200]}`,
+        borderBottom: `1px solid ${colors.slate[200]}`,
+        padding: '1.5rem 0'
       }}
     >
       {/* Question Header */}
-      <div className="p-4">
-        <div className="flex items-start gap-3">
+      <div className="px-2">
+        <div className="flex items-start gap-6">
           {/* Question Number */}
           <div 
-            className="flex-shrink-0 w-8 h-8 rounded-lg flex items-center justify-center text-sm font-bold"
+            className="flex-shrink-0 w-8 text-sm font-bold text-right pt-1"
             style={{ 
-              backgroundColor: colors.slate[100],
-              color: colors.slate[600],
+              color: colors.slate[400],
             }}
           >
-            {question.id}
+            {String(question.id).padStart(2, '0')}
           </div>
 
           <div className="flex-1 min-w-0">
             {/* Question Text */}
             <h4 
-              className="text-sm font-medium mb-2 leading-relaxed"
+              className="text-base font-semibold mb-3 leading-relaxed"
               style={{ 
-                color: colors.slate[700],
-                fontWeight: typography.fontWeight.medium,
+                color: colors.navy,
               }}
             >
               {question.question}
@@ -56,10 +55,9 @@ export function QuestionCard({ question, showCommentary = true }: QuestionCardPr
 
             {/* Answer */}
             <p 
-              className="text-sm mb-3"
+              className="text-sm mb-4 leading-relaxed"
               style={{ 
                 color: colors.slate[600],
-                lineHeight: typography.lineHeight.relaxed,
               }}
             >
               {question.answer}
@@ -67,14 +65,14 @@ export function QuestionCard({ question, showCommentary = true }: QuestionCardPr
 
             {/* Footer Row */}
             <div className="flex items-center justify-between">
-              <div className="flex items-center gap-3">
+              <div className="flex items-center gap-6">
                 {/* Confidence Badge */}
                 <span 
-                  className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium"
-                  style={{ backgroundColor: conf.bg, color: conf.text }}
+                  className="inline-flex items-center gap-1.5 text-xs font-medium uppercase tracking-wider"
+                  style={{ color: conf.text }}
                 >
                   <span 
-                    className="w-2 h-2 rounded-full"
+                    className="w-1.5 h-1.5 rounded-full"
                     style={{ backgroundColor: conf.dot }}
                   />
                   {question.confidence}
@@ -83,10 +81,9 @@ export function QuestionCard({ question, showCommentary = true }: QuestionCardPr
                 {/* Source */}
                 {question.source && (
                   <span 
-                    className="text-xs"
-                    style={{ color: colors.slate[400] }}
+                    className="text-xs text-slate-400"
                   >
-                    {question.source}
+                    Source: {question.source}
                   </span>
                 )}
               </div>
@@ -95,10 +92,10 @@ export function QuestionCard({ question, showCommentary = true }: QuestionCardPr
               {showCommentary && question.commentary && (
                 <button
                   onClick={() => setIsExpanded(!isExpanded)}
-                  className="flex items-center gap-1 text-xs font-medium transition-colors hover:opacity-80"
-                  style={{ color: colors.navy }}
+                  className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider transition-colors hover:text-orange-600"
+                  style={{ color: colors.accent }}
                 >
-                  {isExpanded ? 'Hide' : 'Show'} Commentary
+                  {isExpanded ? 'Hide Analysis' : 'Innovera Analysis'}
                   <svg 
                     className={`w-4 h-4 transition-transform ${isExpanded ? 'rotate-180' : ''}`} 
                     fill="none" 
@@ -117,34 +114,18 @@ export function QuestionCard({ question, showCommentary = true }: QuestionCardPr
       {/* Expandable Commentary */}
       {showCommentary && question.commentary && isExpanded && (
         <div 
-          className="px-4 py-3 border-t"
+          className="mt-4 ml-14 p-4"
           style={{ 
             backgroundColor: colors.slate[50],
-            borderColor: colors.slate[200],
+            borderLeft: `2px solid ${colors.accent}`,
           }}
         >
-          <div className="flex items-start gap-2 pl-11">
-            <svg 
-              className="w-4 h-4 flex-shrink-0 mt-0.5" 
-              fill="none" 
-              stroke="currentColor" 
-              viewBox="0 0 24 24"
-              style={{ color: colors.teal }}
-            >
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-            </svg>
-            <div>
-              <span 
-                className="text-xs font-medium uppercase tracking-wider block mb-1"
-                style={{ color: colors.teal }}
-              >
-                Innovera Commentary
-              </span>
+          <div className="flex items-start gap-3">
+            <div className="flex-1">
               <p 
-                className="text-sm italic"
+                className="text-sm italic leading-relaxed"
                 style={{ 
-                  color: colors.slate[600],
-                  lineHeight: typography.lineHeight.relaxed,
+                  color: colors.slate[700],
                 }}
               >
                 {question.commentary}
