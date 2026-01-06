@@ -5,9 +5,45 @@ interface MemoInputProps {
   onChange: (value: string) => void;
   disabled?: boolean;
   onPrefill?: () => void;
+  placeholder?: string;
+  label?: string;
 }
 
-export function MemoInput({ value, onChange, disabled, onPrefill }: MemoInputProps) {
+const DEFAULT_PLACEHOLDER = `Paste your investment memo here...
+
+Expected format includes:
+• Overview Table (project metadata)
+• 'Tell it to me straight' section
+• Strategic Fit analysis
+• Highlights and key findings
+• 'What You Would Have To Believe' assumptions
+• Six-T Risk Analysis (Team, TAM, Technology, Traction, Terms, Trends)
+• 'Should We Do It' and 'Can We Do It' assessments
+• Chapter analyses (Team, Opportunity, Path to Success, Operations)`;
+
+const QA_PLACEHOLDER = `Paste your Q&A response document here...
+
+Expected format includes:
+• Executive Summary Table (question, answer, confidence)
+• Summary Statistics (counts by confidence level)
+• Detailed Question Responses (grouped by category)
+• Cross-Domain Insights (integrated analysis)
+• Synthesis & Strategic Implications
+• Recommended Next Steps`;
+
+export function MemoInput({ 
+  value, 
+  onChange, 
+  disabled, 
+  onPrefill,
+  placeholder,
+  label = 'Investment Memo'
+}: MemoInputProps) {
+  // Determine placeholder based on label if not explicitly provided
+  const actualPlaceholder = placeholder ?? (
+    label === 'Q&A Document' ? QA_PLACEHOLDER : DEFAULT_PLACEHOLDER
+  );
+
   return (
     <div className="w-full">
       <div className="flex items-center justify-between mb-3">
@@ -15,7 +51,7 @@ export function MemoInput({ value, onChange, disabled, onPrefill }: MemoInputPro
           htmlFor="memo-input" 
           className="block text-sm font-semibold text-[var(--foreground)] tracking-wide"
         >
-          Investment Memo
+          {label}
         </label>
         {onPrefill && (
           <button
@@ -37,17 +73,7 @@ export function MemoInput({ value, onChange, disabled, onPrefill }: MemoInputPro
         value={value}
         onChange={(e) => onChange(e.target.value)}
         disabled={disabled}
-        placeholder="Paste your investment memo here...
-
-Expected format includes:
-• Overview Table (project metadata)
-• 'Tell it to me straight' section
-• Strategic Fit analysis
-• Highlights and key findings
-• 'What You Would Have To Believe' assumptions
-• Six-T Risk Analysis (Team, TAM, Technology, Traction, Terms, Trends)
-• 'Should We Do It' and 'Can We Do It' assessments
-• Chapter analyses (Team, Opportunity, Path to Success, Operations)"
+        placeholder={actualPlaceholder}
         className="w-full h-[400px] px-5 py-4 bg-white border-2 border-[var(--border)] 
                    rounded-2xl text-[var(--foreground)] placeholder-[var(--muted)]/60
                    focus:outline-none focus:ring-0 focus:border-[var(--accent)]
@@ -68,4 +94,3 @@ Expected format includes:
     </div>
   );
 }
-

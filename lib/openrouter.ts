@@ -1,5 +1,7 @@
 import { ExtractionResult, validateExtractionResult } from './schema';
+import { QAExtractionResult, validateQAExtractionResult } from './qa-schema';
 import { EXTRACTION_SYSTEM_PROMPT, SIMPLIFIED_EXTRACTION_PROMPT, createUserPrompt } from './prompts';
+import { QA_EXTRACTION_SYSTEM_PROMPT, SIMPLIFIED_QA_EXTRACTION_PROMPT, createQAUserPrompt } from './qa-prompts';
 
 const OPENROUTER_API_URL = 'https://openrouter.ai/api/v1/chat/completions';
 const MODEL = 'google/gemini-3-flash-preview';
@@ -30,17 +32,19 @@ export interface ExtractionResponse {
   retried?: boolean;
 }
 
-/**
- * Extracts JSON from a response that might contain markdown code blocks
- */
+export interface QAExtractionResponse {
+  success: boolean;
+  data?: QAExtractionResult;
+  error?: string;
+  retried?: boolean;
+}
+
 function extractJsonFromResponse(content: string): string {
-  // Try to extract JSON from markdown code blocks
   const jsonBlockMatch = content.match(/```(?:json)?\s*([\s\S]*?)```/);
   if (jsonBlockMatch) {
     return jsonBlockMatch[1].trim();
   }
   
-  // Try to find raw JSON object
   const jsonMatch = content.match(/\{[\s\S]*\}/);
   if (jsonMatch) {
     return jsonMatch[0];
@@ -49,9 +53,6 @@ function extractJsonFromResponse(content: string): string {
   return content.trim();
 }
 
-/**
- * Calls OpenRouter API with the given messages
- */
 async function callOpenRouter(
   messages: OpenRouterMessage[],
   apiKey: string
@@ -68,7 +69,7 @@ async function callOpenRouter(
       body: JSON.stringify({
         model: MODEL,
         messages,
-        temperature: 0.1, // Low temperature for consistent extraction
+        temperature: 0.1,
         max_tokens: 8192,
       }),
     });
@@ -110,9 +111,6 @@ async function callOpenRouter(
   }
 }
 
-/**
- * Attempts to parse and validate the extraction result
- */
 function parseExtractionResult(content: string): { data?: ExtractionResult; error?: string } {
   try {
     const jsonContent = extractJsonFromResponse(content);
@@ -131,32 +129,36 @@ function parseExtractionResult(content: string): { data?: ExtractionResult; erro
   }
 }
 
-/**
- * Main extraction function - extracts structured data from an investment memo
- * 
- * @param memoContent - The raw investment memo text
- * @param apiKey - OpenRouter API key
- * @returns ExtractionResponse with success status and data or error
- */
+function parseQAExtractionResult(content: string): { data?: QAExtractionResult; error?: string } {
+  try {
+    const jsonContent = extractJsonFromResponse(content);
+    const parsed = JSON.parse(jsonContent);
+    
+    if (!validateQAExtractionResult(parsed)) {
+      return { error: 'Response does not match expected Q&A schema structure' };
+    }
+    
+    return { data: parsed as QAExtractionResult };
+  } catch (error) {
+    console.error('JSON parse error:', error);
+    return { 
+      error: error instanceof Error ? `Invalid JSON: ${error.message}` : 'Failed to parse JSON' 
+    };
+  }
+}
+
 export async function extractMemoData(
   memoContent: string,
   apiKey: string
 ): Promise<ExtractionResponse> {
   if (!memoContent.trim()) {
-    return {
-      success: false,
-      error: 'Memo content cannot be empty',
-    };
+    return { success: false, error: 'Memo content cannot be empty' };
   }
 
   if (!apiKey) {
-    return {
-      success: false,
-      error: 'OpenRouter API key is not configured',
-    };
+    return { success: false, error: 'OpenRouter API key is not configured' };
   }
 
-  // First attempt with full prompt
   const messages: OpenRouterMessage[] = [
     { role: 'system', content: EXTRACTION_SYSTEM_PROMPT },
     { role: 'user', content: createUserPrompt(memoContent) },
@@ -166,22 +168,14 @@ export async function extractMemoData(
   const firstResponse = await callOpenRouter(messages, apiKey);
 
   if (firstResponse.error) {
-    return {
-      success: false,
-      error: firstResponse.error,
-    };
+    return { success: false, error: firstResponse.error };
   }
 
-  // Try to parse first response
   const firstParse = parseExtractionResult(firstResponse.content);
   if (firstParse.data) {
-    return {
-      success: true,
-      data: firstParse.data,
-    };
+    return { success: true, data: firstParse.data };
   }
 
-  // Retry with simplified prompt
   console.log('First attempt failed, retrying with simplified prompt...');
   console.log('First attempt error:', firstParse.error);
 
@@ -193,20 +187,12 @@ export async function extractMemoData(
   const retryResponse = await callOpenRouter(retryMessages, apiKey);
 
   if (retryResponse.error) {
-    return {
-      success: false,
-      error: `Retry failed: ${retryResponse.error}`,
-      retried: true,
-    };
+    return { success: false, error: `Retry failed: ${retryResponse.error}`, retried: true };
   }
 
   const retryParse = parseExtractionResult(retryResponse.content);
   if (retryParse.data) {
-    return {
-      success: true,
-      data: retryParse.data,
-      retried: true,
-    };
+    return { success: true, data: retryParse.data, retried: true };
   }
 
   return {
@@ -216,3 +202,57 @@ export async function extractMemoData(
   };
 }
 
+export async function extractQAData(
+  qaContent: string,
+  apiKey: string
+): Promise<QAExtractionResponse> {
+  if (!qaContent.trim()) {
+    return { success: false, error: 'Q&A content cannot be empty' };
+  }
+
+  if (!apiKey) {
+    return { success: false, error: 'OpenRouter API key is not configured' };
+  }
+
+  const messages: OpenRouterMessage[] = [
+    { role: 'system', content: QA_EXTRACTION_SYSTEM_PROMPT },
+    { role: 'user', content: createQAUserPrompt(qaContent) },
+  ];
+
+  console.log('Attempting Q&A extraction with full prompt...');
+  const firstResponse = await callOpenRouter(messages, apiKey);
+
+  if (firstResponse.error) {
+    return { success: false, error: firstResponse.error };
+  }
+
+  const firstParse = parseQAExtractionResult(firstResponse.content);
+  if (firstParse.data) {
+    return { success: true, data: firstParse.data };
+  }
+
+  console.log('First Q&A attempt failed, retrying with simplified prompt...');
+  console.log('First attempt error:', firstParse.error);
+
+  const retryMessages: OpenRouterMessage[] = [
+    { role: 'system', content: SIMPLIFIED_QA_EXTRACTION_PROMPT },
+    { role: 'user', content: createQAUserPrompt(qaContent) },
+  ];
+
+  const retryResponse = await callOpenRouter(retryMessages, apiKey);
+
+  if (retryResponse.error) {
+    return { success: false, error: `Retry failed: ${retryResponse.error}`, retried: true };
+  }
+
+  const retryParse = parseQAExtractionResult(retryResponse.content);
+  if (retryParse.data) {
+    return { success: true, data: retryParse.data, retried: true };
+  }
+
+  return {
+    success: false,
+    error: `Failed to extract valid Q&A JSON after retry. Last error: ${retryParse.error}`,
+    retried: true,
+  };
+}

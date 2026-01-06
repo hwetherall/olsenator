@@ -9,6 +9,7 @@ export const colors = {
   // Primary colors
   navy: '#1e293b',
   white: '#ffffff',
+  teal: '#14b8a6',  // Accent color for highlights
   
   // Slate hierarchy for text
   slate: {
