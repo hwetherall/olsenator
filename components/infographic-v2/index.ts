@@ -6,6 +6,7 @@
  */
 
 export { InfographicContainerV2 } from './InfographicContainerV2';
+export { SectionHeader } from './SectionHeader';
 export { OverviewTable } from './OverviewTable';
 export { OverviewBlock } from './OverviewBlock';
 export { StrategicFitBlock } from './StrategicFitBlock';

@@ -9,31 +9,21 @@ interface StrategicFitBlockProps {
 
 export function StrategicFitBlock({ data }: StrategicFitBlockProps) {
   return (
-    <div className="avoid-break">
-      <div className="flex items-center gap-2 mb-4">
-        <div 
-          className="w-1 h-6 rounded-full"
-          style={{ backgroundColor: colors.navy }}
-        />
-        <h2 
-          className="text-lg font-semibold"
-          style={{ 
-            color: colors.navy,
-            fontFamily: typography.fontFamily.sans,
-          }}
-        >
-          Strategic Fit Assessment
-        </h2>
-      </div>
-
+    <div className="space-y-5">
       {/* Main Assessment */}
       <div 
-        className="rounded-xl p-5 mb-4"
+        className="rounded-xl p-5"
         style={{ 
           backgroundColor: colors.slate[50],
           border: `1px solid ${colors.slate[200]}`,
         }}
       >
+        <span 
+          className="text-xs font-semibold uppercase tracking-wider block mb-3"
+          style={{ color: colors.slate[500] }}
+        >
+          Assessment Summary
+        </span>
         <p 
           className="text-sm leading-relaxed"
           style={{ 
@@ -52,16 +42,16 @@ export function StrategicFitBlock({ data }: StrategicFitBlockProps) {
           className="rounded-xl p-5"
           style={{ 
             backgroundColor: colors.white,
-            border: `1px solid ${colors.slate[200]}`,
+            border: `2px solid ${colors.risk.amber}30`,
           }}
         >
-          <div className="flex items-center gap-2 mb-3">
+          <div className="flex items-center gap-3 mb-4">
             <div 
-              className="w-8 h-8 rounded-lg flex items-center justify-center"
+              className="w-10 h-10 rounded-xl flex items-center justify-center"
               style={{ backgroundColor: colors.risk.amberLight }}
             >
               <svg 
-                className="w-4 h-4" 
+                className="w-5 h-5" 
                 fill="none" 
                 stroke="currentColor" 
                 viewBox="0 0 24 24"
@@ -76,7 +66,7 @@ export function StrategicFitBlock({ data }: StrategicFitBlockProps) {
               </svg>
             </div>
             <span 
-              className="text-sm font-semibold uppercase tracking-wider"
+              className="text-base font-bold uppercase tracking-wide"
               style={{ color: colors.navy }}
             >
               Can We Do It?
@@ -98,16 +88,16 @@ export function StrategicFitBlock({ data }: StrategicFitBlockProps) {
           className="rounded-xl p-5"
           style={{ 
             backgroundColor: colors.white,
-            border: `1px solid ${colors.slate[200]}`,
+            border: `2px solid ${colors.risk.green}30`,
           }}
         >
-          <div className="flex items-center gap-2 mb-3">
+          <div className="flex items-center gap-3 mb-4">
             <div 
-              className="w-8 h-8 rounded-lg flex items-center justify-center"
+              className="w-10 h-10 rounded-xl flex items-center justify-center"
               style={{ backgroundColor: colors.risk.greenLight }}
             >
               <svg 
-                className="w-4 h-4" 
+                className="w-5 h-5" 
                 fill="none" 
                 stroke="currentColor" 
                 viewBox="0 0 24 24"
@@ -122,7 +112,7 @@ export function StrategicFitBlock({ data }: StrategicFitBlockProps) {
               </svg>
             </div>
             <span 
-              className="text-sm font-semibold uppercase tracking-wider"
+              className="text-base font-bold uppercase tracking-wide"
               style={{ color: colors.navy }}
             >
               Should We Do It?

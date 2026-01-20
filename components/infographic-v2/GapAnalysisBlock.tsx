@@ -23,40 +23,37 @@ export function GapAnalysisBlock({ data }: GapAnalysisBlockProps) {
 
   return (
     <div className="space-y-6">
-      {/* Execution Gap Analysis */}
-      <div className="avoid-break">
+      {/* Execution Gap Analysis - 7T Framework */}
+      <div>
         <div className="flex items-center gap-2 mb-4">
           <div 
-            className="w-1 h-6 rounded-full"
+            className="w-1.5 h-5 rounded-full"
             style={{ backgroundColor: colors.risk.amber }}
           />
-          <h2 
-            className="text-lg font-semibold"
-            style={{ 
-              color: colors.navy,
-              fontFamily: typography.fontFamily.sans,
-            }}
+          <span 
+            className="text-sm font-semibold uppercase tracking-wider"
+            style={{ color: colors.slate[700] }}
           >
-            Execution Gap Analysis (7T Framework)
-          </h2>
+            7T Framework Analysis
+          </span>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
           {gapKeys.map((key) => {
             const gap = gapLabels[key] || { label: key, icon: '📌' };
             return (
               <div
                 key={key}
-                className="rounded-lg p-4"
+                className="rounded-xl p-4"
                 style={{ 
-                  backgroundColor: colors.white,
+                  backgroundColor: colors.slate[50],
                   border: `1px solid ${colors.slate[200]}`,
                 }}
               >
                 <div className="flex items-center gap-2 mb-2">
-                  <span className="text-lg">{gap.icon}</span>
+                  <span className="text-xl">{gap.icon}</span>
                   <span 
-                    className="text-xs font-semibold uppercase tracking-wider"
+                    className="text-xs font-bold uppercase tracking-wider"
                     style={{ color: colors.navy }}
                   >
                     {gap.label}
@@ -79,50 +76,39 @@ export function GapAnalysisBlock({ data }: GapAnalysisBlockProps) {
 
       {/* Critical Assumptions */}
       {data.criticalAssumptions.length > 0 && (
-        <div className="avoid-break">
+        <div>
           <div className="flex items-center gap-2 mb-4">
             <div 
-              className="w-1 h-6 rounded-full"
+              className="w-1.5 h-5 rounded-full"
               style={{ backgroundColor: colors.risk.red }}
             />
-            <h2 
-              className="text-lg font-semibold"
-              style={{ 
-                color: colors.navy,
-                fontFamily: typography.fontFamily.sans,
-              }}
-            >
-              Critical Assumptions
-            </h2>
             <span 
-              className="px-2 py-0.5 rounded text-xs font-medium"
-              style={{ 
-                backgroundColor: colors.slate[100],
-                color: colors.slate[600],
-              }}
+              className="text-sm font-semibold uppercase tracking-wider"
+              style={{ color: colors.slate[700] }}
             >
-              {data.criticalAssumptions.length} items
+              Critical Assumptions ({data.criticalAssumptions.length})
             </span>
           </div>
 
           <div 
             className="rounded-xl p-5"
             style={{ 
-              backgroundColor: colors.slate[50],
-              border: `1px solid ${colors.slate[200]}`,
+              backgroundColor: colors.risk.redLight,
+              border: `1px solid ${colors.risk.red}20`,
             }}
           >
-            <ul className="space-y-3">
+            <div className="grid md:grid-cols-2 gap-3">
               {data.criticalAssumptions.map((assumption, index) => (
-                <li 
+                <div 
                   key={index}
-                  className="flex items-start gap-3"
+                  className="flex items-start gap-3 p-3 rounded-lg"
+                  style={{ backgroundColor: colors.white }}
                 >
                   <span 
-                    className="w-5 h-5 rounded-full flex items-center justify-center flex-shrink-0 text-xs font-medium mt-0.5"
+                    className="w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0 text-xs font-bold"
                     style={{ 
-                      backgroundColor: colors.risk.amberLight,
-                      color: colors.risk.amber,
+                      backgroundColor: colors.risk.red,
+                      color: colors.white,
                     }}
                   >
                     {index + 1}
@@ -136,9 +122,9 @@ export function GapAnalysisBlock({ data }: GapAnalysisBlockProps) {
                   >
                     {assumption}
                   </p>
-                </li>
+                </div>
               ))}
-            </ul>
+            </div>
           </div>
         </div>
       )}
