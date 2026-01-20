@@ -1,6 +1,8 @@
 import { ExtractionResult, validateExtractionResult } from './schema';
+import { ExtractionResultV2, validateExtractionResultV2 } from './schema-v2';
 import { QAExtractionResult, validateQAExtractionResult } from './qa-schema';
 import { EXTRACTION_SYSTEM_PROMPT, SIMPLIFIED_EXTRACTION_PROMPT, createUserPrompt } from './prompts';
+import { EXTRACTION_SYSTEM_PROMPT_V2, SIMPLIFIED_EXTRACTION_PROMPT_V2, createUserPromptV2 } from './prompts-v2';
 import { QA_EXTRACTION_SYSTEM_PROMPT, SIMPLIFIED_QA_EXTRACTION_PROMPT, createQAUserPrompt } from './qa-prompts';
 
 const OPENROUTER_API_URL = 'https://openrouter.ai/api/v1/chat/completions';
@@ -35,6 +37,13 @@ export interface ExtractionResponse {
 export interface QAExtractionResponse {
   success: boolean;
   data?: QAExtractionResult;
+  error?: string;
+  retried?: boolean;
+}
+
+export interface ExtractionResponseV2 {
+  success: boolean;
+  data?: ExtractionResultV2;
   error?: string;
   retried?: boolean;
 }
@@ -253,6 +262,79 @@ export async function extractQAData(
   return {
     success: false,
     error: `Failed to extract valid Q&A JSON after retry. Last error: ${retryParse.error}`,
+    retried: true,
+  };
+}
+
+function parseExtractionResultV2(content: string): { data?: ExtractionResultV2; error?: string } {
+  try {
+    const jsonContent = extractJsonFromResponse(content);
+    const parsed = JSON.parse(jsonContent);
+    
+    if (!validateExtractionResultV2(parsed)) {
+      return { error: 'Response does not match expected V2 schema structure' };
+    }
+    
+    return { data: parsed as ExtractionResultV2 };
+  } catch (error) {
+    console.error('JSON parse error:', error);
+    return { 
+      error: error instanceof Error ? `Invalid JSON: ${error.message}` : 'Failed to parse JSON' 
+    };
+  }
+}
+
+export async function extractMemoDataV2(
+  memoContent: string,
+  apiKey: string
+): Promise<ExtractionResponseV2> {
+  if (!memoContent.trim()) {
+    return { success: false, error: 'Memo content cannot be empty' };
+  }
+
+  if (!apiKey) {
+    return { success: false, error: 'OpenRouter API key is not configured' };
+  }
+
+  const messages: OpenRouterMessage[] = [
+    { role: 'system', content: EXTRACTION_SYSTEM_PROMPT_V2 },
+    { role: 'user', content: createUserPromptV2(memoContent) },
+  ];
+
+  console.log('Attempting V2 extraction with full prompt...');
+  const firstResponse = await callOpenRouter(messages, apiKey);
+
+  if (firstResponse.error) {
+    return { success: false, error: firstResponse.error };
+  }
+
+  const firstParse = parseExtractionResultV2(firstResponse.content);
+  if (firstParse.data) {
+    return { success: true, data: firstParse.data };
+  }
+
+  console.log('First V2 attempt failed, retrying with simplified prompt...');
+  console.log('First attempt error:', firstParse.error);
+
+  const retryMessages: OpenRouterMessage[] = [
+    { role: 'system', content: SIMPLIFIED_EXTRACTION_PROMPT_V2 },
+    { role: 'user', content: createUserPromptV2(memoContent) },
+  ];
+
+  const retryResponse = await callOpenRouter(retryMessages, apiKey);
+
+  if (retryResponse.error) {
+    return { success: false, error: `Retry failed: ${retryResponse.error}`, retried: true };
+  }
+
+  const retryParse = parseExtractionResultV2(retryResponse.content);
+  if (retryParse.data) {
+    return { success: true, data: retryParse.data, retried: true };
+  }
+
+  return {
+    success: false,
+    error: `Failed to extract valid V2 JSON after retry. Last error: ${retryParse.error}`,
     retried: true,
   };
 }
