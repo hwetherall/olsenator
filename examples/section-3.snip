@@ -1,0 +1,209 @@
+# Olsenator Section 4: Key Highlights Extraction Prompt
+
+## Context
+
+You are an expert analyst responsible for extracting the key highlights from an investment memo. These highlights are the "sticky facts" that will anchor an executive's memory of this opportunity — the 5-7 facts, metrics, or insights that would change (or confirm) their decision.
+
+This is NOT a summary. This is a curated selection of the most decision-relevant information, each with context that makes it meaningful.
+
+## Inputs
+
+{{>standards/olsenator/olsenator-inputs}}
+
+## Your Task
+
+Review all the material provided above and extract 5-7 key highlights. Each highlight must be specific, grounded, and decision-relevant.
+
+## Extraction Fields (for each highlight)
+
+| Field | Purpose |
+|-------|---------|
+| **Highlight** | The provocative insight or hard truth. Don't just state a fact, state the *implication*. (Punchy, max 15 words) |
+| **Category** | What type is this? |
+| **Why It Matters** | The "So What?". How does this specifically impact the investment thesis (Risk, Return, or Moat)? (1 sentence) |
+| **Context / Grounding** | The "Proof". Hard data, comparables, or specific anecdotes that validate the insight. (1-2 sentences) |
+| **Polarity** | Is this a tailwind (positive), headwind (negative), or neutral? |
+| **Time Sensitivity** | Is this time-bound? If yes, what's the window? |
+| **Source Confidence** | (Optional) How reliable is this information? |
+
+## Category Options
+
+- **Market** — Market size, growth, trends, dynamics
+- **Team** — Leadership, capabilities, track record
+- **Financial** — Revenue, margins, unit economics, funding
+- **Technology** — Product, tech stack, IP, differentiation
+- **Traction** — Customers, pilots, validation, revenue
+- **Competitive** — Competitive positioning, moat, threats
+- **Risk** — Key vulnerabilities, dependencies, unknowns
+- **Timing** — Windows of opportunity, regulatory deadlines, market shifts
+- **Strategic** — Fit with investor strategy, portfolio synergies
+
+## Source Confidence Definitions
+
+| Level | Definition |
+|-------|------------|
+| **Verified** | Comes from authoritative source (government data, audited financials, signed contracts) |
+| **Estimated** | Reasonable estimate based on multiple data points or industry benchmarks |
+| **Assumed** | Management assertion or single-source claim without independent validation |
+
+## Selection Criteria
+
+### Include if:
+
+- **Decision-relevant**: Would change or confirm the recommendation
+- **Specific**: Has a number, name, date, or concrete fact
+- **Non-obvious**: An exec wouldn't already assume this
+- **Differentiated**: Not already covered in Banner, Strategic Fit, or Gap Analysis
+- **Grounded**: Can be contextualized with a benchmark or comparison
+
+### Exclude if:
+
+- **Generic**: "The market is competitive" (says nothing)
+- **Redundant**: Already captured in another section
+- **Ungrounded**: Can't provide context that makes it meaningful
+- **Not actionable**: Interesting but doesn't inform a decision
+
+## Critical Guidelines
+
+1. **Balance is required**: Highlights should include a mix of tailwinds AND headwinds. If all highlights are positive, reconsider — this is a decision document, not a sales pitch. Aim for at least 1-2 headwinds if they exist in the source material.
+
+2. **Prioritize ruthlessly**: If you find 10 candidates, pick the 5-7 that would most change an exec's mind. Lead with the most decision-critical.
+
+3. **Grounding is mandatory**: Every highlight MUST have context. "Large market" is useless. "¥820B market (3x the size of the adjacent waste management software market)" is useful. If you cannot provide grounding, either find a comparison or drop the highlight.
+
+4. **Quantify when possible**: Replace vague language with numbers.
+   - "Large market" → "¥820B market"
+   - "Growing fast" → "8.7% CAGR"
+   - "Experienced team" → "Combined 47 years in municipal infrastructure"
+
+5. **Flag time sensitivity**: If a highlight has an expiration date or window, call it out explicitly. Executives need to know if they're making,a "decide now" or "decide later" call.
+
+6. **Source matters**: An exec will weigh "MLIT census data" differently than "management's estimate." Be transparent about confidence level.
+
+## Output Format
+
+**CRITICAL: Output ONLY raw JSON. Do NOT wrap in markdown code blocks (no ```json or ```). Start with { and end with }.**
+
+Return your extraction as a JSON object with the following structure:
+
+```json
+{
+  "highlights": [
+    {
+      "highlight": "",
+      "category": "",
+      "why_it_matters": "",
+      "context_grounding": "",
+      "polarity": "tailwind | headwind | neutral",
+      "time_sensitivity": {
+        "is_time_bound": false,
+        "window": null
+      },
+      "source_confidence": "verified | estimated | assumed"
+    }
+  ],
+  "metadata": {
+    "total_highlights": 0,
+    "tailwinds": 0,
+    "headwinds": 0,
+    "neutral": 0,
+    "balance_check": ""
+  }
+}
+```
+
+## Guidelines
+
+- **Be punchy**: Highlights should be quotable. If an exec can't repeat it from memory, it's too long.
+- **Be honest**: Include headwinds. Credibility comes from balance.
+- **Be precise**: Vague highlights waste everyone's time.
+- **Be selective**: 5 great highlights beat 10 mediocre ones.
+- **Match the source**: Do not invent facts. If the memo lacks quantified highlights, note "Limited quantified data in source material" and extract what's available.
+
+## Example Output
+
+```json
+{
+  "highlights": [
+    {
+      "highlight": "Technical workforce declined 42.8% (47,000 → 26,900) in wastewater facilities",
+      "category": "Market",
+      "why_it_matters": "Creates urgent demand for automation — municipalities have no choice but to adopt",
+      "context_grounding": "This is wastewater alone; broader infrastructure shows similar trends. Decline is irreversible due to aging demographics (average worker age: 58).",
+      "polarity": "tailwind",
+      "time_sensitivity": {
+        "is_time_bound": true,
+        "window": "Crisis accelerates through 2030 as boomer cohort retires"
+      },
+      "source_confidence": "verified"
+    },
+    {
+      "highlight": "¥12.3 trillion in infrastructure requires renewal by 2030",
+      "category": "Market",
+      "why_it_matters": "Defines the TAM ceiling — this is a generational infrastructure replacement cycle",
+      "context_grounding": "Equivalent to 2.3% of Japan's GDP. Roughly 60% of this is water/wastewater infrastructure, the target segment.",
+      "polarity": "tailwind",
+      "time_sensitivity": {
+        "is_time_bound": true,
+        "window": "Regulatory mandate requires renewal plans by 2028"
+      },
+      "source_confidence": "verified"
+    },
+    {
+      "highlight": "Zero SaaS experience on founding team",
+      "category": "Team",
+      "why_it_matters": "Core thesis requires services-to-platform pivot — team lacks the DNA to execute",
+      "context_grounding": "Leadership backgrounds: 3 civil engineers, 1 municipal administrator. No CTO, no product lead, no enterprise sales experience.",
+      "polarity": "headwind",
+      "time_sensitivity": {
+        "is_time_bound": false,
+        "window": null
+      },
+      "source_confidence": "verified"
+    },
+    {
+      "highlight": "3 pilot municipalities with 100% renewal intent",
+      "category": "Traction",
+      "why_it_matters": "Early validation that product solves a real pain point — but intent ≠ contract",
+      "context_grounding": "Pilots are small municipalities (<50K population). Enterprise pricing and procurement pathway remain untested.",
+      "polarity": "tailwind",
+      "time_sensitivity": {
+        "is_time_bound": true,
+        "window": "Procurement cycles mean conversion decision expected Q3 FY2026"
+      },
+      "source_confidence": "assumed"
+    },
+    {
+      "highlight": "No direct competitor has municipal infrastructure + software capabilities",
+      "category": "Competitive",
+      "why_it_matters": "Potential first-mover advantage in a market that rewards incumbency",
+      "context_grounding": "Competitors are either pure-play software (no domain expertise) or traditional engineering firms (no product mindset). The combination is rare.",
+      "polarity": "tailwind",
+      "time_sensitivity": {
+        "is_time_bound": true,
+        "window": "Window likely 18-24 months before larger players enter"
+      },
+      "source_confidence": "estimated"
+    },
+    {
+      "highlight": "Corporate salary bands 30-40% below market for senior tech talent",
+      "category": "Risk",
+      "why_it_matters": "Talent acquisition is the critical unlock — comp structure makes this harder",
+      "context_grounding": "CTO-level roles in Tokyo SaaS market: ¥25-35M. Corporate band caps at ¥22M. Gap is structural, not negotiable.",
+      "polarity": "headwind",
+      "time_sensitivity": {
+        "is_time_bound": false,
+        "window": null
+      },
+      "source_confidence": "estimated"
+    }
+  ],
+  "metadata": {
+    "total_highlights": 6,
+    "tailwinds": 4,
+    "headwinds": 2,
+    "neutral": 0,
+    "balance_check": "Balanced — includes both market tailwinds and execution headwinds"
+  }
+}
+```

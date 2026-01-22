@@ -52,7 +52,7 @@ ${V2_EXTRACTION_SCHEMA_JSON}
 
 ### identification
 - project_name: The name of the project/venture being evaluated
-- one_liner: A single sentence describing what the project does
+- one_liner: A single sentence describing what the project does in plain English (avoid jargon).
 - stage: Current development stage (e.g., "Incubation", "Validation", "Growth")
 - sector: Industry or sector (e.g., "GovTech / Infrastructure SaaS")
 - geography: Primary geographic market
@@ -97,10 +97,10 @@ Array of 5-10 gap dimensions. For each:
 
 ### highlights
 Array of 5-10 key facts. For each:
-- highlight: The key fact or metric (bold headline)
-- category: Market, Financial, Team, Risk, Competitive, Strategic, Technology, or Regulatory
-- why_it_matters: Brief explanation of significance
-- context_grounding: Benchmark or comparison for context
+   - highlight: The provocative insight or hard truth (bold headline)
+   - category: Market, Financial, Team, Risk, Competitive, Strategic, Technology, or Regulatory
+   - why_it_matters: The "So What?" - impact on investment thesis
+   - context_grounding: The "Proof" - hard data or comparables
 - polarity: "tailwind" (positive) or "headwind" (negative)
 - time_sensitivity: Is it time-bound? If so, what's the window?
 - source_confidence: "verified" (factual), "estimated" (calculated), "assumed" (hypothesized)
@@ -123,6 +123,14 @@ Array of 3-6 validation steps. For each:
 - ultimate_decision: The final decision this pathway unlocks
 - pathway_confidence: Overall confidence in the pathway
 
+### supporting_analysis
+- explored_and_tested: Array of insights (headline, insight, source_chapter)
+- risks_acknowledged: Array of risks (headline, insight, severity, source_chapter)
+- path_summary: Summary of the chosen path (recommendation, path_description, confidence)
+- key_trade_offs_resolved: Array of trade-offs (trade_off, resolution, supporting_evidence, source_chapters, confidence)
+- alternatives_considered: Array of alternatives (alternative, why_not_preferred, source_chapters, confidence)
+- path_advantages: Array of advantages (advantage, description, source_chapter, confidence)
+
 Remember: Output ONLY the JSON object. No other text.`;
 
 /**
@@ -143,6 +151,7 @@ Output a JSON object with these required fields:
 - highlights_metadata (total_highlights, tailwinds, headwinds, neutral, balance_check)
 - next_steps (array with step_number/step_title/owner/description/timeline/depends_on/success_gate/unlocks/if_gate_fails)
 - pathway_metadata (total_steps, critical_path_duration, ultimate_decision, pathway_confidence)
+- supporting_analysis (explored_and_tested, risks_acknowledged, path_summary, key_trade_offs_resolved, alternatives_considered, path_advantages)
 
 MAPPING NOTES:
 - In Section 2, "summary" should map to "gap_summary"

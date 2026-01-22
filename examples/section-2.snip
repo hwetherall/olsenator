@@ -1,0 +1,284 @@
+# Olsenator Section 3: Evaluation Gap Extraction Prompt
+
+## Context
+
+You are an expert analyst responsible for extracting gap analysis data from an investment memo. This data will power a visual quadrant plot that helps executives instantly triage: "Which gaps should I worry about, and which are solvable?"
+
+The visual maps each dimension on two axes:
+- **X-axis: Gap Size** — How far are we from where we need to be?
+- **Y-axis: Ease of Closing** — How hard is it to get there?
+
+This creates four quadrants:
+```
+                    EASY TO CLOSE
+                         ↑
+     QUICK WINS          │         PRIORITY 
+     (Small + Easy)      │         INVESTMENTS
+     (Large + Easy)
+    ─────────────────────┼─────────────────────→
+                         │                    LARGE GAP
+     MANAGEABLE          │         DEALBREAKERS
+     (Small + Hard)      │         (Large + Hard)
+                         │
+                    HARD TO CLOSE
+```
+
+Your job is to extract the structured data that enables this visualization.
+
+## Inputs
+
+{{>standards/olsenator/olsenator-inputs}}
+
+## Your Task
+
+Review all the material provided above and extract gap analysis for each relevant dimension. Focus on honest assessment — the value of this analysis is in identifying real gaps, not hiding them.
+
+## Dimensions to Assess
+
+### Core Dimensions (always assess if addressed in source material)
+
+1. **Team / Leadership** — Do they have the people to execute?
+2. **Technology / Product** — Is the tech stack and product ready?
+3. **Traction / Validation** — Is there evidence of market demand?
+4. **Capital / Funding** — Do they have the money to reach the next milestone?
+5. **Market Access / Go-to-Market** — Can they reach and sell to customers?
+6. **Regulatory / Legal** — Are there compliance or legal barriers?
+
+### Optional Dimensions (assess only if material to the investment thesis)
+
+7. **Operational Infrastructure** — Systems, processes, scalability
+8. **Partnerships / Ecosystem** — Strategic relationships, channel partners
+9. **IP / Defensibility** — Patents, trade secrets, moats
+
+## Extraction Questions (for each dimension)
+
+| Field | Question |
+|-------|----------|
+| **Dimension** | What area is being assessed? |
+| **Current State** | Where does the venture currently stand? (1-2 sentences) |
+| **Required State** | Where does it need to be for success? (1-2 sentences) |
+| **Gap Summary** | What is missing or insufficient? (1 sentence — for hover tooltip) |
+| **Gap Size** | How significant is this gap? (1-5 scale) |
+| **Ease of Closing** | How difficult to close? (1-5 scale) |
+| **Why Easy/Hard** | What makes it easy or hard? (1 sentence — for expand view) |
+| **Action to Close** | **CRITICAL:** What is the single most critical milestone to hit? Must be a specific hire, contract, or deliverable. DO NOT use generic phrases like "Create a plan" or "Assess". |
+| **Risk of Inaction** | What specifically breaks if this gap is not closed? (e.g., "Run out of cash in 6 months", "Competitor X captures market"). |
+| **Owner** | Who is responsible for closing this gap? (e.g., "Venture Team", "Corporate HQ", "Joint"). |
+
+## Scale Definitions
+
+### Gap Size (1-5)
+
+| Score | Label | Definition |
+|-------|-------|------------|
+| 1 | Negligible | Minor refinements needed; essentially ready |
+| 2 | Small | Gap exists but doesn't threaten success |
+| 3 | Medium | Material gap requiring focused attention |
+| 4 | Large | Significant gap that could derail the venture |
+| 5 | Critical | Fundamental gap; success unlikely without addressing |
+
+### Ease of Closing (1-5)
+
+| Score | Label | Definition |
+|-------|-------|------------|
+| 1 | Very Hard | Requires transformation, years, or factors outside control |
+| 2 | Hard | Major effort, significant resources, or external dependencies |
+| 3 | Medium | Achievable with focused effort and reasonable resources |
+| 4 | Easy | Straightforward with available resources and clear path |
+| 5 | Very Easy | Quick fix; could be done in weeks with existing capabilities |
+
+### Quadrant Classification (derived from scores)
+
+| Quadrant | Gap Size | Ease of Closing | Implication |
+|----------|----------|-----------------|-------------|
+| **Quick Win** | 1-2 | 4-5 | Low priority; will resolve naturally |
+| **Priority Investment** | 4-5 | 4-5 | Focus here; high-impact and achievable |
+| **Manageable** | 1-2 | 1-2 | Monitor; small but sticky |
+| **Dealbreaker** | 4-5 | 1-2 | Red flag; may be fatal to the thesis |
+| **Mixed** | 3 or mid-range | 3 or mid-range | Requires judgment; context-dependent |
+
+## Output Format
+
+**CRITICAL: Output ONLY raw JSON. Do NOT wrap in markdown code blocks (no ```json or ```). Start with { and end with }.**
+
+Return your extraction as a JSON object with the following structure:
+
+```json
+{
+  "gaps": [
+    {
+      "dimension": "",
+      "category": "core | optional",
+      "current_state": "",
+      "required_state": "",
+      "gap_summary": "",
+      "gap_size": {
+        "score": 0,
+        "label": ""
+      },
+      "ease_of_closing": {
+        "score": 0,
+        "label": ""
+      },
+      "quadrant": "",
+      "why_easy_or_hard": "",
+      "action_to_close": "",
+      "risk_of_inaction": "",
+      "owner": ""
+    }
+  ],
+  "summary": {
+    "total_dimensions_assessed": 0,
+    "dealbreakers": [],
+    "priority_investments": [],
+    "quick_wins": [],
+    "manageable": [],
+    "overall_gap_assessment": ""
+  }
+}
+```
+
+## Guidelines
+
+- **Be honest**: The value is in surfacing real gaps, not in making the venture look good
+- **Be specific**: "Team is weak" is useless; "No CTO, no SaaS experience on leadership team" is actionable
+- **Use the scales consistently**: A "Large" gap (4) should mean the same thing across dimensions
+- **Match the source**: Only assess dimensions that have evidence in the memo. If a dimension isn't addressed, omit it or note "Not assessed in source material"
+- **Think like a deal-doer**: Frame actions in terms of what would actually de-risk the investment
+
+## Example Output
+
+```json
+{
+  "gaps": [
+    {
+      "dimension": "Team / Leadership",
+      "category": "core",
+      "current_state": "Strong domain expertise in civil engineering and municipal relationships; zero software or SaaS experience on leadership team",
+      "required_state": "CTO with SaaS platform experience, Head of Product, and 2 enterprise sales architects to drive land-and-expand motion",
+      "gap_summary": "Missing entire software leadership layer",
+      "gap_size": {
+        "score": 5,
+        "label": "Critical"
+      },
+      "ease_of_closing": {
+        "score": 2,
+        "label": "Hard"
+      },
+      "quadrant": "Dealbreaker",
+      "why_easy_or_hard": "Corporate salary bands won't attract top digital talent; 9-month ramp time typical for senior hires",
+      "action_to_close": "Carve out separate entity with market-rate compensation to hire a Founding CTO within 90 days.",
+      "risk_of_inaction": "Venture will build low-margin 'consulting-ware' instead of scalable software, capping margins at 30%.",
+      "owner": "Venture Team"
+    },
+    {
+      "dimension": "Technology / Product",
+      "category": "core",
+      "current_state": "Prototype exists for inspection module; built on legacy architecture with significant technical debt",
+      "required_state": "Cloud-native platform with API-first architecture capable of supporting 100+ concurrent municipal deployments",
+      "gap_summary": "Architecture won't scale; needs rebuild not refactor",
+      "gap_size": {
+        "score": 4,
+        "label": "Large"
+      },
+      "ease_of_closing": {
+        "score": 4,
+        "label": "Easy"
+      },
+      "quadrant": "Priority Investment",
+      "why_easy_or_hard": "Well-understood technical problem with available talent pool; 12-18 month timeline with proper investment",
+      "action_to_close": "Hire platform architect and allocate ¥200M for ground-up rebuild on modern stack",
+      "risk_of_inaction": "System will crash under load of >10 municipalities, destroying early customer trust.",
+      "owner": "Venture Team"
+    },
+    {
+      "dimension": "Traction / Validation",
+      "category": "core",
+      "current_state": "3 pilot municipalities using prototype; strong qualitative feedback but no signed contracts or revenue",
+      "required_state": "5+ paying customers with at least 1 prefecture-level cluster generating >¥3M ARR",
+      "gap_summary": "Pilots haven't converted to revenue; pricing power unproven",
+      "gap_size": {
+        "score": 3,
+        "label": "Medium"
+      },
+      "ease_of_closing": {
+        "score": 3,
+        "label": "Medium"
+      },
+      "quadrant": "Mixed",
+      "why_easy_or_hard": "Existing relationships provide warm pipeline, but public procurement cycles are 6-12 months",
+      "action_to_close": "Deploy dedicated sales resource to convert 2 pilots to paid contracts within FY2026",
+      "risk_of_inaction": "Burn rate will deplete cash reserves before Series A metrics are met.",
+      "owner": "Venture Team"
+    },
+    {
+      "dimension": "Capital / Funding",
+      "category": "core",
+      "current_state": "¥2.1B allocated for strategic investments; this project requesting ¥500M over 24 months",
+      "required_state": "¥500M committed with clear milestone-based release schedule",
+      "gap_summary": "Funding available but not yet committed to this initiative",
+      "gap_size": {
+        "score": 2,
+        "label": "Small"
+      },
+      "ease_of_closing": {
+        "score": 5,
+        "label": "Very Easy"
+      },
+      "quadrant": "Quick Win",
+      "why_easy_or_hard": "Internal capital allocation decision; no external fundraising required",
+      "action_to_close": "Secure board approval for phased investment tied to hiring CTO and signing first paid customer",
+      "risk_of_inaction": "Project will be paused or cancelled due to lack of budget continuity.",
+      "owner": "Corporate HQ"
+    },
+    {
+      "dimension": "Market Access / Go-to-Market",
+      "category": "core",
+      "current_state": "200+ active municipal relationships in Kanto region; trusted brand in public sector",
+      "required_state": "National coverage with presence in 3+ regions; established channel partnerships with system integrators",
+      "gap_summary": "Strong in Kanto but no presence outside core region",
+      "gap_size": {
+        "score": 3,
+        "label": "Medium"
+      },
+      "ease_of_closing": {
+        "score": 4,
+        "label": "Easy"
+      },
+      "quadrant": "Priority Investment",
+      "why_easy_or_hard": "Existing brand and reference customers provide credibility; expansion is execution not invention",
+      "action_to_close": "Establish regional office in Kansai and sign one SI partnership for national reach",
+      "risk_of_inaction": "Competitors will capture other regions, limiting total addressable market.",
+      "owner": "Venture Team"
+    },
+    {
+      "dimension": "Regulatory / Legal",
+      "category": "core",
+      "current_state": "30+ years navigating public procurement; existing compliance frameworks for government contracts",
+      "required_state": "Compliance with upcoming data localization requirements and new infrastructure inspection mandates",
+      "gap_summary": "Current compliance is strong; new regulations require minor adaptation",
+      "gap_size": {
+        "score": 1,
+        "label": "Negligible"
+      },
+      "ease_of_closing": {
+        "score": 4,
+        "label": "Easy"
+      },
+      "quadrant": "Quick Win",
+      "why_easy_or_hard": "Team has regulatory expertise; changes are well-telegraphed with 18-month implementation runway",
+      "action_to_close": "Assign in-house counsel to draft compliance roadmap by Q2",
+      "risk_of_inaction": "Minor fines or delays in future tenders.",
+      "owner": "Corporate Legal"
+    }
+  ],
+  "summary": {
+    "total_dimensions_assessed": 6,
+    "dealbreakers": ["Team / Leadership"],
+    "priority_investments": ["Technology / Product", "Market Access / Go-to-Market"],
+    "quick_wins": ["Capital / Funding", "Regulatory / Legal"],
+    "manageable": [],
+    "overall_gap_assessment": "One dealbreaker (Team) blocks progress; if solved, remaining gaps are addressable with focused investment in Technology and GTM expansion"
+  }
+}
+```

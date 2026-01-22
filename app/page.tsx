@@ -12,6 +12,7 @@ import { V2ExtractionResult } from '@/lib/v2-schema';
 import { removeTeamReferences } from '@/lib/kajima-transform';
 import { PREFILL_TEXT } from '@/lib/prefill';
 import { QA_PREFILL_TEXT } from '@/lib/qa-prefill';
+import { V2_PREFILL_TEXT, V2_EXTRACTION_JSON } from '@/lib/v2-prefill';
 
 type AppMode = 'memo' | 'qa' | 'v2';
 
@@ -292,8 +293,28 @@ export default function Home() {
       setMemo(PREFILL_TEXT);
     } else if (mode === 'qa') {
       setQaContent(QA_PREFILL_TEXT);
+    } else if (mode === 'v2') {
+      setV2Content(V2_PREFILL_TEXT);
     }
-    // V2 mode doesn't have a prefill text yet
+  };
+
+  // New function to directly populate V2 data from the prefill JSON
+  const handlePrefillJson = () => {
+    if (mode === 'v2') {
+      // Set the content to the prefill text so it's visible what was used
+      setV2Content(V2_PREFILL_TEXT);
+      // Directly set the data without API call
+      setV2Data(V2_EXTRACTION_JSON as unknown as V2ExtractionResult);
+      // Clear any errors
+      setError(null);
+      // Show the infographic immediately
+      setShowInfographic(true);
+      
+      // Scroll to infographic
+      setTimeout(() => {
+        infographicRef.current?.scrollIntoView({ behavior: 'smooth' });
+      }, 100);
+    }
   };
 
   const handleGenerateInfographic = async () => {
@@ -392,7 +413,7 @@ export default function Home() {
             >
               <span className="flex items-center gap-2">
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 17V7m0 10a2 2 0 01-2 2H5a2 2 0 01-2-2V7a2 2 0 012-2h2a2 2 0 012 2m0 10a2 2 0 002 2h2a2 2 0 002-2M9 7a2 2 0 012-2h2a2 2 0 012 2m0 10V7m0 10a2 2 0 002 2h2a2 2 0 002-2V7a2 2 0 00-2-2h-2a2 2 0 00-2 2" />
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 17V7m0 10a2 2 0 01-2 2H5a2 2 0 01-2-2V7a2 2 0 012-2h2a2 2 0 012 2m0 10a2 2 0 002 2h2a2 2 0 002-2M9 7a2 2 0 012-2h2a2 2 0 012 2m0 10V7m0 10a2 2 0 002 2h2a2 2 0 00-2-2h-2a2 2 0 00-2 2" />
                 </svg>
                 V2 Analysis
               </span>
@@ -450,7 +471,7 @@ export default function Home() {
               value={currentContent}
               onChange={setCurrentContent}
               disabled={isLoading || isTranslating}
-              onPrefill={mode !== 'v2' ? handlePrefill : undefined}
+              onPrefill={handlePrefill}
               placeholder={mode === 'memo' 
                 ? 'Paste your investment memo here...' 
                 : mode === 'qa'
@@ -521,6 +542,24 @@ export default function Home() {
                 )}
               </button>
               
+              {/* Prefill JSON Button for V2 Mode */}
+              {mode === 'v2' && (
+                <button
+                  onClick={handlePrefillJson}
+                  className="px-6 py-4 bg-emerald-600 hover:bg-emerald-700
+                             text-white font-semibold rounded-full
+                             transition-all duration-300 ease-out
+                             flex items-center justify-center gap-2
+                             shadow-lg hover:shadow-xl
+                             tracking-wide uppercase text-sm"
+                >
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                  </svg>
+                  Prefill JSON
+                </button>
+              )}
+              
               <button
                 onClick={handleClear}
                 disabled={isLoading || isTranslating || (!currentContent && !hasData && !error)}
@@ -578,7 +617,7 @@ export default function Home() {
                            tracking-wide uppercase text-sm"
               >
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 17V7m0 10a2 2 0 01-2 2H5a2 2 0 01-2-2V7a2 2 0 012-2h2a2 2 0 012 2m0 10a2 2 0 002 2h2a2 2 0 002-2M9 7a2 2 0 012-2h2a2 2 0 012 2m0 10V7m0 10a2 2 0 002 2h2a2 2 0 002-2V7a2 2 0 00-2-2h-2a2 2 0 00-2 2" />
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 17V7m0 10a2 2 0 01-2 2H5a2 2 0 01-2-2V7a2 2 0 012-2h2a2 2 0 012 2m0 10a2 2 0 002 2h2a2 2 0 002-2M9 7a2 2 0 012-2h2a2 2 0 012 2m0 10V7m0 10a2 2 0 002 2h2a2 2 0 00-2-2h-2a2 2 0 00-2 2" />
                 </svg>
                 Generate {mode === 'qa' ? 'Q&A ' : mode === 'v2' ? 'V2 ' : ''}Infographic
               </button>

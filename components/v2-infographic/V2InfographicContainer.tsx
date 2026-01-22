@@ -8,6 +8,8 @@ import { GapQuadrantSection } from './GapQuadrantSection';
 import { HighlightsV2Section } from './HighlightsV2Section';
 import { NextStepsPathway } from './NextStepsPathway';
 
+import { ProcessSection } from './ProcessSection';
+
 interface V2InfographicContainerProps {
   data: V2ExtractionResult;
   onCopyHtml?: () => void;
@@ -80,6 +82,13 @@ export function V2InfographicContainer({ data, onCopyHtml }: V2InfographicContai
             questionAndAnswer={data.question_and_answer}
             thesis={data.thesis}
           />
+
+          {/* Page 1.5: The Process - Moved here */}
+          {data.supporting_analysis && (
+            <div className="px-6 pt-6">
+              <ProcessSection analysis={data.supporting_analysis} />
+            </div>
+          )}
 
           {/* Strategic Fit Assessment */}
           <div className="p-6">

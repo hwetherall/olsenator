@@ -1,205 +1,155 @@
 'use client';
 
-import { HighlightV2, HighlightsMetadata, Polarity, SourceConfidence } from '@/lib/v2-schema';
+import { HighlightV2, HighlightsMetadata, SourceConfidence } from '@/lib/v2-schema';
 
 interface HighlightsV2SectionProps {
   highlights: HighlightV2[];
   metadata: HighlightsMetadata;
 }
 
-// Category colors
-const categoryColors: Record<string, { bg: string; text: string }> = {
-  'Market': { bg: '#dbeafe', text: '#1e40af' },
-  'Financial': { bg: '#dcfce7', text: '#166534' },
-  'Team': { bg: '#fae8ff', text: '#86198f' },
-  'Risk': { bg: '#fecaca', text: '#991b1b' },
-  'Competitive': { bg: '#fed7aa', text: '#9a3412' },
-  'Strategic': { bg: '#e0e7ff', text: '#3730a3' },
-  'Technology': { bg: '#cffafe', text: '#155e75' },
-  'Regulatory': { bg: '#fef3c7', text: '#92400e' },
+// Simplified category colors - using a more muted, professional palette
+const categoryColors: Record<string, string> = {
+  'Market': 'text-blue-600 bg-blue-50 border-blue-100',
+  'Financial': 'text-emerald-600 bg-emerald-50 border-emerald-100',
+  'Team': 'text-purple-600 bg-purple-50 border-purple-100',
+  'Risk': 'text-rose-600 bg-rose-50 border-rose-100',
+  'Competitive': 'text-orange-600 bg-orange-50 border-orange-100',
+  'Strategic': 'text-indigo-600 bg-indigo-50 border-indigo-100',
+  'Technology': 'text-cyan-600 bg-cyan-50 border-cyan-100',
+  'Regulatory': 'text-amber-600 bg-amber-50 border-amber-100',
 };
 
-// Source confidence badges
-const confidenceBadges: Record<SourceConfidence, { icon: string; label: string; color: string }> = {
-  'verified': { icon: '✓', label: 'Verified', color: '#22c55e' },
-  'estimated': { icon: '~', label: 'Estimated', color: '#f59e0b' },
-  'assumed': { icon: '?', label: 'Assumed', color: '#94a3b8' },
+// Simplified confidence indicators
+const confidenceIcons: Record<SourceConfidence, string> = {
+  'verified': '✓',
+  'estimated': '~',
+  'assumed': '?',
 };
 
-interface HighlightCardProps {
-  highlight: HighlightV2;
-}
-
-function HighlightCard({ highlight }: HighlightCardProps) {
+function HighlightRow({ highlight }: { highlight: HighlightV2 }) {
   const isTailwind = highlight.polarity === 'tailwind';
-  const polarityColor = isTailwind ? '#22c55e' : '#ef4444';
-  const categoryColor = categoryColors[highlight.category] || { bg: '#f1f5f9', text: '#475569' };
-  const confidence = confidenceBadges[highlight.source_confidence];
-
+  const categoryStyle = categoryColors[highlight.category] || 'text-slate-600 bg-slate-50 border-slate-100';
+  
   return (
-    <div 
-      className="bg-white rounded-xl border overflow-hidden transition-shadow hover:shadow-md"
-      style={{ borderColor: '#e2e8f0', borderLeftWidth: '4px', borderLeftColor: polarityColor }}
-    >
-      <div className="p-4">
-        {/* Header Row */}
-        <div className="flex items-start justify-between gap-2 mb-3">
-          {/* Polarity Icon */}
-          <div 
-            className="w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0"
-            style={{ backgroundColor: `${polarityColor}15` }}
-          >
-            {isTailwind ? (
-              <svg className="w-3 h-3" style={{ color: polarityColor }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 10l7-7m0 0l7 7m-7-7v18" />
-              </svg>
-            ) : (
-              <svg className="w-3 h-3" style={{ color: polarityColor }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
-              </svg>
-            )}
-          </div>
-
-          {/* Category Tag */}
-          <span 
-            className="px-2 py-0.5 rounded text-xs font-medium"
-            style={{ backgroundColor: categoryColor.bg, color: categoryColor.text }}
-          >
-            {highlight.category}
-          </span>
-        </div>
-
-        {/* Highlight Text */}
-        <p className="text-sm font-bold text-slate-800 mb-2 leading-tight">
-          {highlight.highlight}
-        </p>
-
-        {/* Why It Matters */}
-        <p className="text-xs text-slate-600 mb-3 leading-relaxed">
-          {highlight.why_it_matters}
-        </p>
-
-        {/* Context Grounding */}
-        <div className="bg-slate-50 rounded-lg p-2 mb-3">
-          <p className="text-xs text-slate-500 italic">
-            {highlight.context_grounding}
-          </p>
-        </div>
-
-        {/* Footer Row */}
-        <div className="flex items-center justify-between pt-2 border-t border-slate-100">
-          {/* Time Sensitivity */}
-          {highlight.time_sensitivity.is_time_bound && highlight.time_sensitivity.window ? (
-            <div className="flex items-center gap-1">
-              <svg className="w-3 h-3 text-amber-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <div className="group relative bg-white p-4 rounded-lg border border-slate-100 hover:border-slate-300 hover:shadow-sm transition-all duration-200">
+      {/* Top Meta Row */}
+      <div className="flex items-center justify-between mb-2">
+        <span className={`text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full border ${categoryStyle}`}>
+          {highlight.category}
+        </span>
+        
+        <div className="flex items-center gap-3 text-xs text-slate-400">
+          {highlight.time_sensitivity.is_time_bound && (
+            <span className="flex items-center gap-1 text-amber-600 bg-amber-50 px-1.5 py-0.5 rounded">
+              <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>
-              <span className="text-xs text-amber-600 font-medium">
-                {highlight.time_sensitivity.window}
-              </span>
-            </div>
-          ) : (
-            <span className="text-xs text-slate-400">No time constraint</span>
-          )}
-
-          {/* Source Confidence */}
-          <div 
-            className="flex items-center gap-1 px-2 py-0.5 rounded"
-            style={{ backgroundColor: `${confidence.color}15` }}
-          >
-            <span style={{ color: confidence.color }}>{confidence.icon}</span>
-            <span className="text-xs font-medium" style={{ color: confidence.color }}>
-              {confidence.label}
+              {highlight.time_sensitivity.window}
             </span>
-          </div>
+          )}
         </div>
       </div>
+
+      {/* Main Content */}
+      <div className="space-y-2">
+        <h4 className="text-sm font-bold text-slate-900 leading-snug">
+          {highlight.highlight}
+        </h4>
+        <p className="text-sm text-slate-600 leading-relaxed border-l-2 border-slate-200 pl-3">
+          {highlight.why_it_matters}
+        </p>
+      </div>
+
+      {/* Context Grounding - Made more readable */}
+      {highlight.context_grounding && (
+        <div className="mt-3 pt-3 border-t border-slate-100">
+          <p className="text-xs text-slate-500 leading-relaxed">
+            <span className="font-semibold text-slate-700">Context:</span> {highlight.context_grounding}
+          </p>
+        </div>
+      )}
     </div>
   );
 }
 
 export function HighlightsV2Section({ highlights, metadata }: HighlightsV2SectionProps) {
-  // Separate tailwinds and headwinds
   const tailwinds = highlights.filter(h => h.polarity === 'tailwind');
   const headwinds = highlights.filter(h => h.polarity === 'headwind');
 
   return (
     <div className="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
-      {/* Section Header */}
-      <div className="px-6 py-4 border-b border-slate-200 bg-slate-50">
-        <div className="flex items-center justify-between">
+      {/* Header & Synthesis */}
+      <div className="bg-slate-50 border-b border-slate-200 px-6 py-5">
+        <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4">
           <div>
             <h2 className="text-lg font-bold text-slate-800">Key Highlights</h2>
             <p className="text-sm text-slate-500 mt-1">Critical facts balanced between opportunities and challenges</p>
           </div>
-
-          {/* Balance Indicator */}
-          <div className="flex items-center gap-3">
-            <div className="flex items-center gap-1">
-              <div className="w-4 h-4 rounded-full bg-green-100 flex items-center justify-center">
-                <svg className="w-2 h-2 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 10l7-7m0 0l7 7m-7-7v18" />
-                </svg>
-              </div>
-              <span className="text-sm font-semibold text-green-700">{metadata.tailwinds}</span>
-              <span className="text-xs text-slate-500">Tailwinds</span>
+          
+          {/* Synthesis Box */}
+          <div className="bg-white px-4 py-3 rounded-lg border border-slate-200 shadow-sm md:max-w-md">
+            <div className="flex items-center gap-2 mb-1">
+              <div className="w-2 h-2 rounded-full bg-slate-400" />
+              <span className="text-xs font-bold text-slate-500 uppercase tracking-wider">Balance Assessment</span>
             </div>
-            <div className="w-px h-4 bg-slate-300" />
-            <div className="flex items-center gap-1">
-              <div className="w-4 h-4 rounded-full bg-red-100 flex items-center justify-center">
-                <svg className="w-2 h-2 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
-                </svg>
-              </div>
-              <span className="text-sm font-semibold text-red-700">{metadata.headwinds}</span>
-              <span className="text-xs text-slate-500">Headwinds</span>
-            </div>
+            <p className="text-sm font-medium text-slate-700 leading-snug">
+              {metadata.balance_check}
+            </p>
           </div>
         </div>
       </div>
 
-      <div className="p-6">
-        {/* Highlights Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
-          {highlights.map((highlight, index) => (
-            <HighlightCard key={index} highlight={highlight} />
-          ))}
+      {/* The Ledger Layout */}
+      <div className="grid grid-cols-1 md:grid-cols-2 divide-y md:divide-y-0 md:divide-x divide-slate-200">
+        
+        {/* Left Column: Tailwinds (Assets) */}
+        <div className="p-6 bg-gradient-to-b from-emerald-50/30 to-transparent">
+          <div className="flex items-center gap-2 mb-6">
+            <div className="p-1.5 bg-emerald-100 text-emerald-600 rounded-md">
+              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 10l7-7m0 0l7 7m-7-7v18" />
+              </svg>
+            </div>
+            <div>
+              <h3 className="text-sm font-bold text-slate-800">Tailwinds</h3>
+              <p className="text-xs text-slate-500">Market drivers & competitive advantages</p>
+            </div>
+            <span className="ml-auto text-xs font-bold bg-emerald-100 text-emerald-700 px-2 py-1 rounded-full">
+              {tailwinds.length}
+            </span>
+          </div>
+          
+          <div className="space-y-3">
+            {tailwinds.map((highlight, index) => (
+              <HighlightRow key={`tailwind-${index}`} highlight={highlight} />
+            ))}
+          </div>
         </div>
 
-        {/* Balance Check */}
-        <div className="p-4 rounded-lg bg-slate-50 border border-slate-200">
-          <div className="flex items-center gap-2 mb-2">
-            <svg className="w-4 h-4 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 6l3 1m0 0l-3 9a5.002 5.002 0 006.001 0M6 7l3 9M6 7l6-2m6 2l3-1m-3 1l-3 9a5.002 5.002 0 006.001 0M18 7l3 9m-3-9l-6-2m0-2v2m0 16V5m0 16H9m3 0h3" />
-            </svg>
-            <span className="text-xs font-semibold text-slate-600 uppercase tracking-wider">Balance Assessment</span>
+        {/* Right Column: Headwinds (Liabilities) */}
+        <div className="p-6 bg-gradient-to-b from-rose-50/30 to-transparent">
+          <div className="flex items-center gap-2 mb-6">
+            <div className="p-1.5 bg-rose-100 text-rose-600 rounded-md">
+              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+              </svg>
+            </div>
+            <div>
+              <h3 className="text-sm font-bold text-slate-800">Headwinds</h3>
+              <p className="text-xs text-slate-500">Risks, gaps & structural challenges</p>
+            </div>
+            <span className="ml-auto text-xs font-bold bg-rose-100 text-rose-700 px-2 py-1 rounded-full">
+              {headwinds.length}
+            </span>
           </div>
-          <p className="text-sm text-slate-700">{metadata.balance_check}</p>
+
+          <div className="space-y-3">
+            {headwinds.map((highlight, index) => (
+              <HighlightRow key={`headwind-${index}`} highlight={highlight} />
+            ))}
+          </div>
         </div>
 
-        {/* Visual Balance Bar */}
-        <div className="mt-4">
-          <div className="h-2 rounded-full bg-slate-200 overflow-hidden flex">
-            <div 
-              className="h-full bg-green-500 transition-all duration-500"
-              style={{ width: `${(metadata.tailwinds / metadata.total_highlights) * 100}%` }}
-            />
-            <div 
-              className="h-full bg-red-500 transition-all duration-500"
-              style={{ width: `${(metadata.headwinds / metadata.total_highlights) * 100}%` }}
-            />
-            {metadata.neutral > 0 && (
-              <div 
-                className="h-full bg-slate-400 transition-all duration-500"
-                style={{ width: `${(metadata.neutral / metadata.total_highlights) * 100}%` }}
-              />
-            )}
-          </div>
-          <div className="flex justify-between mt-1 text-xs text-slate-500">
-            <span>Tailwinds ({Math.round((metadata.tailwinds / metadata.total_highlights) * 100)}%)</span>
-            <span>Headwinds ({Math.round((metadata.headwinds / metadata.total_highlights) * 100)}%)</span>
-          </div>
-        </div>
       </div>
     </div>
   );

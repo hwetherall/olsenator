@@ -139,6 +139,8 @@ export interface Gap {
   quadrant: GapQuadrant;
   why_easy_or_hard: string;
   action_to_close: string;
+  risk_of_inaction?: string; // New field
+  owner?: string; // New field
 }
 
 export interface GapSummary {
@@ -391,7 +393,9 @@ export const V2_EXTRACTION_SCHEMA_JSON = `{
     "ease_of_closing": { "score": 1-5, "label": "Very Hard" | "Hard" | "Medium" | "Easy" | "Very Easy" },
     "quadrant": "Dealbreaker" | "Priority Investment" | "Quick Win" | "Mixed" | "Manageable",
     "why_easy_or_hard": string,
-    "action_to_close": string
+    "action_to_close": string,
+    "risk_of_inaction": string,
+    "owner": string
   }],
   "gap_summary": {
     "total_dimensions_assessed": number,
@@ -403,10 +407,10 @@ export const V2_EXTRACTION_SCHEMA_JSON = `{
     "overall_gap_assessment": string
   },
   "highlights": [{
-    "highlight": string,
+    "highlight": string, // The provocative insight or hard truth (bold headline)
     "category": "Market" | "Financial" | "Team" | "Risk" | "Competitive" | "Strategic" | "Technology" | "Regulatory",
-    "why_it_matters": string,
-    "context_grounding": string,
+    "why_it_matters": string, // The "So What?" - impact on investment thesis
+    "context_grounding": string, // The "Proof" - hard data or comparables
     "polarity": "tailwind" | "headwind",
     "time_sensitivity": { "is_time_bound": boolean, "window": string | null },
     "source_confidence": "verified" | "estimated" | "assumed"
@@ -434,6 +438,43 @@ export const V2_EXTRACTION_SCHEMA_JSON = `{
     "critical_path_duration": string,
     "ultimate_decision": string,
     "pathway_confidence": "High" | "Medium" | "Low"
+  },
+  "supporting_analysis": {
+    "explored_and_tested": [{
+      "headline": string,
+      "insight": string,
+      "source_chapter": string
+    }],
+    "risks_acknowledged": [{
+      "headline": string,
+      "insight": string,
+      "severity": "high" | "medium" | "low",
+      "source_chapter": string
+    }],
+    "path_summary": {
+      "recommendation": string,
+      "path_description": string,
+      "confidence": "high" | "medium" | "low"
+    },
+    "key_trade_offs_resolved": [{
+      "trade_off": string,
+      "resolution": string,
+      "supporting_evidence": string,
+      "source_chapters": string[],
+      "confidence": "high" | "medium" | "low"
+    }],
+    "alternatives_considered": [{
+      "alternative": string,
+      "why_not_preferred": string,
+      "source_chapters": string[],
+      "confidence": "high" | "medium" | "low"
+    }],
+    "path_advantages": [{
+      "advantage": string,
+      "description": string,
+      "source_chapter": string,
+      "confidence": "high" | "medium" | "low"
+    }]
   }
 }`;
 

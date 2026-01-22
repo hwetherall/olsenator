@@ -13,176 +13,232 @@ export function BannerSection({ identification, questionAndAnswer, thesis }: Ban
   const getConfidenceColor = (rating: string) => {
     switch (rating) {
       case 'High':
-        return { bg: '#dcfce7', text: '#166534', border: '#22c55e' };
+        return { bg: 'bg-emerald-500/10', text: 'text-emerald-400', border: 'border-emerald-500/30', ring: 'ring-emerald-500/20' };
       case 'Medium-High':
-        return { bg: '#ecfccb', text: '#3f6212', border: '#84cc16' };
+        return { bg: 'bg-lime-500/10', text: 'text-lime-400', border: 'border-lime-500/30', ring: 'ring-lime-500/20' };
       case 'Medium':
-        return { bg: '#fef3c7', text: '#92400e', border: '#f59e0b' };
+        return { bg: 'bg-amber-500/10', text: 'text-amber-400', border: 'border-amber-500/30', ring: 'ring-amber-500/20' };
       case 'Medium-Low':
-        return { bg: '#fed7aa', text: '#9a3412', border: '#f97316' };
+        return { bg: 'bg-orange-500/10', text: 'text-orange-400', border: 'border-orange-500/30', ring: 'ring-orange-500/20' };
       case 'Low':
-        return { bg: '#fecaca', text: '#991b1b', border: '#ef4444' };
+        return { bg: 'bg-red-500/10', text: 'text-red-400', border: 'border-red-500/30', ring: 'ring-red-500/20' };
       default:
-        return { bg: '#f1f5f9', text: '#475569', border: '#94a3b8' };
+        return { bg: 'bg-slate-500/10', text: 'text-slate-400', border: 'border-slate-500/30', ring: 'ring-slate-500/20' };
     }
   };
 
   // Extract decision keyword from answer
   const getDecisionFromAnswer = (answer: string) => {
     const firstWord = answer.split(' ')[0].toLowerCase();
-    if (firstWord.includes('conditional')) return { word: 'Conditional', color: '#f59e0b' };
-    if (firstWord.includes('yes') || firstWord.includes('proceed') || firstWord.includes('go')) return { word: 'Yes', color: '#22c55e' };
-    if (firstWord.includes('no') || firstWord.includes('pass')) return { word: 'No', color: '#ef4444' };
-    return { word: 'Conditional', color: '#f59e0b' };
+    if (firstWord.includes('conditional')) return { word: 'Conditional Go', color: 'text-amber-400', bg: 'bg-amber-500/10', border: 'border-amber-500/30' };
+    if (firstWord.includes('yes') || firstWord.includes('proceed') || firstWord.includes('go')) return { word: 'Go', color: 'text-emerald-400', bg: 'bg-emerald-500/10', border: 'border-emerald-500/30' };
+    if (firstWord.includes('no') || firstWord.includes('pass')) return { word: 'No Go', color: 'text-red-400', bg: 'bg-red-500/10', border: 'border-red-500/30' };
+    return { word: 'Conditional', color: 'text-amber-400', bg: 'bg-amber-500/10', border: 'border-amber-500/30' };
   };
 
   const confidenceStyle = getConfidenceColor(questionAndAnswer.confidence.rating);
   const decision = getDecisionFromAnswer(questionAndAnswer.the_answer);
 
+  // Helper to clean the answer text
+  const cleanAnswerText = (text: string) => {
+    // 1. Remove the decision prefix (Conditional Go, Yes, etc.)
+    let cleaned = text.replace(/^(Conditional Go|Conditional|Yes|No|Proceed|Pass)/i, '').trim();
+    
+    // 2. Remove "Option X" patterns, including parentheses
+    // Matches: "(Option 2)", "Option 2)", "Option 2 -", "(Option 2) -", etc.
+    cleaned = cleaned.replace(/^[\s-–]*\(?Option\s*\d+\)?[\s-–]*/i, '').trim();
+    
+    return cleaned;
+  };
+
+  const displayAnswer = cleanAnswerText(questionAndAnswer.the_answer) || questionAndAnswer.the_answer;
+
   return (
-    <div className="bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 text-white">
-      {/* Top Banner - Identification Strip */}
-      <div className="px-8 py-6 border-b border-slate-700/50">
-        <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
-          {/* Project Name & One-liner */}
-          <div className="flex-1">
-            <h1 className="text-2xl lg:text-3xl font-bold tracking-tight mb-2">
+    <div className="bg-slate-900 text-white font-sans">
+      {/* Top Banner - Cleaned Up Layout */}
+      <div className="px-8 pt-10 pb-8 bg-slate-900">
+        <div className="max-w-5xl mx-auto">
+          
+          {/* Title Block */}
+          <div className="mb-8">
+            <h1 className="text-3xl lg:text-4xl font-bold tracking-tight text-white mb-4 leading-tight">
               {identification.project_name}
             </h1>
-            <p className="text-slate-300 text-sm lg:text-base max-w-2xl">
+            <p className="text-lg text-slate-400 leading-relaxed max-w-3xl">
               {identification.one_liner}
             </p>
           </div>
-          
-          {/* Metadata Pills */}
-          <div className="flex flex-wrap items-center gap-2">
-            <span className="px-3 py-1.5 rounded-full text-xs font-medium bg-blue-500/20 text-blue-300 border border-blue-500/30">
-              {identification.stage}
-            </span>
-            <span className="px-3 py-1.5 rounded-full text-xs font-medium bg-purple-500/20 text-purple-300 border border-purple-500/30">
-              {identification.sector}
-            </span>
-            <span className="px-3 py-1.5 rounded-full text-xs font-medium bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
-              {identification.geography}
-            </span>
-            <span className="px-3 py-1.5 rounded-full text-xs font-medium bg-slate-500/20 text-slate-300 border border-slate-500/30">
-              {new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })}
-            </span>
-          </div>
-        </div>
-      </div>
 
-      {/* Question & Answer Block */}
-      <div className="px-8 py-8">
-        <div className="max-w-4xl">
-          {/* The Question */}
-          <div className="mb-6">
-            <span className="text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2 block">
-              The Question
-            </span>
-            <h2 className="text-xl lg:text-2xl font-semibold text-white leading-tight">
-              {questionAndAnswer.the_question}
-            </h2>
-          </div>
+          {/* Structured Metadata Grid - Replaces the messy tags */}
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 py-6 border-y border-slate-800">
+            
+            {/* Stage */}
+            <div className="flex items-start gap-3">
+              <div className="mt-1 p-1.5 rounded bg-blue-500/10 text-blue-400">
+                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                </svg>
+              </div>
+              <div>
+                <p className="text-xs font-semibold uppercase tracking-wider text-slate-500 mb-0.5">Current Stage</p>
+                <p className="text-sm font-medium text-slate-200">{identification.stage}</p>
+              </div>
+            </div>
 
-          {/* The Answer */}
-          <div className="flex flex-col lg:flex-row lg:items-start gap-4">
-            <div className="flex-1">
-              <span className="text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2 block">
-                The Answer
-              </span>
-              <div className="flex items-start gap-3">
-                {/* Decision Badge */}
-                <span 
-                  className="flex-shrink-0 px-3 py-1 rounded-md text-sm font-bold"
-                  style={{ 
-                    backgroundColor: `${decision.color}20`,
-                    color: decision.color,
-                    border: `1px solid ${decision.color}40`
-                  }}
-                >
-                  {decision.word}
-                </span>
-                <p className="text-base lg:text-lg text-slate-200 leading-relaxed">
-                  {questionAndAnswer.the_answer}
+            {/* Sector */}
+            <div className="flex items-start gap-3">
+              <div className="mt-1 p-1.5 rounded bg-purple-500/10 text-purple-400">
+                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                </svg>
+              </div>
+              <div>
+                <p className="text-xs font-semibold uppercase tracking-wider text-slate-500 mb-0.5">Sector</p>
+                <p className="text-sm font-medium text-slate-200">{identification.sector}</p>
+              </div>
+            </div>
+
+            {/* Geography */}
+            <div className="flex items-start gap-3">
+              <div className="mt-1 p-1.5 rounded bg-emerald-500/10 text-emerald-400">
+                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+              </div>
+              <div>
+                <p className="text-xs font-semibold uppercase tracking-wider text-slate-500 mb-0.5">Geography</p>
+                <p className="text-sm font-medium text-slate-200">{identification.geography}</p>
+              </div>
+            </div>
+
+            {/* Date */}
+            <div className="flex items-start gap-3">
+              <div className="mt-1 p-1.5 rounded bg-slate-700/30 text-slate-400">
+                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                </svg>
+              </div>
+              <div>
+                <p className="text-xs font-semibold uppercase tracking-wider text-slate-500 mb-0.5">Report Date</p>
+                <p className="text-sm font-medium text-slate-200">
+                  {new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })}
                 </p>
               </div>
             </div>
 
-            {/* Confidence Indicator */}
-            <div 
-              className="flex-shrink-0 px-4 py-3 rounded-lg text-center min-w-[120px]"
-              style={{ 
-                backgroundColor: `${confidenceStyle.border}15`,
-                border: `1px solid ${confidenceStyle.border}40`
-              }}
-            >
-              <span className="text-xs font-semibold uppercase tracking-wider block mb-1" style={{ color: confidenceStyle.border }}>
-                Confidence
-              </span>
-              <span className="text-lg font-bold block" style={{ color: confidenceStyle.border }}>
-                {questionAndAnswer.confidence.rating}
-              </span>
-              {questionAndAnswer.confidence.percentage && (
-                <span className="text-sm" style={{ color: confidenceStyle.border }}>
-                  {questionAndAnswer.confidence.percentage}%
-                </span>
-              )}
-            </div>
           </div>
         </div>
       </div>
 
-      {/* Thesis Row - Three Cards */}
-      <div className="px-8 pb-8">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+      {/* Main Content Area */}
+      <div className="px-8 pb-12 space-y-10">
+        
+        {/* The Big Question */}
+        <div className="text-center max-w-4xl mx-auto pt-4">
+          <h2 className="text-2xl lg:text-3xl font-semibold text-white leading-tight">
+            {questionAndAnswer.the_question}
+          </h2>
+        </div>
+
+        {/* The Verdict Box */}
+        <div className="max-w-5xl mx-auto bg-slate-800/40 rounded-2xl border border-slate-700 overflow-hidden relative shadow-2xl">
+          <div className="absolute top-0 left-0 w-1 h-full bg-gradient-to-b from-slate-700 to-slate-800"></div>
+          
+          <div className="flex flex-col md:flex-row">
+            {/* Left: The Decision */}
+            <div className="flex-1 p-8 flex flex-col justify-center border-b md:border-b-0 md:border-r border-slate-700/50">
+              <span className="text-xs font-bold uppercase tracking-widest text-slate-500 mb-3">
+                The Verdict
+              </span>
+              <div className="flex items-start gap-4">
+                <div className={`flex-shrink-0 w-1.5 self-stretch rounded-full ${decision.bg.replace('/10', '')}`}></div>
+                <div>
+                  <h3 className={`text-4xl font-bold mb-2 ${decision.color}`}>
+                    {decision.word}
+                  </h3>
+                  <p className="text-lg text-slate-300 leading-relaxed">
+                    {displayAnswer}
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* Right: Confidence Score */}
+            <div className="md:w-72 p-8 bg-slate-800/60 flex flex-col items-center justify-center text-center">
+              <span className="text-xs font-bold uppercase tracking-widest text-slate-500 mb-4">
+                Confidence Level
+              </span>
+              <div className={`relative flex items-center justify-center w-28 h-28 rounded-full border-[6px] ${confidenceStyle.border} ${confidenceStyle.bg} mb-3`}>
+                <div className="text-center">
+                  <span className={`text-3xl font-bold ${confidenceStyle.text}`}>
+                    {questionAndAnswer.confidence.percentage ? `${questionAndAnswer.confidence.percentage}%` : ''}
+                  </span>
+                </div>
+                {!questionAndAnswer.confidence.percentage && (
+                   <svg className={`w-12 h-12 ${confidenceStyle.text}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                   </svg>
+                )}
+              </div>
+              <span className={`text-sm font-bold tracking-wide ${confidenceStyle.text}`}>
+                {questionAndAnswer.confidence.rating}
+              </span>
+            </div>
+          </div>
+        </div>
+
+        {/* Thesis Cards - The "Why" */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-6xl mx-auto">
           {/* The Prize */}
-          <div className="bg-slate-800/50 rounded-xl p-5 border border-slate-700/50">
-            <div className="flex items-center gap-2 mb-3">
-              <div className="w-8 h-8 rounded-lg bg-amber-500/20 flex items-center justify-center">
-                <svg className="w-4 h-4 text-amber-400" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" />
+          <div className="group relative bg-slate-800/30 rounded-xl p-6 border border-amber-500/20 hover:bg-slate-800/50 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg hover:shadow-amber-900/10">
+            <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-amber-500/40 to-transparent rounded-t-xl"></div>
+            <div className="flex items-center gap-3 mb-4">
+              <div className="p-2 rounded-lg bg-amber-500/10 text-amber-400">
+                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v13m0-13V6a2 2 0 112 2h-2zm0 0V5.5A2.5 2.5 0 109.5 8H12zm-7 4h14M5 12a2 2 0 110-4h14a2 2 0 110 4M5 12v7a2 2 0 002 2h10a2 2 0 002-2v-7" />
                 </svg>
               </div>
-              <span className="text-xs font-semibold uppercase tracking-wider text-amber-400">
+              <span className="text-sm font-bold uppercase tracking-wider text-amber-400">
                 The Prize
               </span>
             </div>
-            <p className="text-sm text-slate-300 leading-relaxed">
+            <p className="text-slate-300 leading-relaxed text-sm">
               {thesis.the_prize}
             </p>
           </div>
 
           {/* The Risk */}
-          <div className="bg-slate-800/50 rounded-xl p-5 border border-slate-700/50">
-            <div className="flex items-center gap-2 mb-3">
-              <div className="w-8 h-8 rounded-lg bg-red-500/20 flex items-center justify-center">
-                <svg className="w-4 h-4 text-red-400" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z" />
+          <div className="group relative bg-slate-800/30 rounded-xl p-6 border border-red-500/20 hover:bg-slate-800/50 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg hover:shadow-red-900/10">
+            <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-red-500/40 to-transparent rounded-t-xl"></div>
+            <div className="flex items-center gap-3 mb-4">
+              <div className="p-2 rounded-lg bg-red-500/10 text-red-400">
+                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
                 </svg>
               </div>
-              <span className="text-xs font-semibold uppercase tracking-wider text-red-400">
+              <span className="text-sm font-bold uppercase tracking-wider text-red-400">
                 The Risk
               </span>
             </div>
-            <p className="text-sm text-slate-300 leading-relaxed">
+            <p className="text-slate-300 leading-relaxed text-sm">
               {thesis.the_risk}
             </p>
           </div>
 
           {/* The Unlock */}
-          <div className="bg-slate-800/50 rounded-xl p-5 border border-slate-700/50">
-            <div className="flex items-center gap-2 mb-3">
-              <div className="w-8 h-8 rounded-lg bg-emerald-500/20 flex items-center justify-center">
-                <svg className="w-4 h-4 text-emerald-400" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M12 17c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm6-9h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6h1.9c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm0 12H6V10h12v10z" />
+          <div className="group relative bg-slate-800/30 rounded-xl p-6 border border-emerald-500/20 hover:bg-slate-800/50 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg hover:shadow-emerald-900/10">
+            <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-emerald-500/40 to-transparent rounded-t-xl"></div>
+            <div className="flex items-center gap-3 mb-4">
+              <div className="p-2 rounded-lg bg-emerald-500/10 text-emerald-400">
+                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z" />
                 </svg>
               </div>
-              <span className="text-xs font-semibold uppercase tracking-wider text-emerald-400">
+              <span className="text-sm font-bold uppercase tracking-wider text-emerald-400">
                 The Unlock
               </span>
             </div>
-            <p className="text-sm text-slate-300 leading-relaxed">
+            <p className="text-slate-300 leading-relaxed text-sm">
               {thesis.the_unlock}
             </p>
           </div>
