@@ -7,7 +7,32 @@ interface StrategicFitBlockProps {
   data: StrategicFitBlockType;
 }
 
+// Helper to extract score/verdict from text
+// Example input: "Borderline (Low confidence). While NLM has..."
+// Returns: { score: "Borderline (Low confidence)", text: "While NLM has..." }
+function extractScore(fullText: string) {
+  // Regex to find the first sentence which typically contains the verdict/score
+  // Looks for text ending with a period, but tries to be smart about parentheses
+  const match = fullText.match(/^([^\.]+?(\([^\)]+\))?)\.\s+(.+)$/);
+  
+  if (match) {
+    return {
+      score: match[1].trim(),
+      text: match[3].trim()
+    };
+  }
+  
+  // Fallback if no clean separation found
+  return {
+    score: '',
+    text: fullText
+  };
+}
+
 export function StrategicFitBlock({ data }: StrategicFitBlockProps) {
+  const canWe = extractScore(data.canWeDoIt);
+  const shouldWe = extractScore(data.shouldWeDoIt);
+
   return (
     <div className="space-y-5">
       {/* Main Assessment */}
@@ -47,7 +72,7 @@ export function StrategicFitBlock({ data }: StrategicFitBlockProps) {
         >
           <div className="flex items-center gap-3 mb-4">
             <div 
-              className="w-10 h-10 rounded-xl flex items-center justify-center"
+              className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0"
               style={{ backgroundColor: colors.risk.amberLight }}
             >
               <svg 
@@ -72,6 +97,20 @@ export function StrategicFitBlock({ data }: StrategicFitBlockProps) {
               Can We Do It?
             </span>
           </div>
+
+          {/* Extracted Score Component */}
+          {canWe.score && (
+            <div 
+              className="mb-4 inline-block px-3 py-1.5 rounded-lg text-sm font-bold"
+              style={{ 
+                backgroundColor: colors.risk.amberLight,
+                color: colors.risk.amber,
+              }}
+            >
+              {canWe.score}
+            </div>
+          )}
+
           <p 
             className="text-sm leading-relaxed"
             style={{ 
@@ -79,7 +118,7 @@ export function StrategicFitBlock({ data }: StrategicFitBlockProps) {
               lineHeight: typography.lineHeight.relaxed,
             }}
           >
-            {data.canWeDoIt}
+            {canWe.text}
           </p>
         </div>
 
@@ -93,7 +132,7 @@ export function StrategicFitBlock({ data }: StrategicFitBlockProps) {
         >
           <div className="flex items-center gap-3 mb-4">
             <div 
-              className="w-10 h-10 rounded-xl flex items-center justify-center"
+              className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0"
               style={{ backgroundColor: colors.risk.greenLight }}
             >
               <svg 
@@ -118,6 +157,20 @@ export function StrategicFitBlock({ data }: StrategicFitBlockProps) {
               Should We Do It?
             </span>
           </div>
+
+          {/* Extracted Score Component */}
+          {shouldWe.score && (
+            <div 
+              className="mb-4 inline-block px-3 py-1.5 rounded-lg text-sm font-bold"
+              style={{ 
+                backgroundColor: colors.risk.greenLight,
+                color: colors.risk.green,
+              }}
+            >
+              {shouldWe.score}
+            </div>
+          )}
+
           <p 
             className="text-sm leading-relaxed"
             style={{ 
@@ -125,7 +178,7 @@ export function StrategicFitBlock({ data }: StrategicFitBlockProps) {
               lineHeight: typography.lineHeight.relaxed,
             }}
           >
-            {data.shouldWeDoIt}
+            {shouldWe.text}
           </p>
         </div>
       </div>

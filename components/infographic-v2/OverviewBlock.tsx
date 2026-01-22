@@ -158,7 +158,7 @@ export function OverviewBlock({ data }: OverviewBlockProps) {
               className="text-sm font-semibold uppercase tracking-wider"
               style={{ color: colors.slate[700] }}
             >
-              Key Risks ({data.risksAcknowledged.length})
+              Key Risks
             </span>
           </div>
           <div className="grid md:grid-cols-2 gap-3">

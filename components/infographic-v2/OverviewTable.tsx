@@ -8,21 +8,6 @@ interface OverviewTableProps {
 }
 
 export function OverviewTable({ data }: OverviewTableProps) {
-  const getDecisionColor = (decision: string) => {
-    switch (decision) {
-      case 'Proceed':
-        return { bg: colors.risk.greenLight, text: colors.risk.green };
-      case 'Conditional':
-        return { bg: colors.risk.amberLight, text: colors.risk.amber };
-      case 'Do Not Proceed':
-        return { bg: colors.risk.redLight, text: colors.risk.red };
-      default:
-        return { bg: colors.slate[100], text: colors.slate[600] };
-    }
-  };
-
-  const decisionColors = getDecisionColor(data.decision);
-
   return (
     <div 
       className="rounded-xl overflow-hidden"
@@ -53,25 +38,6 @@ export function OverviewTable({ data }: OverviewTableProps) {
             >
               {data.oneLiner}
             </p>
-          </div>
-          
-          {/* Decision Badge */}
-          <div 
-            className="px-4 py-2 rounded-lg text-center flex-shrink-0"
-            style={{ backgroundColor: decisionColors.bg }}
-          >
-            <span 
-              className="text-xs font-medium uppercase tracking-wider block mb-1"
-              style={{ color: decisionColors.text }}
-            >
-              Decision
-            </span>
-            <span 
-              className="text-lg font-bold block"
-              style={{ color: decisionColors.text }}
-            >
-              {data.decision}
-            </span>
           </div>
         </div>
       </div>
