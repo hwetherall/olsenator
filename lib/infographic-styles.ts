@@ -65,6 +65,85 @@ export const colors = {
     atRisk: '#ef4444',
     atRiskBg: '#fef2f2',
   },
+  
+  // V2 Infographic colors
+  v2: {
+    // Quadrant colors for gap analysis
+    quadrant: {
+      quickWin: '#22c55e',
+      quickWinBg: '#dcfce7',
+      quickWinText: '#166534',
+      priorityInvestment: '#3b82f6',
+      priorityInvestmentBg: '#dbeafe',
+      priorityInvestmentText: '#1e40af',
+      manageable: '#f59e0b',
+      manageableBg: '#fef3c7',
+      manageableText: '#92400e',
+      dealbreaker: '#ef4444',
+      dealbreakerBg: '#fecaca',
+      dealbreakerText: '#991b1b',
+      mixed: '#64748b',
+      mixedBg: '#e2e8f0',
+      mixedText: '#475569',
+    },
+    // Polarity colors for highlights
+    polarity: {
+      tailwind: '#22c55e',
+      tailwindBg: '#dcfce7',
+      tailwindText: '#166534',
+      headwind: '#ef4444',
+      headwindBg: '#fecaca',
+      headwindText: '#991b1b',
+    },
+    // Owner colors for next steps
+    owner: {
+      venture: '#3b82f6',
+      ventureBg: '#dbeafe',
+      ventureText: '#1e40af',
+      joint: '#d946ef',
+      jointBg: '#fae8ff',
+      jointText: '#86198f',
+      investor: '#22c55e',
+      investorBg: '#dcfce7',
+      investorText: '#166534',
+    },
+    // Failure action colors
+    failureAction: {
+      pivot: '#f59e0b',
+      pivotBg: '#fef3c7',
+      pivotText: '#92400e',
+      pass: '#ef4444',
+      passBg: '#fecaca',
+      passText: '#991b1b',
+      reassess: '#6366f1',
+      reassessBg: '#e0e7ff',
+      reassessText: '#3730a3',
+    },
+    // Confidence colors (extended)
+    confidence: {
+      high: '#22c55e',
+      highBg: '#dcfce7',
+      highText: '#166534',
+      mediumHigh: '#84cc16',
+      mediumHighBg: '#ecfccb',
+      mediumHighText: '#3f6212',
+      medium: '#f59e0b',
+      mediumBg: '#fef3c7',
+      mediumText: '#92400e',
+      mediumLow: '#f97316',
+      mediumLowBg: '#fed7aa',
+      mediumLowText: '#9a3412',
+      low: '#ef4444',
+      lowBg: '#fecaca',
+      lowText: '#991b1b',
+    },
+    // Source confidence colors
+    sourceConfidence: {
+      verified: '#22c55e',
+      estimated: '#f59e0b',
+      assumed: '#94a3b8',
+    },
+  },
 } as const;
 
 export const spacing = {
@@ -224,5 +303,59 @@ export function getAssumptionBgColor(status: string): string {
       return colors.assumption.atRiskBg;
     default:
       return colors.slate[100];
+  }
+}
+
+// V2 Helper functions
+export function getV2QuadrantColor(quadrant: string): { bg: string; border: string; text: string } {
+  switch (quadrant) {
+    case 'Quick Win':
+      return { bg: colors.v2.quadrant.quickWinBg, border: colors.v2.quadrant.quickWin, text: colors.v2.quadrant.quickWinText };
+    case 'Priority Investment':
+      return { bg: colors.v2.quadrant.priorityInvestmentBg, border: colors.v2.quadrant.priorityInvestment, text: colors.v2.quadrant.priorityInvestmentText };
+    case 'Manageable':
+      return { bg: colors.v2.quadrant.manageableBg, border: colors.v2.quadrant.manageable, text: colors.v2.quadrant.manageableText };
+    case 'Dealbreaker':
+      return { bg: colors.v2.quadrant.dealbreakerBg, border: colors.v2.quadrant.dealbreaker, text: colors.v2.quadrant.dealbreakerText };
+    case 'Mixed':
+    default:
+      return { bg: colors.v2.quadrant.mixedBg, border: colors.v2.quadrant.mixed, text: colors.v2.quadrant.mixedText };
+  }
+}
+
+export function getV2PolarityColor(polarity: string): { bg: string; border: string; text: string } {
+  if (polarity === 'tailwind') {
+    return { bg: colors.v2.polarity.tailwindBg, border: colors.v2.polarity.tailwind, text: colors.v2.polarity.tailwindText };
+  }
+  return { bg: colors.v2.polarity.headwindBg, border: colors.v2.polarity.headwind, text: colors.v2.polarity.headwindText };
+}
+
+export function getV2OwnerColor(owner: string): { bg: string; border: string; text: string } {
+  switch (owner) {
+    case 'venture':
+      return { bg: colors.v2.owner.ventureBg, border: colors.v2.owner.venture, text: colors.v2.owner.ventureText };
+    case 'joint':
+      return { bg: colors.v2.owner.jointBg, border: colors.v2.owner.joint, text: colors.v2.owner.jointText };
+    case 'investor':
+      return { bg: colors.v2.owner.investorBg, border: colors.v2.owner.investor, text: colors.v2.owner.investorText };
+    default:
+      return { bg: colors.slate[100], border: colors.slate[400], text: colors.slate[700] };
+  }
+}
+
+export function getV2ConfidenceColor(confidence: string): { bg: string; border: string; text: string } {
+  switch (confidence) {
+    case 'High':
+      return { bg: colors.v2.confidence.highBg, border: colors.v2.confidence.high, text: colors.v2.confidence.highText };
+    case 'Medium-High':
+      return { bg: colors.v2.confidence.mediumHighBg, border: colors.v2.confidence.mediumHigh, text: colors.v2.confidence.mediumHighText };
+    case 'Medium':
+      return { bg: colors.v2.confidence.mediumBg, border: colors.v2.confidence.medium, text: colors.v2.confidence.mediumText };
+    case 'Medium-Low':
+      return { bg: colors.v2.confidence.mediumLowBg, border: colors.v2.confidence.mediumLow, text: colors.v2.confidence.mediumLowText };
+    case 'Low':
+      return { bg: colors.v2.confidence.lowBg, border: colors.v2.confidence.low, text: colors.v2.confidence.lowText };
+    default:
+      return { bg: colors.slate[100], border: colors.slate[400], text: colors.slate[700] };
   }
 }

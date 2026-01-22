@@ -1,7 +1,9 @@
 import { ExtractionResult, validateExtractionResult } from './schema';
 import { QAExtractionResult, validateQAExtractionResult } from './qa-schema';
+import { V2ExtractionResult, validateV2ExtractionResult } from './v2-schema';
 import { EXTRACTION_SYSTEM_PROMPT, SIMPLIFIED_EXTRACTION_PROMPT, createUserPrompt } from './prompts';
 import { QA_EXTRACTION_SYSTEM_PROMPT, SIMPLIFIED_QA_EXTRACTION_PROMPT, createQAUserPrompt } from './qa-prompts';
+import { V2_EXTRACTION_SYSTEM_PROMPT, SIMPLIFIED_V2_EXTRACTION_PROMPT, createV2UserPrompt } from './v2-prompts';
 
 const OPENROUTER_API_URL = 'https://openrouter.ai/api/v1/chat/completions';
 const MODEL = 'google/gemini-3-flash-preview';
@@ -35,6 +37,13 @@ export interface ExtractionResponse {
 export interface QAExtractionResponse {
   success: boolean;
   data?: QAExtractionResult;
+  error?: string;
+  retried?: boolean;
+}
+
+export interface V2ExtractionResponse {
+  success: boolean;
+  data?: V2ExtractionResult;
   error?: string;
   retried?: boolean;
 }
@@ -253,6 +262,79 @@ export async function extractQAData(
   return {
     success: false,
     error: `Failed to extract valid Q&A JSON after retry. Last error: ${retryParse.error}`,
+    retried: true,
+  };
+}
+
+function parseV2ExtractionResult(content: string): { data?: V2ExtractionResult; error?: string } {
+  try {
+    const jsonContent = extractJsonFromResponse(content);
+    const parsed = JSON.parse(jsonContent);
+    
+    if (!validateV2ExtractionResult(parsed)) {
+      return { error: 'Response does not match expected V2 schema structure' };
+    }
+    
+    return { data: parsed as V2ExtractionResult };
+  } catch (error) {
+    console.error('JSON parse error:', error);
+    return { 
+      error: error instanceof Error ? `Invalid JSON: ${error.message}` : 'Failed to parse JSON' 
+    };
+  }
+}
+
+export async function extractV2Data(
+  documentContent: string,
+  apiKey: string
+): Promise<V2ExtractionResponse> {
+  if (!documentContent.trim()) {
+    return { success: false, error: 'Document content cannot be empty' };
+  }
+
+  if (!apiKey) {
+    return { success: false, error: 'OpenRouter API key is not configured' };
+  }
+
+  const messages: OpenRouterMessage[] = [
+    { role: 'system', content: V2_EXTRACTION_SYSTEM_PROMPT },
+    { role: 'user', content: createV2UserPrompt(documentContent) },
+  ];
+
+  console.log('Attempting V2 extraction with full prompt...');
+  const firstResponse = await callOpenRouter(messages, apiKey);
+
+  if (firstResponse.error) {
+    return { success: false, error: firstResponse.error };
+  }
+
+  const firstParse = parseV2ExtractionResult(firstResponse.content);
+  if (firstParse.data) {
+    return { success: true, data: firstParse.data };
+  }
+
+  console.log('First V2 attempt failed, retrying with simplified prompt...');
+  console.log('First attempt error:', firstParse.error);
+
+  const retryMessages: OpenRouterMessage[] = [
+    { role: 'system', content: SIMPLIFIED_V2_EXTRACTION_PROMPT },
+    { role: 'user', content: createV2UserPrompt(documentContent) },
+  ];
+
+  const retryResponse = await callOpenRouter(retryMessages, apiKey);
+
+  if (retryResponse.error) {
+    return { success: false, error: `Retry failed: ${retryResponse.error}`, retried: true };
+  }
+
+  const retryParse = parseV2ExtractionResult(retryResponse.content);
+  if (retryParse.data) {
+    return { success: true, data: retryParse.data, retried: true };
+  }
+
+  return {
+    success: false,
+    error: `Failed to extract valid V2 JSON after retry. Last error: ${retryParse.error}`,
     retried: true,
   };
 }

@@ -5,13 +5,15 @@ import { MemoInput } from '@/components/MemoInput';
 import { JsonOutput } from '@/components/JsonOutput';
 import { InfographicContainer } from '@/components/infographic';
 import { QAInfographicContainer } from '@/components/qa-infographic';
+import { V2InfographicContainer } from '@/components/v2-infographic';
 import { ExtractionResult, KajimaExtractionResult } from '@/lib/schema';
 import { QAExtractionResult } from '@/lib/qa-schema';
+import { V2ExtractionResult } from '@/lib/v2-schema';
 import { removeTeamReferences } from '@/lib/kajima-transform';
 import { PREFILL_TEXT } from '@/lib/prefill';
 import { QA_PREFILL_TEXT } from '@/lib/qa-prefill';
 
-type AppMode = 'memo' | 'qa';
+type AppMode = 'memo' | 'qa' | 'v2';
 
 interface ApiResponse {
   success: boolean;
@@ -29,6 +31,15 @@ interface QAApiResponse {
   retried?: boolean;
 }
 
+interface V2ApiResponse {
+  success: boolean;
+  data?: V2ExtractionResult;
+  error?: string;
+  duration?: number;
+  retried?: boolean;
+  parsed?: boolean;
+}
+
 export default function Home() {
   // Mode state
   const [mode, setMode] = useState<AppMode>('memo');
@@ -36,6 +47,7 @@ export default function Home() {
   // Input state
   const [memo, setMemo] = useState('');
   const [qaContent, setQaContent] = useState('');
+  const [v2Content, setV2Content] = useState('');
   
   // Memo extraction state
   const [extractedData, setExtractedData] = useState<ExtractionResult | null>(null);
@@ -43,6 +55,9 @@ export default function Home() {
   
   // QA extraction state
   const [qaData, setQaData] = useState<QAExtractionResult | null>(null);
+  
+  // V2 extraction state
+  const [v2Data, setV2Data] = useState<V2ExtractionResult | null>(null);
   
   // Common state
   const [error, setError] = useState<string | null>(null);
@@ -66,6 +81,7 @@ export default function Home() {
     setExtractedData(null);
     setDisplayData(null);
     setQaData(null);
+    setV2Data(null);
     setDuration(undefined);
     setRetried(undefined);
   };
@@ -73,8 +89,10 @@ export default function Home() {
   const handleExtract = async () => {
     if (mode === 'memo') {
       await handleMemoExtract();
-    } else {
+    } else if (mode === 'qa') {
       await handleQAExtract();
+    } else {
+      await handleV2Extract();
     }
   };
 
@@ -203,15 +221,65 @@ export default function Home() {
     }
   };
 
+  const handleV2Extract = async () => {
+    if (v2Content.trim().length < 100) {
+      setError('Please paste the V2 analysis document (minimum 100 characters).');
+      return;
+    }
+
+    setIsLoading(true);
+    setError(null);
+    setV2Data(null);
+    setDuration(undefined);
+    setRetried(undefined);
+    setShowInfographic(false);
+
+    const startTime = Date.now();
+
+    try {
+      const response = await fetch('/api/extract-v2', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ content: v2Content }),
+      });
+
+      const result: V2ApiResponse = await response.json();
+
+      if (!result.success || !result.data) {
+        setError(result.error || 'Unknown error occurred');
+        setRetried(result.retried);
+        setIsLoading(false);
+        return;
+      }
+
+      const totalDuration = Date.now() - startTime;
+      setV2Data(result.data);
+      setDuration(totalDuration);
+      setRetried(result.retried);
+
+    } catch (err) {
+      setError(
+        err instanceof Error 
+          ? `Network error: ${err.message}` 
+          : 'Failed to connect to the server'
+      );
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   const handleClear = () => {
     if (mode === 'memo') {
       setMemo('');
       setExtractedData(null);
       setDisplayData(null);
       setKajimaEnabled(false);
-    } else {
+    } else if (mode === 'qa') {
       setQaContent('');
       setQaData(null);
+    } else {
+      setV2Content('');
+      setV2Data(null);
     }
     setError(null);
     setDuration(undefined);
@@ -222,9 +290,10 @@ export default function Home() {
   const handlePrefill = () => {
     if (mode === 'memo') {
       setMemo(PREFILL_TEXT);
-    } else {
+    } else if (mode === 'qa') {
       setQaContent(QA_PREFILL_TEXT);
     }
+    // V2 mode doesn't have a prefill text yet
   };
 
   const handleGenerateInfographic = async () => {
@@ -240,10 +309,10 @@ export default function Home() {
     setTimeout(() => setCopySuccess(false), 2000);
   };
 
-  const currentContent = mode === 'memo' ? memo : qaContent;
-  const setCurrentContent = mode === 'memo' ? setMemo : setQaContent;
-  const hasData = mode === 'memo' ? !!displayData : !!qaData;
-  const currentData = mode === 'memo' ? displayData : qaData;
+  const currentContent = mode === 'memo' ? memo : mode === 'qa' ? qaContent : v2Content;
+  const setCurrentContent = mode === 'memo' ? setMemo : mode === 'qa' ? setQaContent : setV2Content;
+  const hasData = mode === 'memo' ? !!displayData : mode === 'qa' ? !!qaData : !!v2Data;
+  const currentData = mode === 'memo' ? displayData : mode === 'qa' ? qaData : v2Data;
 
   return (
     <main className="min-h-screen bg-[var(--background)]">
@@ -313,6 +382,21 @@ export default function Home() {
                 Q&A Response
               </span>
             </button>
+            <button
+              onClick={() => handleModeChange('v2')}
+              className={`px-6 py-2.5 rounded-full text-sm font-medium transition-all duration-200 ${
+                mode === 'v2'
+                  ? 'bg-[var(--accent)] text-white shadow-md'
+                  : 'text-[var(--muted)] hover:text-[var(--foreground)]'
+              }`}
+            >
+              <span className="flex items-center gap-2">
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 17V7m0 10a2 2 0 01-2 2H5a2 2 0 01-2-2V7a2 2 0 012-2h2a2 2 0 012 2m0 10a2 2 0 002 2h2a2 2 0 002-2M9 7a2 2 0 012-2h2a2 2 0 012 2m0 10V7m0 10a2 2 0 002 2h2a2 2 0 002-2V7a2 2 0 00-2-2h-2a2 2 0 00-2 2" />
+                </svg>
+                V2 Analysis
+              </span>
+            </button>
           </div>
         </div>
       </div>
@@ -331,7 +415,7 @@ export default function Home() {
                 and generate beautiful infographics for executive review.
               </p>
             </>
-          ) : (
+          ) : mode === 'qa' ? (
             <>
               <h2 className="text-4xl md:text-5xl font-light text-[var(--foreground)] leading-tight mb-8">
                 Transform Q&A documents into{' '}
@@ -340,6 +424,17 @@ export default function Home() {
               <p className="text-lg text-[var(--muted)] mb-12 max-w-2xl mx-auto">
                 Paste your client Q&A response and let The Olsenator create category-based 
                 infographics highlighting confidence levels, gaps, and next steps.
+              </p>
+            </>
+          ) : (
+            <>
+              <h2 className="text-4xl md:text-5xl font-light text-[var(--foreground)] leading-tight mb-8">
+                Executive-grade investment{' '}
+                <span className="text-[var(--accent)] font-normal">infographics</span>
+              </h2>
+              <p className="text-lg text-[var(--muted)] mb-12 max-w-2xl mx-auto">
+                Paste your V2 structured analysis and generate a comprehensive visual infographic 
+                with gap analysis, decision pathways, and strategic fit assessment.
               </p>
             </>
           )}
@@ -355,12 +450,14 @@ export default function Home() {
               value={currentContent}
               onChange={setCurrentContent}
               disabled={isLoading || isTranslating}
-              onPrefill={handlePrefill}
+              onPrefill={mode !== 'v2' ? handlePrefill : undefined}
               placeholder={mode === 'memo' 
                 ? 'Paste your investment memo here...' 
-                : 'Paste your Q&A response document here...'
+                : mode === 'qa'
+                  ? 'Paste your Q&A response document here...'
+                  : 'Paste your V2 structured analysis here (with SECTION tags or raw text)...'
               }
-              label={mode === 'memo' ? 'Investment Memo' : 'Q&A Document'}
+              label={mode === 'memo' ? 'Investment Memo' : mode === 'qa' ? 'Q&A Document' : 'V2 Analysis Document'}
             />
             
             {/* Japanese Mode Toggle - Only for Memo Mode */}
@@ -408,7 +505,7 @@ export default function Home() {
                 {isLoading ? (
                   <>
                     <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                    {mode === 'memo' ? 'Extracting...' : 'Analyzing Q&A...'}
+                    {mode === 'memo' ? 'Extracting...' : mode === 'qa' ? 'Analyzing Q&A...' : 'Processing V2...'}
                   </>
                 ) : isTranslating ? (
                   <>
@@ -418,7 +515,9 @@ export default function Home() {
                 ) : (
                   mode === 'memo' 
                     ? (kajimaEnabled ? 'Extract & Translate' : 'Extract Data')
-                    : 'Analyze Q&A'
+                    : mode === 'qa'
+                      ? 'Analyze Q&A'
+                      : 'Generate V2 Infographic'
                 )}
               </button>
               
@@ -448,14 +547,18 @@ export default function Home() {
                   ? 'Translating to Japanese...' 
                   : mode === 'memo' 
                     ? 'Extracting memo data...'
-                    : 'Analyzing Q&A document...'
+                    : mode === 'qa'
+                      ? 'Analyzing Q&A document...'
+                      : 'Processing V2 analysis...'
               }
               loadingSubtext={
                 isTranslating 
                   ? 'Converting to consulting-grade Japanese' 
                   : mode === 'memo'
                     ? 'Analyzing your investment memo'
-                    : 'Extracting questions, answers, and insights'
+                    : mode === 'qa'
+                      ? 'Extracting questions, answers, and insights'
+                      : 'Generating executive infographic data'
               }
               duration={duration}
               retried={retried}
@@ -477,7 +580,7 @@ export default function Home() {
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 17V7m0 10a2 2 0 01-2 2H5a2 2 0 01-2-2V7a2 2 0 012-2h2a2 2 0 012 2m0 10a2 2 0 002 2h2a2 2 0 002-2M9 7a2 2 0 012-2h2a2 2 0 012 2m0 10V7m0 10a2 2 0 002 2h2a2 2 0 002-2V7a2 2 0 00-2-2h-2a2 2 0 00-2 2" />
                 </svg>
-                Generate {mode === 'qa' ? 'Q&A ' : ''}Infographic
+                Generate {mode === 'qa' ? 'Q&A ' : mode === 'v2' ? 'V2 ' : ''}Infographic
               </button>
             )}
           </div>
@@ -507,7 +610,9 @@ export default function Home() {
                 <p className="mt-1 text-[var(--muted)] leading-relaxed">
                   {mode === 'memo' 
                     ? 'Extract structured data from your investment memo, then generate a visual infographic optimized for executive review and print-to-PDF export. The entire process takes just seconds.'
-                    : 'Extract questions, answers, confidence levels, and gaps from your Q&A document. Generate category-based infographics with actionable next steps for C-Suite presentation.'
+                    : mode === 'qa'
+                      ? 'Extract questions, answers, confidence levels, and gaps from your Q&A document. Generate category-based infographics with actionable next steps for C-Suite presentation.'
+                      : 'Parse pre-structured V2 analysis or extract from text to generate executive-grade infographics with gap quadrant analysis, strategic fit assessment, and decision pathways.'
                   }
                 </p>
               </div>
@@ -549,6 +654,13 @@ export default function Home() {
             {mode === 'qa' && qaData && (
               <QAInfographicContainer
                 data={qaData}
+                onCopyHtml={handleCopyHtml}
+              />
+            )}
+            
+            {mode === 'v2' && v2Data && (
+              <V2InfographicContainer
+                data={v2Data}
                 onCopyHtml={handleCopyHtml}
               />
             )}
