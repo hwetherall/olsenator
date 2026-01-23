@@ -48,19 +48,19 @@ export function ProcessSection({ analysis, language = 'en' }: ProcessSectionProp
       return (
         <div className="space-y-6">
           <div className="bg-emerald-50 border border-emerald-100 rounded-lg p-4">
-            <h4 className="text-sm font-bold text-emerald-800 uppercase tracking-wider mb-2">Recommendation</h4>
+            <h4 className="text-sm font-bold text-emerald-800 uppercase tracking-wider mb-2">{t('recommendation', language)}</h4>
             <p className="text-emerald-900 font-medium">{analysis.path_summary.recommendation}</p>
           </div>
           
           <div>
-            <h4 className="text-lg font-bold text-slate-800 mb-2">Strategy</h4>
+            <h4 className="text-lg font-bold text-slate-800 mb-2">{t('strategy', language)}</h4>
             <p className="text-slate-600 leading-relaxed">
-              Integrate with an existing civic-tech player like Dappi Studio LLC (FixMyStreet Japan) via API to handle citizen reporting. NLM builds the downstream workflow engine that converts these reports into professional engineering tasks.
+              {t('option1StrategyDetail', language)}
             </p>
           </div>
 
           <div>
-            <h4 className="text-lg font-bold text-slate-800 mb-3">Pros</h4>
+            <h4 className="text-lg font-bold text-slate-800 mb-3">{t('pros', language)}</h4>
             <ul className="space-y-3">
               {analysis.path_advantages.map((adv, i) => (
                 <li key={i} className="flex items-start gap-3">
@@ -79,7 +79,7 @@ export function ProcessSection({ analysis, language = 'en' }: ProcessSectionProp
           </div>
 
           <div>
-            <h4 className="text-lg font-bold text-slate-800 mb-3">Cons</h4>
+            <h4 className="text-lg font-bold text-slate-800 mb-3">{t('cons', language)}</h4>
             <ul className="space-y-2">
               <li className="flex items-start gap-3">
                 <div className="mt-1 w-5 h-5 rounded-full bg-amber-100 flex items-center justify-center flex-shrink-0">
@@ -87,25 +87,25 @@ export function ProcessSection({ analysis, language = 'en' }: ProcessSectionProp
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
                   </svg>
                 </div>
-                <span className="text-slate-600 text-sm">Creates dependency on third-party roadmaps; requires successful API integration negotiation.</span>
+                <span className="text-slate-600 text-sm">{t('option1ConsDetail', language)}</span>
               </li>
             </ul>
           </div>
 
           <div className="border-t border-slate-100 pt-6 mt-6">
-            <h4 className="text-lg font-bold text-slate-800 mb-3">Recommended Engagement Model</h4>
+            <h4 className="text-lg font-bold text-slate-800 mb-3">{t('recommendedEngagementModel', language)}</h4>
             <div className="grid gap-4">
               <div className="bg-slate-50 p-4 rounded-lg">
-                <span className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">Lead Unit</span>
-                <p className="text-sm text-slate-700">New Business Planning & Strategy Division acts as the "Venture Lead," responsible for the platform business model.</p>
+                <span className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">{t('leadUnit', language)}</span>
+                <p className="text-sm text-slate-700">{t('leadUnitDetail', language)}</p>
               </div>
               <div className="bg-slate-50 p-4 rounded-lg">
-                <span className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">Domain Expert</span>
-                <p className="text-sm text-slate-700">Nikkei Engineering acts as the "Technical Anchor," defining the inspection protocols (Steps 2–3).</p>
+                <span className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">{t('domainExpert', language)}</span>
+                <p className="text-sm text-slate-700">{t('domainExpertDetail', language)}</p>
               </div>
               <div className="bg-slate-50 p-4 rounded-lg">
-                <span className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">Orchestration Role</span>
-                <p className="text-sm text-slate-700">NLM functions as the Platform Orchestrator, managing the data flow between citizens, municipalities, and external contractors.</p>
+                <span className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">{t('orchestrationRole', language)}</span>
+                <p className="text-sm text-slate-700">{t('orchestrationRoleDetail', language)}</p>
               </div>
             </div>
           </div>
@@ -117,14 +117,14 @@ export function ProcessSection({ analysis, language = 'en' }: ProcessSectionProp
       return (
         <div className="space-y-6">
           <div>
-            <h4 className="text-lg font-bold text-slate-800 mb-2">Strategy</h4>
+            <h4 className="text-lg font-bold text-slate-800 mb-2">{t('strategy', language)}</h4>
             <p className="text-slate-600 leading-relaxed">
-              Build a closed ecosystem where NLM owns all data and user interfaces. Develop a proprietary "Super-App" covering the entire lifecycle from citizen reporting to construction management (Steps 1–5).
+              {t('option2StrategyDetail', language)}
             </p>
           </div>
 
           <div>
-            <h4 className="text-lg font-bold text-slate-800 mb-3">Pros</h4>
+            <h4 className="text-lg font-bold text-slate-800 mb-3">{t('pros', language)}</h4>
             <ul className="space-y-3">
               <li className="flex items-start gap-3">
                 <div className="mt-1 w-5 h-5 rounded-full bg-emerald-100 flex items-center justify-center flex-shrink-0">
@@ -132,13 +132,13 @@ export function ProcessSection({ analysis, language = 'en' }: ProcessSectionProp
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                   </svg>
                 </div>
-                <span className="text-slate-600 text-sm">Maximum control over data security and user experience; eliminates vendor dependencies.</span>
+                <span className="text-slate-600 text-sm">{t('option2ProsDetail', language)}</span>
               </li>
             </ul>
           </div>
 
           <div>
-            <h4 className="text-lg font-bold text-slate-800 mb-3">Cons (Why Rejected)</h4>
+            <h4 className="text-lg font-bold text-slate-800 mb-3">{t('cons', language)} ({t('whyRejected', language)})</h4>
             <ul className="space-y-3">
               {analysis.alternatives_considered
                 .filter(alt => alt.alternative.includes('Option 2') || alt.alternative.includes('Internal Build'))
@@ -151,7 +151,7 @@ export function ProcessSection({ analysis, language = 'en' }: ProcessSectionProp
                     </div>
                     <div>
                       <strong className="block text-slate-800 font-semibold">{alt.why_not_preferred}</strong>
-                      <span className="text-slate-600 text-sm">Custom software development involves significant upfront costs and maintenance liabilities.</span>
+                      <span className="text-slate-600 text-sm">{t('option2ConsDetail', language)}</span>
                     </div>
                   </li>
                 ))}
@@ -162,8 +162,8 @@ export function ProcessSection({ analysis, language = 'en' }: ProcessSectionProp
                   </svg>
                 </div>
                 <div>
-                  <strong className="block text-slate-800 font-semibold">Redundancy</strong>
-                  <span className="text-slate-600 text-sm">Replicates existing free tools (e.g., LINE reporting, FixMyStreet), potentially slowing municipal adoption due to switching costs.</span>
+                  <strong className="block text-slate-800 font-semibold">{t('option2RedundancyTitle', language)}</strong>
+                  <span className="text-slate-600 text-sm">{t('option2RedundancyDetail', language)}</span>
                 </div>
               </li>
             </ul>
@@ -176,14 +176,14 @@ export function ProcessSection({ analysis, language = 'en' }: ProcessSectionProp
       return (
         <div className="space-y-6">
           <div>
-            <h4 className="text-lg font-bold text-slate-800 mb-2">Strategy</h4>
+            <h4 className="text-lg font-bold text-slate-800 mb-2">{t('strategy', language)}</h4>
             <p className="text-slate-600 leading-relaxed">
-              Acquire a player like Dappi Studio LLC to own the "Step 1" entry point. Immediately secure the technology stack and user base.
+              {t('option3StrategyDetail', language)}
             </p>
           </div>
 
           <div>
-            <h4 className="text-lg font-bold text-slate-800 mb-3">Pros</h4>
+            <h4 className="text-lg font-bold text-slate-800 mb-3">{t('pros', language)}</h4>
             <ul className="space-y-3">
               <li className="flex items-start gap-3">
                 <div className="mt-1 w-5 h-5 rounded-full bg-emerald-100 flex items-center justify-center flex-shrink-0">
@@ -191,13 +191,13 @@ export function ProcessSection({ analysis, language = 'en' }: ProcessSectionProp
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                   </svg>
                 </div>
-                <span className="text-slate-600 text-sm">Immediate market share and talent acquisition.</span>
+                <span className="text-slate-600 text-sm">{t('option3ProsDetail', language)}</span>
               </li>
             </ul>
           </div>
 
           <div>
-            <h4 className="text-lg font-bold text-slate-800 mb-3">Cons (Why Rejected)</h4>
+            <h4 className="text-lg font-bold text-slate-800 mb-3">{t('cons', language)} ({t('whyRejected', language)})</h4>
             <ul className="space-y-3">
               {analysis.alternatives_considered
                 .filter(alt => alt.alternative.includes('Option 3') || alt.alternative.includes('Acquisition'))
@@ -210,7 +210,7 @@ export function ProcessSection({ analysis, language = 'en' }: ProcessSectionProp
                     </div>
                     <div>
                       <strong className="block text-slate-800 font-semibold">{alt.why_not_preferred}</strong>
-                      <span className="text-slate-600 text-sm">GovTech valuations are rising, with multiples reaching high double-digits.</span>
+                      <span className="text-slate-600 text-sm">{t('option3ConsDetail', language)}</span>
                     </div>
                   </li>
                 ))}
@@ -221,8 +221,8 @@ export function ProcessSection({ analysis, language = 'en' }: ProcessSectionProp
                   </svg>
                 </div>
                 <div>
-                  <strong className="block text-slate-800 font-semibold">Integration Risk</strong>
-                  <span className="text-slate-600 text-sm">Cultural mismatch between a nimble civic-tech startup and a large corporate entity could stifle innovation.</span>
+                  <strong className="block text-slate-800 font-semibold">{t('option3IntegrationRiskTitle', language)}</strong>
+                  <span className="text-slate-600 text-sm">{t('option3IntegrationRiskDetail', language)}</span>
                 </div>
               </li>
             </ul>
@@ -245,7 +245,7 @@ export function ProcessSection({ analysis, language = 'en' }: ProcessSectionProp
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 7m0 13V7" />
               </svg>
             </div>
-            <h2 className="text-base font-bold text-slate-800">Path Selection Analysis</h2>
+            <h2 className="text-base font-bold text-slate-800">{t('pathSelectionAnalysis', language)}</h2>
           </div>
         </div>
 
@@ -259,17 +259,17 @@ export function ProcessSection({ analysis, language = 'en' }: ProcessSectionProp
                 className="relative rounded-xl border-2 border-emerald-500 bg-white shadow-lg transform lg:-translate-y-2 z-10 flex flex-col cursor-pointer hover:shadow-xl transition-shadow group"
               >
                 <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-emerald-500 text-white text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-wider shadow-sm group-hover:bg-emerald-600 transition-colors">
-                  Recommended
+                  {t('recommended', language)}
                 </div>
                 <div className="p-6 border-b border-slate-100 bg-emerald-50/10">
-                  <h4 className="text-lg font-bold text-slate-800 mb-2">Option 1: Partnership-Led</h4>
+                  <h4 className="text-lg font-bold text-slate-800 mb-2">{t('option1PartnershipLed', language)}</h4>
                   <p className="text-xs text-slate-600 leading-relaxed">
-                    Focus on Steps 2–3 (Inspection/Design) while partnering for Step 1.
+                    {t('option1Description', language)}
                   </p>
                 </div>
                 <div className="p-6 space-y-4 flex-grow">
                   <div>
-                    <span className="text-[10px] font-bold text-emerald-600 uppercase tracking-wider block mb-2">Pros</span>
+                    <span className="text-[10px] font-bold text-emerald-600 uppercase tracking-wider block mb-2">{t('pros', language)}</span>
                     <ul className="space-y-2">
                       {analysis.path_advantages.slice(0, 2).map((adv, i) => (
                         <li key={i} className="flex items-start gap-2 text-xs text-slate-700">
@@ -282,7 +282,7 @@ export function ProcessSection({ analysis, language = 'en' }: ProcessSectionProp
                     </ul>
                   </div>
                   <div className="mt-auto pt-4 text-center">
-                    <span className="text-xs font-bold text-emerald-600 uppercase tracking-wider group-hover:underline">View Details & Strategy</span>
+                    <span className="text-xs font-bold text-emerald-600 uppercase tracking-wider group-hover:underline">{t('viewDetailsStrategy', language)}</span>
                   </div>
                 </div>
               </div>
@@ -293,14 +293,14 @@ export function ProcessSection({ analysis, language = 'en' }: ProcessSectionProp
                 className="rounded-xl border border-slate-200 bg-slate-50 opacity-90 hover:opacity-100 transition-all cursor-pointer hover:shadow-md hover:border-slate-300 flex flex-col group"
               >
                 <div className="p-6 border-b border-slate-200">
-                  <h4 className="text-lg font-bold text-slate-600 mb-2">Option 2: Full Internal Build</h4>
+                  <h4 className="text-lg font-bold text-slate-600 mb-2">{t('option2FullInternalBuild', language)}</h4>
                   <p className="text-xs text-slate-500 leading-relaxed">
-                    Build proprietary "Super-App" covering entire lifecycle (Steps 1–5).
+                    {t('option2Description', language)}
                   </p>
                 </div>
                 <div className="p-6 space-y-4 flex-grow">
                   <div>
-                    <span className="text-[10px] font-bold text-red-500 uppercase tracking-wider block mb-2">Why Rejected</span>
+                    <span className="text-[10px] font-bold text-red-500 uppercase tracking-wider block mb-2">{t('whyRejected', language)}</span>
                     <ul className="space-y-2">
                       {analysis.alternatives_considered
                         .filter(alt => alt.alternative.includes('Option 2') || alt.alternative.includes('Internal Build'))
@@ -316,7 +316,7 @@ export function ProcessSection({ analysis, language = 'en' }: ProcessSectionProp
                     </ul>
                   </div>
                   <div className="mt-auto pt-4 text-center">
-                    <span className="text-xs font-bold text-slate-500 uppercase tracking-wider group-hover:text-slate-700 group-hover:underline">View Analysis</span>
+                    <span className="text-xs font-bold text-slate-500 uppercase tracking-wider group-hover:text-slate-700 group-hover:underline">{t('viewAnalysis', language)}</span>
                   </div>
                 </div>
               </div>
@@ -327,14 +327,14 @@ export function ProcessSection({ analysis, language = 'en' }: ProcessSectionProp
                 className="rounded-xl border border-slate-200 bg-slate-50 opacity-90 hover:opacity-100 transition-all cursor-pointer hover:shadow-md hover:border-slate-300 flex flex-col group"
               >
                 <div className="p-6 border-b border-slate-200">
-                  <h4 className="text-lg font-bold text-slate-600 mb-2">Option 3: Acquisition</h4>
+                  <h4 className="text-lg font-bold text-slate-600 mb-2">{t('option3Acquisition', language)}</h4>
                   <p className="text-xs text-slate-500 leading-relaxed">
-                    Acquire a GovTech startup to secure tech stack and user base immediately.
+                    {t('option3Description', language)}
                   </p>
                 </div>
                 <div className="p-6 space-y-4 flex-grow">
                   <div>
-                    <span className="text-[10px] font-bold text-red-500 uppercase tracking-wider block mb-2">Why Rejected</span>
+                    <span className="text-[10px] font-bold text-red-500 uppercase tracking-wider block mb-2">{t('whyRejected', language)}</span>
                     <ul className="space-y-2">
                       {analysis.alternatives_considered
                         .filter(alt => alt.alternative.includes('Option 3') || alt.alternative.includes('Acquisition'))
@@ -350,7 +350,7 @@ export function ProcessSection({ analysis, language = 'en' }: ProcessSectionProp
                     </ul>
                   </div>
                   <div className="mt-auto pt-4 text-center">
-                    <span className="text-xs font-bold text-slate-500 uppercase tracking-wider group-hover:text-slate-700 group-hover:underline">View Analysis</span>
+                    <span className="text-xs font-bold text-slate-500 uppercase tracking-wider group-hover:text-slate-700 group-hover:underline">{t('viewAnalysis', language)}</span>
                   </div>
                 </div>
               </div>
@@ -363,7 +363,7 @@ export function ProcessSection({ analysis, language = 'en' }: ProcessSectionProp
       <Modal
         isOpen={!!selectedOption}
         onClose={() => setSelectedOption(null)}
-        title={selectedOption === 'Option 1' ? 'Option 1: Partnership-Led Narrow Platform' : selectedOption === 'Option 2' ? 'Option 2: Full Internal Build' : 'Option 3: Strategic Acquisition'}
+        title={selectedOption === 'Option 1' ? t('option1ModalTitle', language) : selectedOption === 'Option 2' ? t('option2ModalTitle', language) : t('option3ModalTitle', language)}
       >
         {renderModalContent()}
       </Modal>

@@ -112,9 +112,10 @@ function ExpandableSection({ title, bottomLine, children, icon, themeColor, defa
 
 interface VerdictBadgeProps {
   verdict: SectionVerdict;
+  language: Language;
 }
 
-function VerdictBadge({ verdict }: VerdictBadgeProps) {
+function VerdictBadge({ verdict, language }: VerdictBadgeProps) {
   const colors = getVerdictColor(verdict.decision);
   const confidenceColors = getConfidenceColor(verdict.confidence);
 
@@ -137,7 +138,7 @@ function VerdictBadge({ verdict }: VerdictBadgeProps) {
           </span>
         </div>
         <span className={`px-2.5 py-1 rounded-md text-xs font-semibold ${confidenceColors.bg} ${confidenceColors.text}`}>
-          {verdict.confidence} Confidence
+          {verdict.confidence} {t('confidence', language)}
         </span>
       </div>
       <p className="text-sm text-slate-600 leading-relaxed pl-7 border-l-2 border-slate-200 ml-2.5">
@@ -183,12 +184,12 @@ export function StrategicFitSection({ shouldWeDoIt, canWeDoIt, synthesis, langua
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
               </svg>
             </div>
-            <h3 className="font-bold text-sm text-slate-800">Strategic Attractiveness</h3>
+            <h3 className="font-bold text-sm text-slate-800">{t('strategicAttractiveness', language)}</h3>
           </div>
 
           <div className="space-y-4 mb-8">
             <ExpandableSection 
-              title="The Prize" 
+              title={t('thePrizeLabel', language)} 
               bottomLine={shouldWeDoIt.the_prize.bottom_line}
               themeColor="blue"
               icon={
@@ -199,22 +200,22 @@ export function StrategicFitSection({ shouldWeDoIt, canWeDoIt, synthesis, langua
             >
               <div className="grid gap-3">
                 <div>
-                  <span className="text-xs font-bold text-slate-400 uppercase tracking-wider block mb-1">Market Size</span>
+                  <span className="text-xs font-bold text-slate-400 uppercase tracking-wider block mb-1">{t('marketSize', language)}</span>
                   <p>{shouldWeDoIt.the_prize.market_size}</p>
                 </div>
                 <div>
-                  <span className="text-xs font-bold text-slate-400 uppercase tracking-wider block mb-1">Margins</span>
+                  <span className="text-xs font-bold text-slate-400 uppercase tracking-wider block mb-1">{t('margins', language)}</span>
                   <p>{shouldWeDoIt.the_prize.margins}</p>
                 </div>
                 <div>
-                  <span className="text-xs font-bold text-slate-400 uppercase tracking-wider block mb-1">Durability</span>
+                  <span className="text-xs font-bold text-slate-400 uppercase tracking-wider block mb-1">{t('durability', language)}</span>
                   <p>{shouldWeDoIt.the_prize.durability}</p>
                 </div>
               </div>
             </ExpandableSection>
 
             <ExpandableSection 
-              title="Strategic Fit" 
+              title={t('strategicFit', language)} 
               bottomLine={shouldWeDoIt.strategic_fit.bottom_line}
               themeColor="blue"
               icon={
@@ -226,22 +227,22 @@ export function StrategicFitSection({ shouldWeDoIt, canWeDoIt, synthesis, langua
             >
               <div className="grid gap-3">
                 <div>
-                  <span className="text-xs font-bold text-slate-400 uppercase tracking-wider block mb-1">Bet Type</span>
+                  <span className="text-xs font-bold text-slate-400 uppercase tracking-wider block mb-1">{t('betType', language)}</span>
                   <p>{shouldWeDoIt.strategic_fit.bet_type}</p>
                 </div>
                 <div>
-                  <span className="text-xs font-bold text-slate-400 uppercase tracking-wider block mb-1">Portfolio Fit</span>
+                  <span className="text-xs font-bold text-slate-400 uppercase tracking-wider block mb-1">{t('portfolioFit', language)}</span>
                   <p>{shouldWeDoIt.strategic_fit.portfolio_fit}</p>
                 </div>
                 <div>
-                  <span className="text-xs font-bold text-slate-400 uppercase tracking-wider block mb-1">Priority Alignment</span>
+                  <span className="text-xs font-bold text-slate-400 uppercase tracking-wider block mb-1">{t('priorityAlignment', language)}</span>
                   <p>{shouldWeDoIt.strategic_fit.priority_alignment}</p>
                 </div>
               </div>
             </ExpandableSection>
 
             <ExpandableSection 
-              title="Our Edge" 
+              title={t('ourEdge', language)} 
               bottomLine={shouldWeDoIt.our_edge.bottom_line}
               themeColor="blue"
               icon={
@@ -252,11 +253,11 @@ export function StrategicFitSection({ shouldWeDoIt, canWeDoIt, synthesis, langua
             >
               <div className="grid gap-3">
                 <div>
-                  <span className="text-xs font-bold text-slate-400 uppercase tracking-wider block mb-1">Why Us</span>
+                  <span className="text-xs font-bold text-slate-400 uppercase tracking-wider block mb-1">{t('whyUs', language)}</span>
                   <p>{shouldWeDoIt.our_edge.why_us}</p>
                 </div>
                 <div>
-                  <span className="text-xs font-bold text-slate-400 uppercase tracking-wider block mb-1">Unfair Advantages</span>
+                  <span className="text-xs font-bold text-slate-400 uppercase tracking-wider block mb-1">{t('unfairAdvantages', language)}</span>
                   <ul className="list-disc list-inside space-y-1 text-slate-600">
                     {shouldWeDoIt.our_edge.unfair_advantages.map((adv, i) => (
                       <li key={i}>{adv}</li>
@@ -267,7 +268,7 @@ export function StrategicFitSection({ shouldWeDoIt, canWeDoIt, synthesis, langua
             </ExpandableSection>
           </div>
 
-          <VerdictBadge verdict={shouldWeDoIt.verdict} />
+          <VerdictBadge verdict={shouldWeDoIt.verdict} language={language} />
         </div>
 
         {/* Execution Capability Panel - Purple Theme */}
@@ -278,12 +279,12 @@ export function StrategicFitSection({ shouldWeDoIt, canWeDoIt, synthesis, langua
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19.428 15.428a2 2 0 00-1.022-.547l-2.384-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" />
               </svg>
             </div>
-            <h3 className="font-bold text-sm text-slate-800">Execution Capability</h3>
+            <h3 className="font-bold text-sm text-slate-800">{t('executionCapability', language)}</h3>
           </div>
 
           <div className="space-y-4 mb-8">
             <ExpandableSection 
-              title="Capital & Infrastructure" 
+              title={t('capitalInfrastructure', language)} 
               bottomLine={canWeDoIt.capital_and_infrastructure.bottom_line}
               themeColor="purple"
               icon={
@@ -294,22 +295,22 @@ export function StrategicFitSection({ shouldWeDoIt, canWeDoIt, synthesis, langua
             >
               <div className="grid gap-3">
                 <div>
-                  <span className="text-xs font-bold text-slate-400 uppercase tracking-wider block mb-1">Cash Position</span>
+                  <span className="text-xs font-bold text-slate-400 uppercase tracking-wider block mb-1">{t('cashPosition', language)}</span>
                   <p>{canWeDoIt.capital_and_infrastructure.cash_position}</p>
                 </div>
                 <div>
-                  <span className="text-xs font-bold text-slate-400 uppercase tracking-wider block mb-1">Facilities</span>
+                  <span className="text-xs font-bold text-slate-400 uppercase tracking-wider block mb-1">{t('facilities', language)}</span>
                   <p>{canWeDoIt.capital_and_infrastructure.facilities}</p>
                 </div>
                 <div>
-                  <span className="text-xs font-bold text-slate-400 uppercase tracking-wider block mb-1">Tools & Systems</span>
+                  <span className="text-xs font-bold text-slate-400 uppercase tracking-wider block mb-1">{t('toolsSystems', language)}</span>
                   <p>{canWeDoIt.capital_and_infrastructure.tools_and_systems}</p>
                 </div>
               </div>
             </ExpandableSection>
 
             <ExpandableSection 
-              title="Market Access" 
+              title={t('marketAccess', language)} 
               bottomLine={canWeDoIt.market_access.bottom_line}
               themeColor="purple"
               icon={
@@ -320,22 +321,22 @@ export function StrategicFitSection({ shouldWeDoIt, canWeDoIt, synthesis, langua
             >
               <div className="grid gap-3">
                 <div>
-                  <span className="text-xs font-bold text-slate-400 uppercase tracking-wider block mb-1">Customer Relationships</span>
+                  <span className="text-xs font-bold text-slate-400 uppercase tracking-wider block mb-1">{t('customerRelationships', language)}</span>
                   <p>{canWeDoIt.market_access.customer_relationships}</p>
                 </div>
                 <div>
-                  <span className="text-xs font-bold text-slate-400 uppercase tracking-wider block mb-1">Geographic Presence</span>
+                  <span className="text-xs font-bold text-slate-400 uppercase tracking-wider block mb-1">{t('geographicPresence', language)}</span>
                   <p>{canWeDoIt.market_access.geographic_presence}</p>
                 </div>
                 <div>
-                  <span className="text-xs font-bold text-slate-400 uppercase tracking-wider block mb-1">Regulatory Experience</span>
+                  <span className="text-xs font-bold text-slate-400 uppercase tracking-wider block mb-1">{t('regulatoryExperience', language)}</span>
                   <p>{canWeDoIt.market_access.regulatory_experience}</p>
                 </div>
               </div>
             </ExpandableSection>
 
             <ExpandableSection 
-              title="People" 
+              title={t('people', language)} 
               bottomLine={canWeDoIt.people.bottom_line}
               themeColor="purple"
               icon={
@@ -346,22 +347,22 @@ export function StrategicFitSection({ shouldWeDoIt, canWeDoIt, synthesis, langua
             >
               <div className="grid gap-3">
                 <div>
-                  <span className="text-xs font-bold text-slate-400 uppercase tracking-wider block mb-1">Skills</span>
+                  <span className="text-xs font-bold text-slate-400 uppercase tracking-wider block mb-1">{t('skills', language)}</span>
                   <p>{canWeDoIt.people.skills}</p>
                 </div>
                 <div>
-                  <span className="text-xs font-bold text-slate-400 uppercase tracking-wider block mb-1">Experience</span>
+                  <span className="text-xs font-bold text-slate-400 uppercase tracking-wider block mb-1">{t('experience', language)}</span>
                   <p>{canWeDoIt.people.experience}</p>
                 </div>
                 <div>
-                  <span className="text-xs font-bold text-slate-400 uppercase tracking-wider block mb-1">Bandwidth</span>
+                  <span className="text-xs font-bold text-slate-400 uppercase tracking-wider block mb-1">{t('bandwidth', language)}</span>
                   <p>{canWeDoIt.people.bandwidth}</p>
                 </div>
               </div>
             </ExpandableSection>
           </div>
 
-          <VerdictBadge verdict={canWeDoIt.verdict} />
+          <VerdictBadge verdict={canWeDoIt.verdict} language={language} />
         </div>
       </div>
 
@@ -371,18 +372,18 @@ export function StrategicFitSection({ shouldWeDoIt, canWeDoIt, synthesis, langua
           <svg className="w-4 h-4 text-slate-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
           </svg>
-          <h3 className="text-xs font-bold text-slate-600 uppercase tracking-wider">Strategic Position</h3>
+          <h3 className="text-xs font-bold text-slate-600 uppercase tracking-wider">{t('strategicPosition', language)}</h3>
         </div>
         
         <div className="max-w-md mx-auto">
           {/* Y-axis label */}
           <div className="flex items-stretch gap-3">
             <div className="flex flex-col justify-between py-2 text-[12px] text-black font-medium w-6">
-              <span>High</span>
+              <span>{t('high', language)}</span>
               <span className="writing-mode-vertical transform -rotate-180 text-black font-semibold tracking-wide" style={{ writingMode: 'vertical-rl' }}>
-                Execution
+                {t('executionAxis', language)}
               </span>
-              <span>Low</span>
+              <span>{t('low', language)}</span>
             </div>
             
             {/* The 2x2 Grid */}
@@ -390,19 +391,19 @@ export function StrategicFitSection({ shouldWeDoIt, canWeDoIt, synthesis, langua
               <div className="grid grid-cols-2 grid-rows-2 aspect-square border border-slate-300 rounded-lg overflow-hidden">
                 {/* Top-Left: Capable but Uninteresting */}
                 <div className="bg-slate-100/50 border-r border-b border-slate-300 p-2 flex items-end">
-                  <span className="text-[11px] font-medium text-black leading-tight">Capable but<br/>Uninteresting</span>
+                  <span className="text-[11px] font-medium text-black leading-tight whitespace-pre-line">{t('capableButUninteresting', language)}</span>
                 </div>
                 {/* Top-Right: High Value */}
                 <div className="bg-emerald-50 border-b border-slate-300 p-2 flex items-end justify-end">
-                  <span className="text-[11px] font-bold text-black leading-tight text-right">High Value<br/>Opportunity</span>
+                  <span className="text-[11px] font-bold text-black leading-tight text-right whitespace-pre-line">{t('highValueOpportunity', language)}</span>
                 </div>
                 {/* Bottom-Left: Avoid */}
                 <div className="bg-red-50/50 border-r border-slate-300 p-2 flex items-start">
-                  <span className="text-[11px] font-medium text-black leading-tight">Avoid</span>
+                  <span className="text-[11px] font-medium text-black leading-tight">{t('avoid', language)}</span>
                 </div>
                 {/* Bottom-Right: Strategic but Risky */}
                 <div className="bg-amber-50 p-2 flex items-start justify-end">
-                  <span className="text-[11px] font-medium text-black leading-tight text-right">Strategic<br/>but Risky</span>
+                  <span className="text-[11px] font-medium text-black leading-tight text-right whitespace-pre-line">{t('strategicButRisky', language)}</span>
                 </div>
               </div>
               
@@ -415,7 +416,7 @@ export function StrategicFitSection({ shouldWeDoIt, canWeDoIt, synthesis, langua
                 }}
               >
                 <div className="absolute -top-6 left-1/2 -translate-x-1/2 whitespace-nowrap bg-slate-800 text-white text-[11px] font-bold px-1.5 py-0.5 rounded">
-                  This Venture
+                  {t('thisVenture', language)}
                 </div>
               </div>
             </div>
@@ -423,9 +424,9 @@ export function StrategicFitSection({ shouldWeDoIt, canWeDoIt, synthesis, langua
           
           {/* X-axis label */}
           <div className="flex justify-between mt-1 px-9 text-[12px] text-black font-medium">
-            <span>Low</span>
-            <span className="text-black font-semibold tracking-wide">Strategic Attractiveness</span>
-            <span>High</span>
+            <span>{t('low', language)}</span>
+            <span className="text-black font-semibold tracking-wide">{t('strategicAttractiveness', language)}</span>
+            <span>{t('high', language)}</span>
           </div>
         </div>
       </div>

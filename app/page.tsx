@@ -92,6 +92,14 @@ export default function Home() {
   
   // Client View Language State
   const [clientLanguage, setClientLanguage] = useState<Language>('en');
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    const i18n = (window as typeof window & { I18n?: { setLanguage?: (l: string) => void } }).I18n;
+    if (i18n?.setLanguage) {
+      i18n.setLanguage(clientLanguage);
+    }
+  }, [clientLanguage]);
   
   const infographicRef = useRef<HTMLDivElement>(null);
 
@@ -104,6 +112,12 @@ export default function Home() {
         await loadScript('/chat/config.js');
         await loadScript('/chat/i18n.js');
         await loadScript('/chat/chat.js');
+        
+        // Set language AFTER scripts are loaded
+        const i18n = (window as typeof window & { I18n?: { setLanguage?: (l: string) => void } }).I18n;
+        if (i18n?.setLanguage) {
+          i18n.setLanguage(clientLanguage);
+        }
       } catch (error) {
         console.error('Failed to load chat module:', error);
       }
@@ -114,6 +128,7 @@ export default function Home() {
     // Initialize client view with prefilled data
     setV2Data(V2_EXTRACTION_JSON as unknown as V2ExtractionResult);
     setShowInfographic(true);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleModeChange = (newMode: AppMode) => {
@@ -140,6 +155,13 @@ export default function Home() {
   // Handle language change for client view
   const handleClientLanguageChange = (lang: Language) => {
     setClientLanguage(lang);
+    // Keep chat i18n in sync with client language
+    if (typeof window !== 'undefined') {
+      const i18n = (window as typeof window & { I18n?: { setLanguage?: (l: string) => void } }).I18n;
+      if (i18n?.setLanguage) {
+        i18n.setLanguage(lang);
+      }
+    }
     // Update data with the appropriate JSON
     const jsonData = lang === 'ja' ? V2_EXTRACTION_JSON_JP : V2_EXTRACTION_JSON;
     setV2Data(jsonData as unknown as V2ExtractionResult);

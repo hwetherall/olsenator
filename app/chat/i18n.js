@@ -3,7 +3,7 @@
  * Handles language switching and translation
  */
 
-const I18n = (function() {
+window.I18n = (function() {
     const STORAGE_KEY = 'olsenator_language';
     
     // Default state

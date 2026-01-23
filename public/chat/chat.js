@@ -39,14 +39,24 @@ const ChatModule = (function() {
     };
 
     // Suggested starter questions
-    const starterQuestions = [
-        "What is the investment decision and recommendation?",
-        "What are the key risks in the Six-T analysis?",
-        "Can municipalities legally procure SaaS subscriptions?",
-        "What is the market size and entry window?",
-        "What are the critical next steps to validate?",
-        "What is NLM's strategic advantage?"
-    ];
+    const starterQuestionsByLang = {
+        en: [
+            "What is the investment decision and recommendation?",
+            "What are the key risks in the Six-T analysis?",
+            "Can municipalities legally procure SaaS subscriptions?",
+            "What is the market size and entry window?",
+            "What are the critical next steps to validate?",
+            "What is NLM's strategic advantage?"
+        ],
+        ja: [
+            "投資判断と推奨事項は何ですか？",
+            "Six-T分析の主要リスクは何ですか？",
+            "自治体はSaaSサブスクを法的に調達できますか？",
+            "市場規模と参入タイミングは？",
+            "検証すべき重要な次のステップは？",
+            "NLMの戦略的優位性は何ですか？"
+        ]
+    };
 
     /**
      * Get API key (from config or localStorage)
@@ -118,21 +128,21 @@ const ChatModule = (function() {
         // Add language change listener
         if (window.I18n) {
             window.I18n.onLanguageChange(() => {
+                // Always destroy and recreate panel to ensure fresh render with new language
+                const panel = document.getElementById('chatPanel');
+                if (panel) {
+                    panel.remove();
+                }
+                
                 if (state.isOpen) {
-                    // Re-render chat panel to update labels
-                    // We need to preserve the current view state
-                    const panel = document.getElementById('chatPanel');
-                    if (panel) {
-                        // Just update texts that can be updated without full re-render
-                        // Or full re-render. Let's do full re-render for simplicity
-                        panel.remove();
-                        renderChatPanel();
-                        const newPanel = document.getElementById('chatPanel');
+                    // Re-render chat panel with new language
+                    renderChatPanel();
+                    const newPanel = document.getElementById('chatPanel');
+                    if (newPanel) {
                         newPanel.style.display = 'flex';
-                        
-                        // Re-attach events
-                        setupEventListeners();
                     }
+                    // Re-attach events
+                    setupEventListeners();
                 }
                 
                 // Update toggle button
@@ -159,7 +169,7 @@ const ChatModule = (function() {
             state.documentContext = await response.text();
         } catch (error) {
             console.error("Failed to load document context:", error);
-            state.documentContext = "Error loading document context.";
+            state.documentContext = I18n?.t ? I18n.t('chat.document_load_error') : "Error loading document context.";
         }
     }
 
@@ -188,23 +198,23 @@ const ChatModule = (function() {
         panel.id = 'chatPanel';
         panel.className = `chat-panel ${state.isExpanded ? 'expanded' : ''}`;
         panel.innerHTML = `
-            <div class="chat-resize-handle" id="chatResizeHandle" title="Drag to resize"></div>
+            <div class="chat-resize-handle" id="chatResizeHandle" title="${I18n.t('chat.resize')}"></div>
             <div class="chat-panel-header">
                 <div class="chat-panel-title">
                     <span class="chat-ai-icon">${icons.sparkle}</span>
                     <span>${I18n.t('chat.title')}</span>
                 </div>
                 <div class="chat-panel-actions">
-                    <button class="chat-action-btn" id="chatExpandBtn" title="Expand">
+                    <button class="chat-action-btn" id="chatExpandBtn" title="${state.isExpanded ? I18n.t('chat.collapse') : I18n.t('chat.expand')}">
                         ${state.isExpanded ? icons.collapse : icons.expand}
                     </button>
-                    <button class="chat-action-btn" id="chatClearBtn" title="Clear conversation">
+                    <button class="chat-action-btn" id="chatClearBtn" title="${I18n.t('chat.clear_conversation')}">
                         ${icons.clear}
                     </button>
-                    <button class="chat-action-btn" id="chatSettingsBtn" title="Settings">
+                    <button class="chat-action-btn" id="chatSettingsBtn" title="${I18n.t('chat.settings')}">
                         ${icons.settings}
                     </button>
-                    <button class="chat-action-btn" id="chatCloseBtn" title="Close">
+                    <button class="chat-action-btn" id="chatCloseBtn" title="${I18n.t('chat.close')}">
                         ${icons.close}
                     </button>
                 </div>
@@ -238,6 +248,8 @@ const ChatModule = (function() {
             return state.messages.map(msg => renderMessage(msg)).join('');
         }
 
+        const lang = I18n?.getLanguage ? I18n.getLanguage() : 'en';
+        const starterQuestions = starterQuestionsByLang[lang] || starterQuestionsByLang.en;
         const starterButtons = starterQuestions
             .map(q => `<button class="starter-question" data-question="${q}">${q}</button>`)
             .join('');
@@ -291,7 +303,7 @@ const ChatModule = (function() {
                             ${modelOptions}
                         </select>
                         <p class="form-hint">
-                            ${currentModel.description || 'Select the AI model to use'}
+                            ${currentModel.description || I18n.t('chat.model_hint')}
                         </p>
                     </div>
                     ${!hasConfigKey ? `
@@ -409,10 +421,11 @@ const ChatModule = (function() {
             const panel = document.getElementById('chatPanel');
             panel.classList.toggle('expanded');
             expandBtn.innerHTML = state.isExpanded ? icons.collapse : icons.expand;
+            expandBtn.title = state.isExpanded ? I18n.t('chat.collapse') : I18n.t('chat.expand');
         });
 
         clearBtn?.addEventListener('click', () => {
-            if (confirm('Clear all chat history?')) {
+            if (confirm(I18n.t('chat.clear_confirm'))) {
                 state.messages = [];
                 localStorage.removeItem(DEFAULTS.storageKeys.messages);
                 messagesContainer.innerHTML = renderWelcomeMessage();
@@ -514,7 +527,7 @@ const ChatModule = (function() {
             removeLoading();
             addMessage({ 
                 role: 'assistant', 
-                content: "I apologize, but I encountered an error connecting to the AI service. Please check your API key in settings." 
+                content: I18n.t('chat.error_connection')
             });
         } finally {
             state.isLoading = false;
@@ -611,7 +624,24 @@ const ChatModule = (function() {
         }
 
         // Prepare messages with context
-        const systemPrompt = `You are a helpful investment analyst assistant.
+        const lang = I18n?.getLanguage ? I18n.getLanguage() : 'en';
+        const systemPrompt = lang === 'ja'
+            ? `あなたは有能な投資アナリストのアシスタントです。
+あなたは「Regional Infrastructure Cluster Regeneration Platform（NLM RIC Project）」に関する投資分析ドキュメントにアクセスできます。
+これは日本の老朽インフラ管理に関するデジタル・オーケストレーション型のGovTech/SaaSベンチャーです。
+
+あなたの役割:
+- 提供されたドキュメントの内容だけに基づいて回答する
+- 簡潔かつプロフェッショナルに回答し、必要に応じて該当箇所を引用する
+- リスク、推奨事項、次のステップを尋ねられたら強調する
+- ドキュメントにない情報は、その旨を明確に伝える
+- 回答は日本語で行う
+
+対象トピック: 投資推奨、Six-Tリスク分析、市場規模（TAM/SAM）、調達/入札経路、チーム評価、戦略適合性、検証仮説。
+
+DOCUMENT CONTEXT:
+${state.documentContext}`
+            : `You are a helpful investment analyst assistant.
 You have access to an Investment Analysis document for the "Regional Infrastructure Cluster Regeneration Platform" (NLM RIC Project) by Nikkei Engineering / Nippon Light Metal.
 This is a GovTech/SaaS venture focused on digital orchestration for aging infrastructure management in Japan.
 

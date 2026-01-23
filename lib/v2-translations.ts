@@ -117,10 +117,212 @@ export const translations = {
     ja: '投資家'
   },
 
+  // ProcessSection
+  pathSelectionAnalysis: {
+    en: 'Path Selection Analysis',
+    ja: '戦略パス選定分析'
+  },
+  recommended: {
+    en: 'Recommended',
+    ja: '推奨'
+  },
+  option1PartnershipLed: {
+    en: 'Option 1: Partnership-Led',
+    ja: 'オプション1：提携主導'
+  },
+  option1Description: {
+    en: 'Focus on Steps 2–3 (Inspection/Design) while partnering for Step 1.',
+    ja: 'ステップ2〜3（点検／設計）に集中し、ステップ1は提携で補完。'
+  },
+  option2FullInternalBuild: {
+    en: 'Option 2: Full Internal Build',
+    ja: 'オプション2：内製フル構築'
+  },
+  option2Description: {
+    en: 'Build proprietary "Super-App" covering entire lifecycle (Steps 1–5).',
+    ja: '全工程（ステップ1〜5）を網羅する独自「スーパーアプリ」を構築。'
+  },
+  option3Acquisition: {
+    en: 'Option 3: Acquisition',
+    ja: 'オプション3：買収'
+  },
+  option3Description: {
+    en: 'Acquire a GovTech startup to secure tech stack and user base immediately.',
+    ja: 'GovTechスタートアップを買収し、技術スタックとユーザーベースを即時確保。'
+  },
+  viewDetailsStrategy: {
+    en: 'View Details & Strategy',
+    ja: '詳細・戦略を見る'
+  },
+  viewAnalysis: {
+    en: 'View Analysis',
+    ja: '分析を見る'
+  },
+  whyRejected: {
+    en: 'Why Rejected',
+    ja: '却下理由'
+  },
+  recommendation: {
+    en: 'Recommendation',
+    ja: '推奨方針'
+  },
+  strategy: {
+    en: 'Strategy',
+    ja: '戦略'
+  },
+  pros: {
+    en: 'Pros',
+    ja: 'メリット'
+  },
+  cons: {
+    en: 'Cons',
+    ja: 'デメリット'
+  },
+  option1StrategyDetail: {
+    en: 'Integrate with an existing civic-tech player like Dappi Studio LLC (FixMyStreet Japan) via API to handle citizen reporting. NLM builds the downstream workflow engine that converts these reports into professional engineering tasks.',
+    ja: 'Dappi Studio LLC（FixMyStreet Japan）など既存のシビックテックとAPI連携し、市民通報を取り込む。NLMは通報を専門エンジニアリング業務に変換する下流ワークフローを構築。'
+  },
+  option1ConsDetail: {
+    en: 'Creates dependency on third-party roadmaps; requires successful API integration negotiation.',
+    ja: '第三者の開発ロードマップに依存し、API連携交渉の成立が前提となる。'
+  },
+  recommendedEngagementModel: {
+    en: 'Recommended Engagement Model',
+    ja: '推奨関与モデル'
+  },
+  leadUnit: {
+    en: 'Lead Unit',
+    ja: '主担当'
+  },
+  leadUnitDetail: {
+    en: 'New Business Planning & Strategy Division acts as the "Venture Lead," responsible for the platform business model.',
+    ja: '新規事業企画・戦略部門が「ベンチャーリード」としてプラットフォーム事業モデルを担う。'
+  },
+  domainExpert: {
+    en: 'Domain Expert',
+    ja: 'ドメイン専門家'
+  },
+  domainExpertDetail: {
+    en: 'Nikkei Engineering acts as the "Technical Anchor," defining the inspection protocols (Steps 2–3).',
+    ja: '日経エンジニアリングが「技術アンカー」として点検プロトコル（ステップ2〜3）を定義。'
+  },
+  orchestrationRole: {
+    en: 'Orchestration Role',
+    ja: 'オーケストレーション役'
+  },
+  orchestrationRoleDetail: {
+    en: 'NLM functions as the Platform Orchestrator, managing the data flow between citizens, municipalities, and external contractors.',
+    ja: 'NLMがプラットフォーム・オーケストレーターとして、市民・自治体・外部事業者間のデータ流通を統括。'
+  },
+  option1ModalTitle: {
+    en: 'Option 1: Partnership-Led Narrow Platform',
+    ja: 'オプション1：提携主導のナロープラットフォーム'
+  },
+  option2ModalTitle: {
+    en: 'Option 2: Full Internal Build',
+    ja: 'オプション2：内製フル構築'
+  },
+  option3ModalTitle: {
+    en: 'Option 3: Strategic Acquisition',
+    ja: 'オプション3：戦略的買収'
+  },
+  option2StrategyDetail: {
+    en: 'Build a closed ecosystem where NLM owns all data and user interfaces. Develop a proprietary "Super-App" covering the entire lifecycle from citizen reporting to construction management (Steps 1–5).',
+    ja: 'NLMがデータとUIを全て保有するクローズドなエコシステムを構築。市民通報から施工管理まで全工程（ステップ1〜5）を担う独自「スーパーアプリ」を開発。'
+  },
+  option2ProsDetail: {
+    en: 'Maximum control over data security and user experience; eliminates vendor dependencies.',
+    ja: 'データセキュリティとUXを最大限に統制でき、ベンダー依存を排除。'
+  },
+  option2ConsDetail: {
+    en: 'Custom software development involves significant upfront costs and maintenance liabilities.',
+    ja: '独自ソフト開発には多額の初期投資と維持負担が伴う。'
+  },
+  option2RedundancyTitle: {
+    en: 'Redundancy',
+    ja: '冗長性'
+  },
+  option2RedundancyDetail: {
+    en: 'Replicates existing free tools (e.g., LINE reporting, FixMyStreet), potentially slowing municipal adoption due to switching costs.',
+    ja: '既存の無料ツール（例：LINE通報、FixMyStreet）と重複し、乗り換えコストが自治体導入の障壁となり得る。'
+  },
+  option3StrategyDetail: {
+    en: 'Acquire a player like Dappi Studio LLC to own the "Step 1" entry point. Immediately secure the technology stack and user base.',
+    ja: 'Dappi Studio LLCのようなプレイヤーを買収し、「ステップ1」の入口を確保。技術スタックとユーザーベースを即時取得。'
+  },
+  option3ProsDetail: {
+    en: 'Immediate market share and talent acquisition.',
+    ja: '市場シェアと人材を即時獲得。'
+  },
+  option3ConsDetail: {
+    en: 'GovTech valuations are rising, with multiples reaching high double-digits.',
+    ja: 'GovTechの評価倍率は高騰しており、二桁後半のマルチプルに達している。'
+  },
+  option3IntegrationRiskTitle: {
+    en: 'Integration Risk',
+    ja: '統合リスク'
+  },
+  option3IntegrationRiskDetail: {
+    en: 'Cultural mismatch between a nimble civic-tech startup and a large corporate entity could stifle innovation.',
+    ja: '俊敏なシビックテック企業と大企業の文化不一致が、イノベーションを阻害する可能性。'
+  },
+
   // StrategicFitSection
   strategicFitAssessment: {
     en: 'Strategic Fit Assessment',
     ja: '戦略的適合性評価'
+  },
+  strategicAttractiveness: {
+    en: 'Strategic Attractiveness',
+    ja: '戦略的魅力度'
+  },
+  executionCapability: {
+    en: 'Execution Capability',
+    ja: '実行力'
+  },
+  capitalInfrastructure: {
+    en: 'Capital & Infrastructure',
+    ja: '資本・インフラ'
+  },
+  priorityAlignment: {
+    en: 'Priority Alignment',
+    ja: '優先事項の整合性'
+  },
+  strategicPosition: {
+    en: 'Strategic Position',
+    ja: '戦略的位置付け'
+  },
+  high: {
+    en: 'High',
+    ja: '高'
+  },
+  low: {
+    en: 'Low',
+    ja: '低'
+  },
+  executionAxis: {
+    en: 'Execution',
+    ja: '実行力'
+  },
+  capableButUninteresting: {
+    en: 'Capable but\nUninteresting',
+    ja: '実行可能だが魅力に欠ける'
+  },
+  highValueOpportunity: {
+    en: 'High Value\nOpportunity',
+    ja: '高価値の機会'
+  },
+  avoid: {
+    en: 'Avoid',
+    ja: '回避'
+  },
+  strategicButRisky: {
+    en: 'Strategic\nbut Risky',
+    ja: '戦略的だがリスク高'
+  },
+  thisVenture: {
+    en: 'This Venture',
+    ja: '本件'
   },
   shouldWeDoIt: {
     en: 'Should We Do It?',
