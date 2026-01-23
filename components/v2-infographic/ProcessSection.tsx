@@ -2,9 +2,11 @@
 
 import { useState } from 'react';
 import { SupportingAnalysis } from '@/lib/v2-schema';
+import { Language, t } from '@/lib/v2-translations';
 
 interface ProcessSectionProps {
   analysis: SupportingAnalysis;
+  language?: Language;
 }
 
 interface ModalProps {
@@ -36,30 +38,9 @@ function Modal({ isOpen, onClose, title, children }: ModalProps) {
   );
 }
 
-export function ProcessSection({ analysis }: ProcessSectionProps) {
-  // Group insights by chapter
-  const insightsByChapter = analysis.explored_and_tested.reduce((acc, item) => {
-    const chapter = item.source_chapter.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
-    if (!acc[chapter]) acc[chapter] = [];
-    acc[chapter].push(item);
-    return acc;
-  }, {} as Record<string, typeof analysis.explored_and_tested>);
-
-  // Sort chapters alphabetically or by some order if needed
-  const chapters = Object.keys(insightsByChapter).sort();
-
-  // State for accordion
-  const [openChapters, setOpenChapters] = useState<Record<string, boolean>>({});
-  
+export function ProcessSection({ analysis, language = 'en' }: ProcessSectionProps) {
   // State for modal
   const [selectedOption, setSelectedOption] = useState<string | null>(null);
-
-  const toggleChapter = (chapter: string) => {
-    setOpenChapters(prev => ({
-      ...prev,
-      [chapter]: !prev[chapter]
-    }));
-  };
 
   // Helper to render modal content based on selected option
   const renderModalContent = () => {
@@ -257,129 +238,19 @@ export function ProcessSection({ analysis }: ProcessSectionProps) {
     <>
       <div className="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
         {/* Section Header */}
-        <div className="px-8 py-6 border-b border-slate-200 bg-slate-50/50">
-          <h2 className="text-xl font-bold text-slate-800">The Process</h2>
-          <p className="text-sm text-slate-500 mt-1">Diligence journey, risk assessment, and path selection</p>
+        <div className="px-6 py-4 border-b border-slate-200 bg-slate-50/50">
+          <div className="flex items-center gap-2">
+            <div className="w-6 h-6 rounded-full bg-purple-100 flex items-center justify-center">
+              <svg className="w-3.5 h-3.5 text-purple-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 7m0 13V7" />
+              </svg>
+            </div>
+            <h2 className="text-base font-bold text-slate-800">Path Selection Analysis</h2>
+          </div>
         </div>
 
-        <div className="divide-y divide-slate-200">
-          
-          {/* 1. What We Explored (Accordion List) */}
-          <div className="p-8">
-            <div className="flex items-center justify-between mb-6">
-              <div className="flex items-center gap-2">
-                <div className="w-6 h-6 rounded-full bg-blue-100 flex items-center justify-center">
-                  <svg className="w-3.5 h-3.5 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
-                  </svg>
-                </div>
-                <h3 className="text-sm font-bold text-slate-700 uppercase tracking-wider">
-                  Diligence Areas Explored ({chapters.length})
-                </h3>
-              </div>
-              <button 
-                onClick={() => setOpenChapters(chapters.reduce((acc, c) => ({...acc, [c]: true}), {}))}
-                className="text-xs font-medium text-blue-600 hover:text-blue-800"
-              >
-                Expand All
-              </button>
-            </div>
-            
-            <div className="flex flex-col gap-4">
-              {chapters.map((chapter) => (
-                <div key={chapter} className="border border-slate-200 rounded-lg bg-slate-50/50 overflow-hidden">
-                  <button
-                    onClick={() => toggleChapter(chapter)}
-                    className="w-full px-4 py-3 flex items-center justify-between bg-white hover:bg-slate-50 transition-colors"
-                  >
-                    <div className="flex items-center gap-3">
-                      <span className={`w-1.5 h-1.5 rounded-full ${openChapters[chapter] ? 'bg-blue-500' : 'bg-slate-300'}`}></span>
-                      <span className="text-sm font-semibold text-slate-700">{chapter}</span>
-                      <span className="text-xs px-2 py-0.5 bg-slate-100 text-slate-500 rounded-full">
-                        {insightsByChapter[chapter].length}
-                      </span>
-                    </div>
-                    <svg 
-                      className={`w-4 h-4 text-slate-400 transition-transform ${openChapters[chapter] ? 'rotate-180' : ''}`} 
-                      fill="none" 
-                      viewBox="0 0 24 24" 
-                      stroke="currentColor"
-                    >
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                    </svg>
-                  </button>
-                  
-                  {openChapters[chapter] && (
-                    <div className="px-4 py-3 border-t border-slate-200 space-y-3 bg-slate-50/30">
-                      {insightsByChapter[chapter].map((insight, idx) => (
-                        <div key={idx} className="bg-white p-3 rounded border border-slate-200 shadow-sm">
-                          <h5 className="text-xs font-bold text-slate-800 mb-1">{insight.headline}</h5>
-                          <p className="text-xs text-slate-600 leading-relaxed">{insight.insight}</p>
-                        </div>
-                      ))}
-                    </div>
-                  )}
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* 2. Risks We Accept (Dense Grid) */}
-          <div className="p-8 bg-slate-50/30">
-            <div className="flex items-center gap-2 mb-6">
-              <div className="w-6 h-6 rounded-full bg-amber-100 flex items-center justify-center">
-                <svg className="w-3.5 h-3.5 text-amber-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-                </svg>
-              </div>
-              <h3 className="text-sm font-bold text-slate-700 uppercase tracking-wider">
-                Risks Acknowledged ({analysis.risks_acknowledged.length})
-              </h3>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-              {analysis.risks_acknowledged.map((risk, idx) => (
-                <div 
-                  key={idx} 
-                  className="relative flex flex-col p-4 rounded-lg bg-white border border-slate-200 shadow-sm hover:shadow-md transition-shadow"
-                >
-                  {/* Severity Stripe */}
-                  <div className={`absolute left-0 top-0 bottom-0 w-1 rounded-l-lg ${
-                    risk.severity === 'high' ? 'bg-red-500' : 
-                    risk.severity === 'medium' ? 'bg-amber-500' : 'bg-blue-500'
-                  }`}></div>
-                  
-                  <div className="pl-2 mb-2 flex items-center justify-between">
-                    <span className={`text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded ${
-                      risk.severity === 'high' ? 'bg-red-50 text-red-600' : 
-                      risk.severity === 'medium' ? 'bg-amber-50 text-amber-600' : 'bg-blue-50 text-blue-600'
-                    }`}>
-                      {risk.severity} Risk
-                    </span>
-                  </div>
-                  
-                  <h4 className="pl-2 text-sm font-bold text-slate-800 leading-snug mb-2">
-                    {risk.headline}
-                  </h4>
-                  <p className="pl-2 text-xs text-slate-600 leading-relaxed flex-grow">
-                    {risk.insight}
-                  </p>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* 3. Why This Path (3-Column Comparison) */}
-          <div className="p-8">
-            <div className="flex items-center gap-2 mb-8">
-              <div className="w-6 h-6 rounded-full bg-purple-100 flex items-center justify-center">
-                <svg className="w-3.5 h-3.5 text-purple-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 7m0 13V7" />
-                </svg>
-              </div>
-              <h3 className="text-sm font-bold text-slate-700 uppercase tracking-wider">Path Selection Analysis</h3>
-            </div>
-
+        {/* Path Selection Content */}
+        <div className="p-6">
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
               
               {/* Option 1: Recommended */}
@@ -485,8 +356,6 @@ export function ProcessSection({ analysis }: ProcessSectionProps) {
               </div>
 
             </div>
-          </div>
-
         </div>
       </div>
 

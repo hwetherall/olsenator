@@ -28,6 +28,9 @@ yarn-error.log*
 # local env files
 .env*
 
+# generated chat config
+public/chat/config.js
+
 # vercel
 .vercel
 

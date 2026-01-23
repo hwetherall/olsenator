@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { MemoInput } from '@/components/MemoInput';
 import { JsonOutput } from '@/components/JsonOutput';
 import { InfographicContainer } from '@/components/infographic';
@@ -12,9 +12,26 @@ import { V2ExtractionResult } from '@/lib/v2-schema';
 import { removeTeamReferences } from '@/lib/kajima-transform';
 import { PREFILL_TEXT } from '@/lib/prefill';
 import { QA_PREFILL_TEXT } from '@/lib/qa-prefill';
-import { V2_PREFILL_TEXT, V2_EXTRACTION_JSON } from '@/lib/v2-prefill';
+import { V2_PREFILL_TEXT, V2_EXTRACTION_JSON, V2_EXTRACTION_JSON_JP } from '@/lib/v2-prefill';
+import { Language } from '@/lib/v2-translations';
 
-type AppMode = 'memo' | 'qa' | 'v2';
+// Load chat scripts dynamically
+function loadScript(src: string): Promise<void> {
+  return new Promise((resolve, reject) => {
+    // Check if already loaded
+    if (document.querySelector(`script[src="${src}"]`)) {
+      resolve();
+      return;
+    }
+    const script = document.createElement('script');
+    script.src = src;
+    script.onload = () => resolve();
+    script.onerror = () => reject(new Error(`Failed to load ${src}`));
+    document.body.appendChild(script);
+  });
+}
+
+type AppMode = 'memo' | 'qa' | 'v2' | 'client';
 
 interface ApiResponse {
   success: boolean;
@@ -42,8 +59,9 @@ interface V2ApiResponse {
 }
 
 export default function Home() {
-  // Mode state
-  const [mode, setMode] = useState<AppMode>('memo');
+  // Mode state - Client View is default
+  const [mode, setMode] = useState<AppMode>('client');
+  const [showAdvanced, setShowAdvanced] = useState(false);
   
   // Input state
   const [memo, setMemo] = useState('');
@@ -72,7 +90,31 @@ export default function Home() {
   const [isTranslating, setIsTranslating] = useState(false);
   const [copySuccess, setCopySuccess] = useState(false);
   
+  // Client View Language State
+  const [clientLanguage, setClientLanguage] = useState<Language>('en');
+  
   const infographicRef = useRef<HTMLDivElement>(null);
+
+  // Load chat module on mount and initialize client view
+  useEffect(() => {
+    const loadChatModule = async () => {
+      try {
+        // Load scripts in order: translations -> config -> i18n -> chat
+        await loadScript('/chat/translations.js');
+        await loadScript('/chat/config.js');
+        await loadScript('/chat/i18n.js');
+        await loadScript('/chat/chat.js');
+      } catch (error) {
+        console.error('Failed to load chat module:', error);
+      }
+    };
+    
+    loadChatModule();
+    
+    // Initialize client view with prefilled data
+    setV2Data(V2_EXTRACTION_JSON as unknown as V2ExtractionResult);
+    setShowInfographic(true);
+  }, []);
 
   const handleModeChange = (newMode: AppMode) => {
     setMode(newMode);
@@ -85,6 +127,22 @@ export default function Home() {
     setV2Data(null);
     setDuration(undefined);
     setRetried(undefined);
+    
+    // Auto-load prefilled data for client view
+    if (newMode === 'client') {
+      // Load based on current language preference
+      const jsonData = clientLanguage === 'ja' ? V2_EXTRACTION_JSON_JP : V2_EXTRACTION_JSON;
+      setV2Data(jsonData as unknown as V2ExtractionResult);
+      setShowInfographic(true);
+    }
+  };
+
+  // Handle language change for client view
+  const handleClientLanguageChange = (lang: Language) => {
+    setClientLanguage(lang);
+    // Update data with the appropriate JSON
+    const jsonData = lang === 'ja' ? V2_EXTRACTION_JSON_JP : V2_EXTRACTION_JSON;
+    setV2Data(jsonData as unknown as V2ExtractionResult);
   };
 
   const handleExtract = async () => {
@@ -332,7 +390,7 @@ export default function Home() {
 
   const currentContent = mode === 'memo' ? memo : mode === 'qa' ? qaContent : v2Content;
   const setCurrentContent = mode === 'memo' ? setMemo : mode === 'qa' ? setQaContent : setV2Content;
-  const hasData = mode === 'memo' ? !!displayData : mode === 'qa' ? !!qaData : !!v2Data;
+  const hasData = mode === 'memo' ? !!displayData : mode === 'qa' ? !!qaData : (mode === 'v2' || mode === 'client') ? !!v2Data : false;
   const currentData = mode === 'memo' ? displayData : mode === 'qa' ? qaData : v2Data;
 
   return (
@@ -368,62 +426,136 @@ export default function Home() {
 
       {/* Mode Toggle */}
       <div className="max-w-7xl mx-auto px-8 no-print">
-        <div className="flex items-center justify-center mb-8">
+        <div className="flex flex-col items-center gap-4 mb-8">
+          {/* Primary Tab - Client View */}
           <div 
             className="inline-flex items-center p-1 rounded-full"
             style={{ backgroundColor: 'var(--surface)', border: '1px solid var(--border)' }}
           >
             <button
-              onClick={() => handleModeChange('memo')}
-              className={`px-6 py-2.5 rounded-full text-sm font-medium transition-all duration-200 ${
-                mode === 'memo'
-                  ? 'bg-[var(--accent)] text-white shadow-md'
+              onClick={() => handleModeChange('client')}
+              className={`px-8 py-3 rounded-full text-sm font-medium transition-all duration-200 ${
+                mode === 'client'
+                  ? 'bg-emerald-600 text-white shadow-md'
                   : 'text-[var(--muted)] hover:text-[var(--foreground)]'
               }`}
             >
               <span className="flex items-center gap-2">
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
                 </svg>
-                Investment Memo
+                Client View
               </span>
             </button>
+            
+            {/* Advanced Features Toggle */}
             <button
-              onClick={() => handleModeChange('qa')}
-              className={`px-6 py-2.5 rounded-full text-sm font-medium transition-all duration-200 ${
-                mode === 'qa'
-                  ? 'bg-[var(--accent)] text-white shadow-md'
+              onClick={() => setShowAdvanced(!showAdvanced)}
+              className={`px-4 py-3 rounded-full text-xs font-medium transition-all duration-200 flex items-center gap-1.5 ${
+                showAdvanced
+                  ? 'text-[var(--accent)]'
                   : 'text-[var(--muted)] hover:text-[var(--foreground)]'
               }`}
             >
-              <span className="flex items-center gap-2">
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-                Q&A Response
-              </span>
-            </button>
-            <button
-              onClick={() => handleModeChange('v2')}
-              className={`px-6 py-2.5 rounded-full text-sm font-medium transition-all duration-200 ${
-                mode === 'v2'
-                  ? 'bg-[var(--accent)] text-white shadow-md'
-                  : 'text-[var(--muted)] hover:text-[var(--foreground)]'
-              }`}
-            >
-              <span className="flex items-center gap-2">
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 17V7m0 10a2 2 0 01-2 2H5a2 2 0 01-2-2V7a2 2 0 012-2h2a2 2 0 012 2m0 10a2 2 0 002 2h2a2 2 0 002-2M9 7a2 2 0 012-2h2a2 2 0 012 2m0 10V7m0 10a2 2 0 002 2h2a2 2 0 00-2-2h-2a2 2 0 00-2 2" />
-                </svg>
-                V2 Analysis
-              </span>
+              <svg className={`w-3.5 h-3.5 transition-transform duration-200 ${showAdvanced ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+              </svg>
+              Advanced
             </button>
           </div>
+          
+          {/* Advanced Features - Hidden by default */}
+          {showAdvanced && (
+            <div 
+              className="inline-flex items-center p-1 rounded-full animate-in fade-in slide-in-from-top-2 duration-200"
+              style={{ backgroundColor: 'var(--surface)', border: '1px solid var(--border)' }}
+            >
+              <button
+                onClick={() => handleModeChange('memo')}
+                className={`px-5 py-2 rounded-full text-sm font-medium transition-all duration-200 ${
+                  mode === 'memo'
+                    ? 'bg-[var(--accent)] text-white shadow-md'
+                    : 'text-[var(--muted)] hover:text-[var(--foreground)]'
+                }`}
+              >
+                <span className="flex items-center gap-2">
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                  </svg>
+                  Investment Memo
+                </span>
+              </button>
+              <button
+                onClick={() => handleModeChange('qa')}
+                className={`px-5 py-2 rounded-full text-sm font-medium transition-all duration-200 ${
+                  mode === 'qa'
+                    ? 'bg-[var(--accent)] text-white shadow-md'
+                    : 'text-[var(--muted)] hover:text-[var(--foreground)]'
+                }`}
+              >
+                <span className="flex items-center gap-2">
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                  Q&A Response
+                </span>
+              </button>
+              <button
+                onClick={() => handleModeChange('v2')}
+                className={`px-5 py-2 rounded-full text-sm font-medium transition-all duration-200 ${
+                  mode === 'v2'
+                    ? 'bg-[var(--accent)] text-white shadow-md'
+                    : 'text-[var(--muted)] hover:text-[var(--foreground)]'
+                }`}
+              >
+                <span className="flex items-center gap-2">
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 17V7m0 10a2 2 0 01-2 2H5a2 2 0 01-2-2V7a2 2 0 012-2h2a2 2 0 012 2m0 10a2 2 0 002 2h2a2 2 0 002-2M9 7a2 2 0 012-2h2a2 2 0 012 2m0 10V7m0 10a2 2 0 002 2h2a2 2 0 00-2-2h-2a2 2 0 00-2 2" />
+                  </svg>
+                  V2 Analysis
+                </span>
+              </button>
+            </div>
+          )}
         </div>
+
+        {/* Language Toggle for Client View */}
+        {mode === 'client' && (
+          <div className="flex items-center justify-center mt-4">
+            <div 
+              className="inline-flex items-center p-1 rounded-full"
+              style={{ backgroundColor: 'var(--surface)', border: '1px solid var(--border)' }}
+            >
+              <button
+                onClick={() => handleClientLanguageChange('en')}
+                className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-200 flex items-center gap-2 ${
+                  clientLanguage === 'en'
+                    ? 'bg-blue-600 text-white shadow-md'
+                    : 'text-[var(--muted)] hover:text-[var(--foreground)]'
+                }`}
+              >
+                <span className="text-base">🇺🇸</span>
+                English
+              </button>
+              <button
+                onClick={() => handleClientLanguageChange('ja')}
+                className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-200 flex items-center gap-2 ${
+                  clientLanguage === 'ja'
+                    ? 'bg-rose-600 text-white shadow-md'
+                    : 'text-[var(--muted)] hover:text-[var(--foreground)]'
+                }`}
+              >
+                <span className="text-base">🇯🇵</span>
+                日本語
+              </button>
+            </div>
+          </div>
+        )}
       </div>
 
-      {/* Hero Section */}
-      {!hasData && !error && !isLoading && (
+      {/* Hero Section - Hidden in client mode */}
+      {mode !== 'client' && !hasData && !error && !isLoading && (
         <div className="max-w-4xl mx-auto px-8 py-16 text-center no-print">
           {mode === 'memo' ? (
             <>
@@ -462,7 +594,8 @@ export default function Home() {
         </div>
       )}
 
-      {/* Main Content */}
+      {/* Main Content - Hidden in client mode */}
+      {mode !== 'client' && (
       <div className="max-w-7xl mx-auto px-8 py-8 no-print">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
           {/* Left Column - Input */}
@@ -659,6 +792,7 @@ export default function Home() {
           </div>
         )}
       </div>
+      )}
 
       {/* Infographic Section */}
       {showInfographic && hasData && (
@@ -697,10 +831,11 @@ export default function Home() {
               />
             )}
             
-            {mode === 'v2' && v2Data && (
+            {(mode === 'v2' || mode === 'client') && v2Data && (
               <V2InfographicContainer
                 data={v2Data}
                 onCopyHtml={handleCopyHtml}
+                language={mode === 'client' ? clientLanguage : 'en'}
               />
             )}
           </div>

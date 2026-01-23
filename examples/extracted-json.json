@@ -457,6 +457,14 @@
           "opportunity-validation"
         ],
         "confidence": "high"
+      },
+      {
+        "alternative": "Option 3: Acquisition",
+        "why_not_preferred": "Prohibitive Acquisition Costs",
+        "source_chapters": [
+          "opportunity-validation"
+        ],
+        "confidence": "high"
       }
     ],
     "path_advantages": [

@@ -2,27 +2,28 @@
 
 import { useState } from 'react';
 import { ShouldWeDoIt, CanWeDoIt, Synthesis, SectionVerdict } from '@/lib/v2-schema';
+import { Language, t } from '@/lib/v2-translations';
 
 interface StrategicFitSectionProps {
   shouldWeDoIt: ShouldWeDoIt;
   canWeDoIt: CanWeDoIt;
   synthesis: Synthesis;
+  language?: Language;
 }
 
-// Helper to get verdict colors
+// Helper to get verdict colors - supports both English and Japanese decisions
 function getVerdictColor(decision: string) {
-  switch (decision) {
-    case 'Yes':
-    case 'Proceed':
-      return { bg: 'bg-emerald-50', text: 'text-emerald-800', border: 'border-emerald-500', icon: 'text-emerald-600' };
-    case 'No':
-    case 'Pass':
-      return { bg: 'bg-red-50', text: 'text-red-800', border: 'border-red-500', icon: 'text-red-600' };
-    case 'Borderline':
-    case 'Conditional':
-    default:
-      return { bg: 'bg-amber-50', text: 'text-amber-800', border: 'border-amber-500', icon: 'text-amber-600' };
+  const lowerDecision = decision.toLowerCase();
+  // Check for Yes/Go verdicts
+  if (lowerDecision === 'yes' || lowerDecision === 'proceed' || decision === 'はい') {
+    return { bg: 'bg-emerald-50', text: 'text-emerald-800', border: 'border-emerald-500', icon: 'text-emerald-600' };
   }
+  // Check for No/Pass verdicts
+  if (lowerDecision === 'no' || lowerDecision === 'pass' || decision === 'いいえ') {
+    return { bg: 'bg-red-50', text: 'text-red-800', border: 'border-red-500', icon: 'text-red-600' };
+  }
+  // Default to Borderline/Conditional (amber)
+  return { bg: 'bg-amber-50', text: 'text-amber-800', border: 'border-amber-500', icon: 'text-amber-600' };
 }
 
 function getConfidenceColor(level: string) {
@@ -146,32 +147,43 @@ function VerdictBadge({ verdict }: VerdictBadgeProps) {
   );
 }
 
-export function StrategicFitSection({ shouldWeDoIt, canWeDoIt, synthesis }: StrategicFitSectionProps) {
-  const finalVerdictColor = getVerdictColor(synthesis.final_verdict.decision);
+// Helper to calculate position from verdict
+function getVerdictPosition(verdict: SectionVerdict): number {
+  // Convert verdict to a position (0-100)
+  if (verdict.decision === 'Yes') {
+    return verdict.confidence === 'High' ? 85 : verdict.confidence === 'Medium' ? 70 : 60;
+  }
+  if (verdict.decision === 'Borderline') {
+    return verdict.confidence === 'High' ? 55 : verdict.confidence === 'Medium' ? 45 : 40;
+  }
+  // No
+  return verdict.confidence === 'High' ? 20 : verdict.confidence === 'Medium' ? 30 : 35;
+}
+
+export function StrategicFitSection({ shouldWeDoIt, canWeDoIt, synthesis, language = 'en' }: StrategicFitSectionProps) {
+  // Calculate venture position on the 2x2
+  const strategicX = getVerdictPosition(shouldWeDoIt.verdict);
+  const executionY = getVerdictPosition(canWeDoIt.verdict);
 
   return (
     <div className="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
       {/* Section Header */}
-      <div className="px-8 py-6 border-b border-slate-200 bg-slate-50/50">
-        <h2 className="text-xl font-bold text-slate-800">Strategic Fit Assessment</h2>
-        <p className="text-sm text-slate-500 mt-1">Evaluating strategic attractiveness vs. execution capability</p>
+      <div className="px-6 py-4 border-b border-slate-200 bg-slate-50/50">
+        <h2 className="text-base font-bold text-slate-800">{t('strategicFitAssessment', language)}</h2>
       </div>
 
       {/* Two-Panel Layout */}
       <div className="grid grid-cols-1 lg:grid-cols-2 divide-y lg:divide-y-0 lg:divide-x divide-slate-200">
         
-        {/* Should We Do It Panel - Blue Theme */}
-        <div className="p-8 bg-gradient-to-b from-white to-blue-50/10">
-          <div className="flex items-center gap-3 mb-6">
-            <div className="w-10 h-10 rounded-xl bg-blue-100 flex items-center justify-center shadow-sm">
-              <svg className="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        {/* Strategic Attractiveness Panel - Blue Theme */}
+        <div className="p-6 bg-gradient-to-b from-white to-blue-50/10">
+          <div className="flex items-center gap-3 mb-4">
+            <div className="w-8 h-8 rounded-lg bg-blue-100 flex items-center justify-center shadow-sm">
+              <svg className="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
               </svg>
             </div>
-            <div>
-              <h3 className="font-bold text-lg text-slate-800">Should We Do It?</h3>
-              <p className="text-xs font-medium text-blue-600 uppercase tracking-wide">Strategic Attractiveness</p>
-            </div>
+            <h3 className="font-bold text-sm text-slate-800">Strategic Attractiveness</h3>
           </div>
 
           <div className="space-y-4 mb-8">
@@ -258,18 +270,15 @@ export function StrategicFitSection({ shouldWeDoIt, canWeDoIt, synthesis }: Stra
           <VerdictBadge verdict={shouldWeDoIt.verdict} />
         </div>
 
-        {/* Can We Do It Panel - Purple Theme */}
-        <div className="p-8 bg-gradient-to-b from-white to-purple-50/10">
-          <div className="flex items-center gap-3 mb-6">
-            <div className="w-10 h-10 rounded-xl bg-purple-100 flex items-center justify-center shadow-sm">
-              <svg className="w-5 h-5 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        {/* Execution Capability Panel - Purple Theme */}
+        <div className="p-6 bg-gradient-to-b from-white to-purple-50/10">
+          <div className="flex items-center gap-3 mb-4">
+            <div className="w-8 h-8 rounded-lg bg-purple-100 flex items-center justify-center shadow-sm">
+              <svg className="w-4 h-4 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19.428 15.428a2 2 0 00-1.022-.547l-2.384-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" />
               </svg>
             </div>
-            <div>
-              <h3 className="font-bold text-lg text-slate-800">Can We Do It?</h3>
-              <p className="text-xs font-medium text-purple-600 uppercase tracking-wide">Execution Capability</p>
-            </div>
+            <h3 className="font-bold text-sm text-slate-800">Execution Capability</h3>
           </div>
 
           <div className="space-y-4 mb-8">
@@ -356,69 +365,69 @@ export function StrategicFitSection({ shouldWeDoIt, canWeDoIt, synthesis }: Stra
         </div>
       </div>
 
-      {/* Synthesis Strip */}
-      <div className="border-t border-slate-200 bg-slate-50 p-8">
-        <h3 className="text-sm font-bold text-slate-400 uppercase tracking-wider mb-6">Executive Synthesis</h3>
+      {/* 2x2 Strategic Quadrant */}
+      <div className="border-t border-slate-200 bg-slate-50/50 p-6">
+        <div className="flex items-center gap-2 mb-4">
+          <svg className="w-4 h-4 text-slate-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+          </svg>
+          <h3 className="text-xs font-bold text-slate-600 uppercase tracking-wider">Strategic Position</h3>
+        </div>
         
-        {/* 1. Final Verdict - Moved to Top */}
-        <div 
-          className="rounded-xl p-6 relative overflow-hidden mb-8 bg-white shadow-sm"
-          style={{ borderLeft: `4px solid ${finalVerdictColor.border.replace('border-', 'var(--tw-colors-')}` }}
-        >
-          <div className="flex flex-col md:flex-row md:items-start gap-6">
-            <div className="flex-1">
-              <div className="flex items-center gap-3 mb-2">
-                <span className="text-xs font-bold uppercase tracking-widest text-slate-500">
-                  Final Recommendation
-                </span>
-                <span 
-                  className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold"
-                  style={{ backgroundColor: `${finalVerdictColor.border}20`, color: finalVerdictColor.text }}
-                >
-                  {synthesis.final_verdict.confidence} Confidence
-                </span>
+        <div className="max-w-md mx-auto">
+          {/* Y-axis label */}
+          <div className="flex items-stretch gap-3">
+            <div className="flex flex-col justify-between py-2 text-[12px] text-black font-medium w-6">
+              <span>High</span>
+              <span className="writing-mode-vertical transform -rotate-180 text-black font-semibold tracking-wide" style={{ writingMode: 'vertical-rl' }}>
+                Execution
+              </span>
+              <span>Low</span>
+            </div>
+            
+            {/* The 2x2 Grid */}
+            <div className="flex-1 relative">
+              <div className="grid grid-cols-2 grid-rows-2 aspect-square border border-slate-300 rounded-lg overflow-hidden">
+                {/* Top-Left: Capable but Uninteresting */}
+                <div className="bg-slate-100/50 border-r border-b border-slate-300 p-2 flex items-end">
+                  <span className="text-[11px] font-medium text-black leading-tight">Capable but<br/>Uninteresting</span>
+                </div>
+                {/* Top-Right: High Value */}
+                <div className="bg-emerald-50 border-b border-slate-300 p-2 flex items-end justify-end">
+                  <span className="text-[11px] font-bold text-black leading-tight text-right">High Value<br/>Opportunity</span>
+                </div>
+                {/* Bottom-Left: Avoid */}
+                <div className="bg-red-50/50 border-r border-slate-300 p-2 flex items-start">
+                  <span className="text-[11px] font-medium text-black leading-tight">Avoid</span>
+                </div>
+                {/* Bottom-Right: Strategic but Risky */}
+                <div className="bg-amber-50 p-2 flex items-start justify-end">
+                  <span className="text-[11px] font-medium text-black leading-tight text-right">Strategic<br/>but Risky</span>
+                </div>
               </div>
-              <h3 
-                className="text-3xl font-bold mb-3"
-                style={{ color: finalVerdictColor.border }}
+              
+              {/* Venture Position Dot */}
+              <div 
+                className="absolute w-4 h-4 rounded-full bg-blue-600 border-2 border-white shadow-lg transform -translate-x-1/2 -translate-y-1/2 z-10"
+                style={{ 
+                  left: `${strategicX}%`, 
+                  top: `${100 - executionY}%` 
+                }}
               >
-                {synthesis.final_verdict.decision}
-              </h3>
-              <div className="p-4 rounded-lg bg-slate-50 border border-slate-100">
-                <p className="text-base text-slate-700 leading-relaxed font-medium">
-                  {synthesis.final_verdict.condition}
-                </p>
+                <div className="absolute -top-6 left-1/2 -translate-x-1/2 whitespace-nowrap bg-slate-800 text-white text-[11px] font-bold px-1.5 py-0.5 rounded">
+                  This Venture
+                </div>
               </div>
             </div>
           </div>
-        </div>
-
-        {/* 2. Alignment & Divergence - Side by Side */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-          {/* Alignment */}
-          <div className="flex flex-col gap-3">
-            <span className="text-xs font-bold text-green-700 uppercase tracking-wider flex items-center gap-2">
-              <div className="w-2 h-2 rounded-full bg-green-500"></div>
-              Strategic Alignment
-            </span>
-            <div className="p-5 rounded-xl bg-white border border-green-100 shadow-sm h-full">
-              <p className="text-sm text-slate-700 leading-relaxed">{synthesis.alignment}</p>
-            </div>
-          </div>
-
-          {/* Divergence */}
-          <div className="flex flex-col gap-3">
-            <span className="text-xs font-bold text-amber-700 uppercase tracking-wider flex items-center gap-2">
-              <div className="w-2 h-2 rounded-full bg-amber-500"></div>
-              Execution Gap
-            </span>
-            <div className="p-5 rounded-xl bg-white border border-amber-100 shadow-sm h-full">
-              <p className="text-sm text-slate-700 leading-relaxed">{synthesis.divergence}</p>
-            </div>
+          
+          {/* X-axis label */}
+          <div className="flex justify-between mt-1 px-9 text-[12px] text-black font-medium">
+            <span>Low</span>
+            <span className="text-black font-semibold tracking-wide">Strategic Attractiveness</span>
+            <span>High</span>
           </div>
         </div>
-
-
       </div>
     </div>
   );

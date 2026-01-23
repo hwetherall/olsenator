@@ -4,18 +4,21 @@ import { useRef } from 'react';
 import { V2ExtractionResult } from '@/lib/v2-schema';
 import { BannerSection } from './BannerSection';
 import { StrategicFitSection } from './StrategicFitSection';
-import { GapQuadrantSection } from './GapQuadrantSection';
+// GapQuadrantSection hidden per C-Suite feedback
+// import { GapQuadrantSection } from './GapQuadrantSection';
 import { HighlightsV2Section } from './HighlightsV2Section';
 import { NextStepsPathway } from './NextStepsPathway';
 
 import { ProcessSection } from './ProcessSection';
+import { Language, t, formatDateLong } from '@/lib/v2-translations';
 
 interface V2InfographicContainerProps {
   data: V2ExtractionResult;
   onCopyHtml?: () => void;
+  language?: Language;
 }
 
-export function V2InfographicContainer({ data, onCopyHtml }: V2InfographicContainerProps) {
+export function V2InfographicContainer({ data, onCopyHtml, language = 'en' }: V2InfographicContainerProps) {
   const containerRef = useRef<HTMLDivElement>(null);
 
   const handlePrint = () => {
@@ -37,7 +40,7 @@ export function V2InfographicContainer({ data, onCopyHtml }: V2InfographicContai
       <div className="flex items-center justify-between mb-6 no-print">
         <div className="flex items-center gap-2">
           <span className="text-sm font-medium text-slate-600">
-            V2 Executive Infographic
+            {t('executiveInfographic', language)}
           </span>
           <span className="text-xs px-2 py-0.5 rounded bg-blue-100 text-blue-700">
             {data.identification.stage}
@@ -51,7 +54,7 @@ export function V2InfographicContainer({ data, onCopyHtml }: V2InfographicContai
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
             </svg>
-            Copy HTML
+            {t('copyHtml', language)}
           </button>
           <button
             onClick={handlePrint}
@@ -60,7 +63,7 @@ export function V2InfographicContainer({ data, onCopyHtml }: V2InfographicContai
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
             </svg>
-            Download as PDF
+            {t('downloadPdf', language)}
           </button>
         </div>
       </div>
@@ -81,12 +84,13 @@ export function V2InfographicContainer({ data, onCopyHtml }: V2InfographicContai
             identification={data.identification}
             questionAndAnswer={data.question_and_answer}
             thesis={data.thesis}
+            language={language}
           />
 
           {/* Page 1.5: The Process - Moved here */}
           {data.supporting_analysis && (
             <div className="px-6 pt-6">
-              <ProcessSection analysis={data.supporting_analysis} />
+              <ProcessSection analysis={data.supporting_analysis} language={language} />
             </div>
           )}
 
@@ -96,33 +100,30 @@ export function V2InfographicContainer({ data, onCopyHtml }: V2InfographicContai
               shouldWeDoIt={data.should_we_do_it}
               canWeDoIt={data.can_we_do_it}
               synthesis={data.synthesis}
+              language={language}
             />
           </div>
         </div>
 
-        {/* Page 2: Gap Analysis + Highlights */}
+        {/* Page 2: Next Steps Pathway */}
         <div className="v2-infographic-page-2 page-break-before">
-          <div className="p-6 space-y-6">
-            {/* Gap Quadrant Analysis */}
-            <GapQuadrantSection 
-              gaps={data.gaps}
-              summary={data.gap_summary}
-            />
-
-            {/* Key Highlights */}
-            <HighlightsV2Section 
-              highlights={data.highlights}
-              metadata={data.highlights_metadata}
-            />
-          </div>
-        </div>
-
-        {/* Page 3: Next Steps Pathway */}
-        <div className="v2-infographic-page-3 page-break-before">
           <div className="p-6">
             <NextStepsPathway 
               steps={data.next_steps}
               metadata={data.pathway_metadata}
+              language={language}
+            />
+          </div>
+        </div>
+
+        {/* Page 3: Key Highlights (collapsed by default) */}
+        <div className="v2-infographic-page-3">
+          <div className="p-6">
+            <HighlightsV2Section 
+              highlights={data.highlights}
+              metadata={data.highlights_metadata}
+              defaultCollapsed={true}
+              language={language}
             />
           </div>
         </div>
@@ -140,9 +141,9 @@ export function V2InfographicContainer({ data, onCopyHtml }: V2InfographicContai
               <span>{data.identification.geography}</span>
             </div>
             <div className="flex items-center gap-4">
-              <span>Generated by The Olsenator V2</span>
+              <span>{t('generatedBy', language)}</span>
               <span>|</span>
-              <span>{new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</span>
+              <span>{formatDateLong(new Date(), language)}</span>
             </div>
           </div>
         </div>

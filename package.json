@@ -3,10 +3,13 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "predev": "node build-config.js",
     "dev": "next dev",
+    "prebuild": "node build-config.js",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "generate-config": "node build-config.js"
   },
   "dependencies": {
     "next": "^16.1.0",
