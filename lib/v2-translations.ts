@@ -444,17 +444,9 @@ export const translations = {
     en: 'Borderline',
     ja: '境界線上'
   },
-  high: {
-    en: 'High',
-    ja: '高'
-  },
   medium: {
     en: 'Medium',
     ja: '中'
-  },
-  low: {
-    en: 'Low',
-    ja: '低'
   },
   synthesis: {
     en: 'Synthesis',
