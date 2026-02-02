@@ -274,8 +274,10 @@ textarea {
 
   /* === PREVENT BREAKING WITHIN ELEMENTS === */
   
-  /* Strategic Fit 2x2 Matrix - MUST stay together */
+  /* Strategic Fit 2x2 Matrix - Start on new page and stay together */
   .v2-infographic .strategic-quadrant {
+    page-break-before: always !important;
+    break-before: page !important;
     page-break-inside: avoid !important;
     break-inside: avoid !important;
   }
@@ -312,9 +314,15 @@ textarea {
 
   /* === FORCE HIGHLIGHTS TO SHOW IN PRINT === */
   
+  /* Multiple selectors for maximum specificity */
   .v2-infographic .highlights-collapsible-content,
-  .v2-infographic .highlights-collapsible-content.hidden {
+  .v2-infographic .highlights-collapsible-content.hidden,
+  .v2-infographic .highlights-section .highlights-collapsible-content,
+  .highlights-collapsible-content.hidden {
     display: block !important;
+    visibility: visible !important;
+    height: auto !important;
+    overflow: visible !important;
   }
 
   /* Hide the chevron icon in print */

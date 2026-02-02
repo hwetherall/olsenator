@@ -112,7 +112,7 @@ export function HighlightsV2Section({ highlights, metadata, defaultCollapsed = f
       </button>
 
       {/* Collapsible Content - Always rendered, hidden via CSS for print support */}
-      <div className={`highlights-collapsible-content ${isCollapsed ? 'hidden' : ''}`}>
+      <div className={`highlights-collapsible-content ${isCollapsed ? 'hidden print:!block' : ''}`}>
         {/* Balance Assessment */}
         <div className="px-6 py-3 bg-slate-50/50 border-b border-slate-200">
           <div className="flex items-center gap-2">
