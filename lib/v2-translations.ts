@@ -122,33 +122,39 @@ export const translations = {
     en: 'Path Selection Analysis',
     ja: '戦略パス選定分析'
   },
+  comparativeSummary: {
+    en: 'Comparative Summary',
+    ja: '比較概要'
+  },
   recommended: {
     en: 'Recommended',
     ja: '推奨'
   },
-  option1PartnershipLed: {
-    en: 'Option 1: Partnership-Led',
-    ja: 'オプション1：提携主導'
+  
+  // RIC Option Names
+  option1StatusQuo: {
+    en: 'Option 1: Status Quo',
+    ja: 'オプション1：現状維持'
   },
   option1Description: {
-    en: 'Focus on Steps 2–3 (Inspection/Design) while partnering for Step 1.',
-    ja: 'ステップ2〜3（点検／設計）に集中し、ステップ1は提携で補完。'
+    en: 'Continue operating exclusively as a Tier 1 System Integrator for physical engineering projects.',
+    ja: '物理的エンジニアリングプロジェクトのTier 1システムインテグレーターとしての事業を継続。'
   },
-  option2FullInternalBuild: {
-    en: 'Option 2: Full Internal Build',
-    ja: 'オプション2：内製フル構築'
+  option2NarrowPlatform: {
+    en: 'Option 2: Narrow Platform',
+    ja: 'オプション2：ナロープラットフォーム'
   },
   option2Description: {
-    en: 'Build proprietary "Super-App" covering entire lifecycle (Steps 1–5).',
-    ja: '全工程（ステップ1〜5）を網羅する独自「スーパーアプリ」を構築。'
+    en: 'Partnership-driven approach focusing on "triage" steps (Inspection and Design) via a "Concierge MVP" to validate demand.',
+    ja: '「コンシェルジュMVP」で需要を検証する「トリアージ」ステップ（点検・設計）に集中した提携主導のアプローチ。'
   },
-  option3Acquisition: {
-    en: 'Option 3: Acquisition',
-    ja: 'オプション3：買収'
+  option3EndToEnd: {
+    en: 'Option 3: End-to-End Platform',
+    ja: 'オプション3：エンドツーエンドプラットフォーム'
   },
   option3Description: {
-    en: 'Acquire a GovTech startup to secure tech stack and user base immediately.',
-    ja: 'GovTechスタートアップを買収し、技術スタックとユーザーベースを即時確保。'
+    en: 'Build a comprehensive ecosystem covering the entire lifecycle from discovery to construction.',
+    ja: '発見から建設まで全ライフサイクルを網羅する包括的エコシステムを構築。'
   },
   viewDetailsStrategy: {
     en: 'View Details & Strategy',
@@ -159,8 +165,8 @@ export const translations = {
     ja: '分析を見る'
   },
   whyRejected: {
-    en: 'Why Rejected',
-    ja: '却下理由'
+    en: 'Why Not Selected',
+    ja: '選定されなかった理由'
   },
   recommendation: {
     en: 'Recommendation',
@@ -178,14 +184,200 @@ export const translations = {
     en: 'Cons',
     ja: 'デメリット'
   },
+  rationale: {
+    en: 'Rationale',
+    ja: '根拠'
+  },
+  whenPreferred: {
+    en: 'When This Option Would Be Preferred',
+    ja: 'このオプションが選好される場合'
+  },
+  
+  // Comparative Table Labels
+  dimension: {
+    en: 'Dimension',
+    ja: '評価軸'
+  },
+  riskLevel: {
+    en: 'Risk Level',
+    ja: 'リスクレベル'
+  },
+  capitalRequired: {
+    en: 'Capital Required',
+    ja: '必要資本'
+  },
+  timeToValue: {
+    en: 'Time to Value',
+    ja: '価値実現までの時間'
+  },
+  keyStrength: {
+    en: 'Key Strength',
+    ja: '主要強み'
+  },
+  keyWeakness: {
+    en: 'Key Weakness',
+    ja: '主要弱点'
+  },
+  deRiskability: {
+    en: 'De-riskability',
+    ja: 'リスク軽減可能性'
+  },
+  
+  // Option 1 (Status Quo) Content
+  option1RiskLevel: {
+    en: 'Low (Execution) / High (Strategic)',
+    ja: '低（実行）／高（戦略）'
+  },
+  option1Capital: {
+    en: '$0 incremental',
+    ja: '追加投資なし'
+  },
+  option1TimeToValue: {
+    en: 'Immediate',
+    ja: '即時'
+  },
+  option1Strength: {
+    en: 'Cash preservation',
+    ja: 'キャッシュ保全'
+  },
+  option1Weakness: {
+    en: 'Strategic obsolescence',
+    ja: '戦略的陳腐化'
+  },
+  option1DeRisk: {
+    en: 'High',
+    ja: '高'
+  },
+  option1ModalTitle: {
+    en: 'Option 1: Status Quo / No-Go',
+    ja: 'オプション1：現状維持'
+  },
   option1StrategyDetail: {
-    en: 'Integrate with an existing civic-tech player like Dappi Studio LLC (FixMyStreet Japan) via API to handle citizen reporting. NLM builds the downstream workflow engine that converts these reports into professional engineering tasks.',
-    ja: 'Dappi Studio LLC（FixMyStreet Japan）など既存のシビックテックとAPI連携し、市民通報を取り込む。NLMは通報を専門エンジニアリング業務に変換する下流ワークフローを構築。'
+    en: 'Maintain Nikkei Engineering\'s traditional business model, operating as a Tier 1 System Integrator focusing exclusively on physical engineering, fabrication, and construction (Steps 3–5). Rely on government-led digitalization initiatives rather than building proprietary technology.',
+    ja: '日経エンジニアリングの従来ビジネスモデルを維持し、物理的エンジニアリング、製造、建設（ステップ3〜5）に専念するTier 1システムインテグレーターとして運営。独自技術の構築ではなく、政府主導のデジタル化イニシアチブに依存。'
   },
-  option1ConsDetail: {
-    en: 'Creates dependency on third-party roadmaps; requires successful API integration negotiation.',
-    ja: '第三者の開発ロードマップに依存し、API連携交渉の成立が前提となる。'
+  option1WhyNotSelected: {
+    en: 'High strategic risk of commoditization as competitors like Nippon Koei digitize their service offerings. Fails to establish a new scalable profit center, leaving the company entirely dependent on cyclical construction bids.',
+    ja: '日本工営のような競合がサービスをデジタル化する中、コモディティ化の戦略的リスクが高い。新たなスケーラブルな収益源を確立できず、循環的な建設入札に完全依存。'
   },
+  option1WhenPreferred: {
+    en: 'If NLM faces an immediate liquidity crisis requiring absolute cash preservation, or if MLIT explicitly mandates a single government-run platform that excludes private sector middleware.',
+    ja: 'NLMが絶対的なキャッシュ保全を必要とする緊急の流動性危機に直面した場合、またはMLITが民間ミドルウェアを排除する単一の政府運営プラットフォームを明示的に義務付けた場合。'
+  },
+  
+  // Option 2 (Narrow Platform) Content
+  option2RiskLevel: {
+    en: 'Medium',
+    ja: '中'
+  },
+  option2Capital: {
+    en: 'Moderate (Software + Ops)',
+    ja: '中程度（ソフトウェア＋運用）'
+  },
+  option2TimeToValue: {
+    en: 'Months (Concierge MVP)',
+    ja: '数ヶ月（コンシェルジュMVP）'
+  },
+  option2Strength: {
+    en: 'Hybrid Authority (License + Tech)',
+    ja: 'ハイブリッド権限（免許＋技術）'
+  },
+  option2Weakness: {
+    en: 'Procurement friction (OpEx)',
+    ja: '調達摩擦（OpEx）'
+  },
+  option2DeRisk: {
+    en: 'High (via Pilot)',
+    ja: '高（パイロットにより）'
+  },
+  option2ModalTitle: {
+    en: 'Option 2: Narrow Platform (Recommended)',
+    ja: 'オプション2：ナロープラットフォーム（推奨）'
+  },
+  option2StrategyDetail: {
+    en: 'Position Nikkei Engineering as the "triage" middleware between citizen reporting and professional repair. Partner with Dappi Studio (FixMyStreet) for data intake while focusing internal resources on converting raw citizen data into verified engineering work orders.',
+    ja: '日経エンジニアリングを市民通報と専門修繕の間の「トリアージ」ミドルウェアとして位置付け。Dappi Studio（FixMyStreet）と提携してデータ取得を行い、内部リソースは生の市民データを検証済みエンジニアリング作業指示に変換することに集中。'
+  },
+  option2RationaleIntro: {
+    en: 'This option is recommended based on three key factors:',
+    ja: 'このオプションは以下の3つの主要因に基づき推奨されます：'
+  },
+  option2Rationale1Title: {
+    en: 'Competitive Moat',
+    ja: '競争優位性'
+  },
+  option2Rationale1Detail: {
+    en: 'Uses Nikkei Engineering\'s legal licensure to certify safety, a capability that pure software competitors cannot replicate due to liability constraints.',
+    ja: '日経エンジニアリングの法的免許を活用して安全性を認証。純粋なソフトウェア競合は責任制約により再現不可能な能力。'
+  },
+  option2Rationale2Title: {
+    en: 'Capital Efficiency',
+    ja: '資本効率'
+  },
+  option2Rationale2Detail: {
+    en: 'The "Concierge MVP" approach validates municipal willingness-to-pay within 6 months using manual processes, avoiding the 3.5-year development timeline required for a full marketplace.',
+    ja: '「コンシェルジュMVP」アプローチにより、手動プロセスを用いて6ヶ月以内に自治体の支払い意思を検証。フルマーケットプレイスに必要な3.5年の開発期間を回避。'
+  },
+  option2Rationale3Title: {
+    en: 'Market Fit',
+    ja: '市場適合性'
+  },
+  option2Rationale3Detail: {
+    en: 'Directly addresses the municipal labor shortage by automating the filtering of citizen reports, solving the "digital inbox" overflow that currently prevents government adoption.',
+    ja: '市民通報のフィルタリングを自動化することで自治体の人手不足に直接対処。現在政府導入を妨げている「デジタル受信箱」の氾濫問題を解決。'
+  },
+  option2ConsDetail: {
+    en: 'Creates dependency on Dappi Studio for the data funnel. Procurement friction remains a risk as municipalities may face challenges paying for OpEx subscription services.',
+    ja: 'データファネルにおいてDappi Studioへの依存が生じる。自治体がOpExサブスクリプションサービスへの支払いに課題を抱える可能性があり、調達摩擦がリスクとして残る。'
+  },
+  
+  // Option 3 (End-to-End) Content
+  option3RiskLevel: {
+    en: 'High',
+    ja: '高'
+  },
+  option3Capital: {
+    en: 'Massive Capital',
+    ja: '大規模資本'
+  },
+  option3TimeToValue: {
+    en: '>3.5 years',
+    ja: '3.5年超'
+  },
+  option3Strength: {
+    en: 'Total Lifecycle Ownership',
+    ja: '全ライフサイクル所有'
+  },
+  option3Weakness: {
+    en: 'Legal/Regulatory barriers',
+    ja: '法的・規制上の障壁'
+  },
+  option3DeRisk: {
+    en: 'Low',
+    ja: '低'
+  },
+  option3ModalTitle: {
+    en: 'Option 3: Full End-to-End Platform',
+    ja: 'オプション3：フルエンドツーエンドプラットフォーム'
+  },
+  option3StrategyDetail: {
+    en: 'Develop a comprehensive operating system managing the entire infrastructure maintenance lifecycle from Step 1 (Discovery) through Step 5 (Construction). Build a "System of Record" integrating citizen reporting, engineering analysis, and a digital marketplace for procurement.',
+    ja: 'ステップ1（発見）からステップ5（建設）までインフラ保守の全ライフサイクルを管理する包括的オペレーティングシステムを開発。市民通報、エンジニアリング分析、調達用デジタルマーケットプレイスを統合した「記録システム」を構築。'
+  },
+  option3WhyNotSelected: {
+    en: 'Japanese law prohibits the same entity from managing both design and construction bidding (separation of duties), making an integrated marketplace legally inviable. Requires "massive capital" and a development timeline exceeding 3.5 years.',
+    ja: '日本の法律は同一事業体が設計と建設入札の両方を管理することを禁止しており（職務分離）、統合マーケットプレイスは法的に実現不可能。「大規模資本」と3.5年を超える開発期間が必要。'
+  },
+  option3WhenPreferred: {
+    en: 'If Japanese construction laws are amended to allow design-build integration within digital platforms, or if NLM acquires a major software company with existing marketplace infrastructure and user base.',
+    ja: 'デジタルプラットフォーム内での設計・建設統合を許可するよう日本の建設法が改正された場合、またはNLMが既存のマーケットプレイスインフラとユーザーベースを持つ大手ソフトウェア企業を買収した場合。'
+  },
+  option3ProsDetail: {
+    en: 'Total lifecycle ownership creates high switching costs and network effects, establishing a defensive moat against large IT competitors.',
+    ja: '全ライフサイクル所有により高いスイッチングコストとネットワーク効果を創出し、大手IT競合に対する防御的な堀を構築。'
+  },
+  
+  // Engagement Model (kept for Option 2)
   recommendedEngagementModel: {
     en: 'Recommended Engagement Model',
     ja: '推奨関与モデル'
@@ -213,58 +405,6 @@ export const translations = {
   orchestrationRoleDetail: {
     en: 'NLM functions as the Platform Orchestrator, managing the data flow between citizens, municipalities, and external contractors.',
     ja: 'NLMがプラットフォーム・オーケストレーターとして、市民・自治体・外部事業者間のデータ流通を統括。'
-  },
-  option1ModalTitle: {
-    en: 'Option 1: Partnership-Led Narrow Platform',
-    ja: 'オプション1：提携主導のナロープラットフォーム'
-  },
-  option2ModalTitle: {
-    en: 'Option 2: Full Internal Build',
-    ja: 'オプション2：内製フル構築'
-  },
-  option3ModalTitle: {
-    en: 'Option 3: Strategic Acquisition',
-    ja: 'オプション3：戦略的買収'
-  },
-  option2StrategyDetail: {
-    en: 'Build a closed ecosystem where NLM owns all data and user interfaces. Develop a proprietary "Super-App" covering the entire lifecycle from citizen reporting to construction management (Steps 1–5).',
-    ja: 'NLMがデータとUIを全て保有するクローズドなエコシステムを構築。市民通報から施工管理まで全工程（ステップ1〜5）を担う独自「スーパーアプリ」を開発。'
-  },
-  option2ProsDetail: {
-    en: 'Maximum control over data security and user experience; eliminates vendor dependencies.',
-    ja: 'データセキュリティとUXを最大限に統制でき、ベンダー依存を排除。'
-  },
-  option2ConsDetail: {
-    en: 'Custom software development involves significant upfront costs and maintenance liabilities.',
-    ja: '独自ソフト開発には多額の初期投資と維持負担が伴う。'
-  },
-  option2RedundancyTitle: {
-    en: 'Redundancy',
-    ja: '冗長性'
-  },
-  option2RedundancyDetail: {
-    en: 'Replicates existing free tools (e.g., LINE reporting, FixMyStreet), potentially slowing municipal adoption due to switching costs.',
-    ja: '既存の無料ツール（例：LINE通報、FixMyStreet）と重複し、乗り換えコストが自治体導入の障壁となり得る。'
-  },
-  option3StrategyDetail: {
-    en: 'Acquire a player like Dappi Studio LLC to own the "Step 1" entry point. Immediately secure the technology stack and user base.',
-    ja: 'Dappi Studio LLCのようなプレイヤーを買収し、「ステップ1」の入口を確保。技術スタックとユーザーベースを即時取得。'
-  },
-  option3ProsDetail: {
-    en: 'Immediate market share and talent acquisition.',
-    ja: '市場シェアと人材を即時獲得。'
-  },
-  option3ConsDetail: {
-    en: 'GovTech valuations are rising, with multiples reaching high double-digits.',
-    ja: 'GovTechの評価倍率は高騰しており、二桁後半のマルチプルに達している。'
-  },
-  option3IntegrationRiskTitle: {
-    en: 'Integration Risk',
-    ja: '統合リスク'
-  },
-  option3IntegrationRiskDetail: {
-    en: 'Cultural mismatch between a nimble civic-tech startup and a large corporate entity could stifle innovation.',
-    ja: '俊敏なシビックテック企業と大企業の文化不一致が、イノベーションを阻害する可能性。'
   },
 
   // StrategicFitSection
