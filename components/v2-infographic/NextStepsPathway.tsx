@@ -187,7 +187,7 @@ export function NextStepsPathway({ steps, metadata, language = 'en' }: NextSteps
 
   return (
     <>
-      <div className="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+      <div className="next-steps-section bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
         {/* Header - Simplified */}
         <div className="px-6 py-4 border-b border-slate-200 bg-slate-50/80 flex items-center justify-between">
           <div className="flex items-center gap-2">
@@ -213,7 +213,7 @@ export function NextStepsPathway({ steps, metadata, language = 'en' }: NextSteps
           <div className="max-w-4xl mx-auto space-y-6">
             
             {/* PHASE 1: PARALLEL EXECUTION */}
-            <div>
+            <div className="phase-section">
               <div className="phase-header mb-4 flex items-center gap-3">
                  <div className="px-2 py-1 bg-slate-100 rounded text-xs font-bold uppercase tracking-wider text-slate-500 border border-slate-200">
                    {t('phase1Validation', language)}
@@ -245,7 +245,7 @@ export function NextStepsPathway({ steps, metadata, language = 'en' }: NextSteps
 
             {/* PHASE 2: EXECUTION / CONVERGED */}
             {convergedSteps.length > 0 && (
-              <div>
+              <div className="phase-section">
                 <div className="phase-header mb-4 flex items-center gap-3">
                    <div className="px-2 py-1 bg-slate-100 rounded text-xs font-bold uppercase tracking-wider text-slate-500 border border-slate-200">
                      {t('phase2Execution', language)}

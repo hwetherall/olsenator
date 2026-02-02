@@ -82,7 +82,7 @@ export function HighlightsV2Section({ highlights, metadata, defaultCollapsed = f
   const headwinds = highlights.filter(h => h.polarity === 'headwind');
 
   return (
-    <div className="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+    <div className="highlights-section bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
       {/* Collapsible Header */}
       <button 
         onClick={() => setIsCollapsed(!isCollapsed)}
@@ -126,7 +126,7 @@ export function HighlightsV2Section({ highlights, metadata, defaultCollapsed = f
         <div className="highlights-grid grid grid-cols-1 md:grid-cols-2 divide-y md:divide-y-0 md:divide-x divide-slate-200">
           
           {/* Left Column: Tailwinds (Assets) */}
-          <div className="p-6 bg-gradient-to-b from-emerald-50/30 to-transparent">
+          <div className="highlights-column p-6 bg-gradient-to-b from-emerald-50/30 to-transparent">
             <div className="flex items-center gap-2 mb-4">
               <div className="p-1 bg-emerald-100 text-emerald-600 rounded">
                 <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -147,7 +147,7 @@ export function HighlightsV2Section({ highlights, metadata, defaultCollapsed = f
           </div>
 
           {/* Right Column: Headwinds (Liabilities) */}
-          <div className="p-6 bg-gradient-to-b from-rose-50/30 to-transparent">
+          <div className="highlights-column p-6 bg-gradient-to-b from-rose-50/30 to-transparent">
             <div className="flex items-center gap-2 mb-4">
               <div className="p-1 bg-rose-100 text-rose-600 rounded">
                 <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">

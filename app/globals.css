@@ -233,9 +233,15 @@ textarea {
 }
 
 /* ==========================================================================
-   V2 Print Styles - Minimal, Focused Fixes
+   V2 Print Styles - Section-based Page Layout
    ========================================================================== */
 @media print {
+  /* Page setup */
+  @page {
+    size: A4 portrait;
+    margin: 10mm;
+  }
+
   /* Basic container setup */
   .v2-infographic {
     width: 100% !important;
@@ -246,7 +252,27 @@ textarea {
     border-radius: 0 !important;
   }
 
-  /* === KEY FIX: Prevent elements from breaking mid-way === */
+  /* === SECTION-LEVEL PAGE BREAKS === */
+  
+  /* Strategic Fit Section - start on new page */
+  .v2-infographic .strategic-fit-section {
+    page-break-before: always !important;
+    break-before: page !important;
+  }
+
+  /* Next Steps Section container - start on new page */
+  .v2-infographic .next-steps-section {
+    page-break-before: always !important;
+    break-before: page !important;
+  }
+
+  /* Highlights Section container - start on new page */
+  .v2-infographic .highlights-section {
+    page-break-before: always !important;
+    break-before: page !important;
+  }
+
+  /* === PREVENT BREAKING WITHIN ELEMENTS === */
   
   /* Strategic Fit 2x2 Matrix - MUST stay together */
   .v2-infographic .strategic-quadrant {
@@ -266,13 +292,25 @@ textarea {
     break-inside: avoid !important;
   }
 
+  /* Phase sections - try to keep together */
+  .v2-infographic .phase-section {
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+  }
+
   /* Highlight cards - keep together */
   .v2-infographic .highlight-row {
     page-break-inside: avoid !important;
     break-inside: avoid !important;
   }
 
-  /* === KEY FIX: Force highlights to show in print === */
+  /* Tailwinds/Headwinds columns - keep together */
+  .v2-infographic .highlights-column {
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+  }
+
+  /* === FORCE HIGHLIGHTS TO SHOW IN PRINT === */
   
   .v2-infographic .highlights-collapsible-content,
   .v2-infographic .highlights-collapsible-content.hidden {
@@ -284,7 +322,44 @@ textarea {
     display: none !important;
   }
 
-  /* === Color printing === */
+  /* === COMPACT STYLING FOR PRINT === */
+  
+  /* Reduce padding */
+  .v2-infographic .p-6 {
+    padding: 12px !important;
+  }
+
+  .v2-infographic .p-5 {
+    padding: 10px !important;
+  }
+
+  .v2-infographic .p-4 {
+    padding: 8px !important;
+  }
+
+  /* Smaller gaps */
+  .v2-infographic .gap-4 {
+    gap: 8px !important;
+  }
+
+  .v2-infographic .space-y-4 > * + * {
+    margin-top: 8px !important;
+  }
+
+  .v2-infographic .space-y-3 > * + * {
+    margin-top: 6px !important;
+  }
+
+  /* Slightly smaller text for density */
+  .v2-infographic .text-sm {
+    font-size: 12px !important;
+  }
+
+  .v2-infographic .text-xs {
+    font-size: 10px !important;
+  }
+
+  /* === COLOR PRINTING === */
   
   .v2-infographic,
   .v2-infographic * {
