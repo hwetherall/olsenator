@@ -120,7 +120,7 @@ function VerdictBadge({ verdict, language }: VerdictBadgeProps) {
   const confidenceColors = getConfidenceColor(verdict.confidence);
 
   return (
-    <div className={`rounded-xl p-5 border-l-4 ${colors.bg} ${colors.border.replace('border', 'border-l')} shadow-sm`}>
+    <div className={`verdict-badge rounded-xl p-5 border-l-4 ${colors.bg} ${colors.border.replace('border', 'border-l')} shadow-sm`}>
       <div className="flex items-center justify-between mb-3">
         <div className="flex items-center gap-2">
           {verdict.decision === 'Yes' && (
@@ -167,7 +167,7 @@ export function StrategicFitSection({ shouldWeDoIt, canWeDoIt, synthesis, langua
   const executionY = getVerdictPosition(canWeDoIt.verdict);
 
   return (
-    <div className="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+    <div className="strategic-fit-section bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
       {/* Section Header */}
       <div className="px-6 py-4 border-b border-slate-200 bg-slate-50/50">
         <h2 className="text-base font-bold text-slate-800">{t('strategicFitAssessment', language)}</h2>
@@ -367,7 +367,7 @@ export function StrategicFitSection({ shouldWeDoIt, canWeDoIt, synthesis, langua
       </div>
 
       {/* 2x2 Strategic Quadrant */}
-      <div className="border-t border-slate-200 bg-slate-50/50 p-6">
+      <div className="strategic-quadrant border-t border-slate-200 bg-slate-50/50 p-6">
         <div className="flex items-center gap-2 mb-4">
           <svg className="w-4 h-4 text-slate-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
@@ -375,13 +375,13 @@ export function StrategicFitSection({ shouldWeDoIt, canWeDoIt, synthesis, langua
           <h3 className="text-xs font-bold text-slate-600 uppercase tracking-wider">{t('strategicPosition', language)}</h3>
         </div>
         
-        <div className="max-w-md mx-auto">
+        <div className="max-w-md mx-auto print:max-w-xs">
           {/* Y-axis label */}
           <div className="flex items-stretch gap-3">
             <div className="flex flex-col justify-between py-2 text-[12px] text-black font-medium w-6">
               <span>{t('high', language)}</span>
               <span className="writing-mode-vertical transform -rotate-180 text-black font-semibold tracking-wide" style={{ writingMode: 'vertical-rl' }}>
-                {t('executionAxis', language)}
+                {t('executionCapability', language)}
               </span>
               <span>{t('low', language)}</span>
             </div>
@@ -390,20 +390,20 @@ export function StrategicFitSection({ shouldWeDoIt, canWeDoIt, synthesis, langua
             <div className="flex-1 relative">
               <div className="grid grid-cols-2 grid-rows-2 aspect-square border border-slate-300 rounded-lg overflow-hidden">
                 {/* Top-Left: Capable but Uninteresting */}
-                <div className="bg-slate-100/50 border-r border-b border-slate-300 p-2 flex items-end">
-                  <span className="text-[11px] font-medium text-black leading-tight whitespace-pre-line">{t('capableButUninteresting', language)}</span>
+                <div className="bg-slate-100/50 border-r border-b border-slate-300 p-2 flex items-center justify-center">
+                  <span className="text-[11px] font-medium text-black leading-tight text-center whitespace-pre-line">{t('capableButUninteresting', language)}</span>
                 </div>
                 {/* Top-Right: High Value */}
-                <div className="bg-emerald-50 border-b border-slate-300 p-2 flex items-end justify-end">
-                  <span className="text-[11px] font-bold text-black leading-tight text-right whitespace-pre-line">{t('highValueOpportunity', language)}</span>
+                <div className="bg-emerald-50 border-b border-slate-300 p-2 flex items-center justify-center">
+                  <span className="text-[11px] font-bold text-black leading-tight text-center whitespace-pre-line">{t('highValueOpportunity', language)}</span>
                 </div>
                 {/* Bottom-Left: Avoid */}
-                <div className="bg-red-50/50 border-r border-slate-300 p-2 flex items-start">
-                  <span className="text-[11px] font-medium text-black leading-tight">{t('avoid', language)}</span>
+                <div className="bg-red-50/50 border-r border-slate-300 p-2 flex items-center justify-center">
+                  <span className="text-[11px] font-medium text-black leading-tight text-center">{t('avoid', language)}</span>
                 </div>
                 {/* Bottom-Right: Strategic but Risky */}
-                <div className="bg-amber-50 p-2 flex items-start justify-end">
-                  <span className="text-[11px] font-medium text-black leading-tight text-right whitespace-pre-line">{t('strategicButRisky', language)}</span>
+                <div className="bg-amber-50 p-2 flex items-center justify-center">
+                  <span className="text-[11px] font-medium text-black leading-tight text-center whitespace-pre-line">{t('strategicButRisky', language)}</span>
                 </div>
               </div>
               

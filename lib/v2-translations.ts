@@ -43,16 +43,16 @@ export const translations = {
     ja: '結論'
   },
   thePrize: {
-    en: 'The Prize',
-    ja: '獲得機会'
+    en: 'The Opportunity',
+    ja: '機会'
   },
   theRisk: {
     en: 'The Risk',
     ja: 'リスク'
   },
   theUnlock: {
-    en: 'The Unlock',
-    ja: '解決の鍵'
+    en: 'The Path',
+    ja: '道筋'
   },
   go: {
     en: 'Go',
@@ -473,8 +473,8 @@ export const translations = {
     ja: '実施可能か？'
   },
   thePrizeLabel: {
-    en: 'The Prize',
-    ja: '獲得機会'
+    en: 'The Opportunity',
+    ja: '機会'
   },
   strategicFit: {
     en: 'Strategic Fit',

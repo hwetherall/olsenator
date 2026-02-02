@@ -117,7 +117,7 @@ function ClickableStepCard({ step, onClick, language = 'en' }: { step: NextStepV
   return (
     <button 
       onClick={onClick}
-      className="h-full w-full text-left flex flex-col bg-white rounded-xl border border-slate-200 shadow-sm hover:shadow-md hover:border-blue-300 transition-all group overflow-hidden"
+      className="step-card h-full w-full text-left flex flex-col bg-white rounded-xl border border-slate-200 shadow-sm hover:shadow-md hover:border-blue-300 transition-all group overflow-hidden"
     >
       {/* Header Section */}
       <div className="p-4 border-b border-slate-50 flex items-start justify-between gap-3 bg-white">
@@ -214,7 +214,7 @@ export function NextStepsPathway({ steps, metadata, language = 'en' }: NextSteps
             
             {/* PHASE 1: PARALLEL EXECUTION */}
             <div>
-              <div className="mb-4 flex items-center gap-3">
+              <div className="phase-header mb-4 flex items-center gap-3">
                  <div className="px-2 py-1 bg-slate-100 rounded text-xs font-bold uppercase tracking-wider text-slate-500 border border-slate-200">
                    {t('phase1Validation', language)}
                  </div>
@@ -234,7 +234,7 @@ export function NextStepsPathway({ steps, metadata, language = 'en' }: NextSteps
             </div>
 
             {/* CONVERGENCE INDICATOR */}
-            <div className="flex items-center justify-center py-4">
+            <div className="convergence-indicator flex items-center justify-center py-4">
               <div className="flex items-center gap-2 px-4 py-1.5 bg-slate-100 rounded-full border border-slate-200 shadow-sm">
                 <svg className="w-4 h-4 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
@@ -246,7 +246,7 @@ export function NextStepsPathway({ steps, metadata, language = 'en' }: NextSteps
             {/* PHASE 2: EXECUTION / CONVERGED */}
             {convergedSteps.length > 0 && (
               <div>
-                <div className="mb-4 flex items-center gap-3">
+                <div className="phase-header mb-4 flex items-center gap-3">
                    <div className="px-2 py-1 bg-slate-100 rounded text-xs font-bold uppercase tracking-wider text-slate-500 border border-slate-200">
                      {t('phase2Execution', language)}
                    </div>

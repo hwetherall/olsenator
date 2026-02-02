@@ -356,12 +356,6 @@ export function ProcessSection({ analysis, language = 'en' }: ProcessSectionProp
 
         {/* Path Selection Content */}
         <div className="p-6">
-          {/* Comparative Summary Table */}
-          <div className="mb-6">
-            <h3 className="text-sm font-bold text-slate-700 uppercase tracking-wider mb-3">{t('comparativeSummary', language)}</h3>
-            <ComparisonTable language={language} />
-          </div>
-
           {/* Option Cards - Option 2 (Narrow Platform) is now recommended */}
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             
@@ -479,6 +473,12 @@ export function ProcessSection({ analysis, language = 'en' }: ProcessSectionProp
               </div>
             </div>
 
+          </div>
+
+          {/* Comparative Summary Table - Moved below option cards */}
+          <div className="mt-8">
+            <h3 className="text-sm font-bold text-slate-700 uppercase tracking-wider mb-3">{t('comparativeSummary', language)}</h3>
+            <ComparisonTable language={language} />
           </div>
         </div>
       </div>

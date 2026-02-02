@@ -77,55 +77,41 @@ export function V2InfographicContainer({ data, onCopyHtml, language = 'en' }: V2
           fontFamily: 'Inter, system-ui, sans-serif',
         }}
       >
-        {/* Page 1: Banner + Strategic Fit */}
-        <div className="v2-infographic-page-1">
-          {/* Banner Section */}
-          <BannerSection 
-            identification={data.identification}
-            questionAndAnswer={data.question_and_answer}
-            thesis={data.thesis}
+        {/* Banner Section */}
+        <BannerSection 
+          identification={data.identification}
+          questionAndAnswer={data.question_and_answer}
+          thesis={data.thesis}
+          language={language}
+        />
+
+        {/* Strategic Fit Assessment */}
+        <div className="p-6">
+          <StrategicFitSection 
+            shouldWeDoIt={data.should_we_do_it}
+            canWeDoIt={data.can_we_do_it}
+            synthesis={data.synthesis}
             language={language}
           />
-
-          {/* Page 1.5: The Process - Moved here */}
-          {data.supporting_analysis && (
-            <div className="px-6 pt-6">
-              <ProcessSection analysis={data.supporting_analysis} language={language} />
-            </div>
-          )}
-
-          {/* Strategic Fit Assessment */}
-          <div className="p-6">
-            <StrategicFitSection 
-              shouldWeDoIt={data.should_we_do_it}
-              canWeDoIt={data.can_we_do_it}
-              synthesis={data.synthesis}
-              language={language}
-            />
-          </div>
         </div>
 
-        {/* Page 2: Next Steps Pathway */}
-        <div className="v2-infographic-page-2 page-break-before">
-          <div className="p-6">
-            <NextStepsPathway 
-              steps={data.next_steps}
-              metadata={data.pathway_metadata}
-              language={language}
-            />
-          </div>
+        {/* Next Steps Pathway */}
+        <div className="p-6 pt-0">
+          <NextStepsPathway 
+            steps={data.next_steps}
+            metadata={data.pathway_metadata}
+            language={language}
+          />
         </div>
 
-        {/* Page 3: Key Highlights (collapsed by default) */}
-        <div className="v2-infographic-page-3">
-          <div className="p-6">
-            <HighlightsV2Section 
-              highlights={data.highlights}
-              metadata={data.highlights_metadata}
-              defaultCollapsed={true}
-              language={language}
-            />
-          </div>
+        {/* Key Highlights */}
+        <div className="p-6 pt-0">
+          <HighlightsV2Section 
+            highlights={data.highlights}
+            metadata={data.highlights_metadata}
+            defaultCollapsed={true}
+            language={language}
+          />
         </div>
 
         {/* Footer */}

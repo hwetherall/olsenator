@@ -20,7 +20,7 @@ export function BannerSection({ identification, questionAndAnswer, thesis, langu
     // Check for Japanese patterns first
     if (answer.includes('条件付き') || lowerAnswer.includes('conditional')) {
       return { 
-        word: t('conditionalGo', lang), 
+        word: t('option2NarrowPlatform', lang), 
         color: 'text-amber-400', 
         bg: 'bg-amber-500/10', 
         border: 'border-amber-500/30' 
@@ -43,7 +43,7 @@ export function BannerSection({ identification, questionAndAnswer, thesis, langu
       };
     }
     return { 
-      word: t('conditional', lang), 
+      word: t('option2NarrowPlatform', lang), 
       color: 'text-amber-400', 
       bg: 'bg-amber-500/10', 
       border: 'border-amber-500/30' 

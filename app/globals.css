@@ -232,9 +232,11 @@ textarea {
   text-orientation: mixed;
 }
 
-/* V2 Print Styles */
+/* ==========================================================================
+   V2 Print Styles - Minimal, Focused Fixes
+   ========================================================================== */
 @media print {
-  /* V2 Infographic container - full width for print */
+  /* Basic container setup */
   .v2-infographic {
     width: 100% !important;
     max-width: 100% !important;
@@ -244,83 +246,51 @@ textarea {
     border-radius: 0 !important;
   }
 
-  /* V2 Page 1 content */
-  .v2-infographic-page-1 {
-    page-break-after: auto;
+  /* === KEY FIX: Prevent elements from breaking mid-way === */
+  
+  /* Strategic Fit 2x2 Matrix - MUST stay together */
+  .v2-infographic .strategic-quadrant {
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
   }
 
-  /* V2 Page 2 content */
-  .v2-infographic-page-2 {
-    page-break-before: always !important;
+  /* Verdict badges - keep together */
+  .v2-infographic .verdict-badge {
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
   }
 
-  /* V2 Page 3 content */
-  .v2-infographic-page-3 {
-    page-break-before: always !important;
-  }
-
-  /* Ensure V2 banner prints correctly */
-  .v2-infographic .bg-gradient-to-br {
-    -webkit-print-color-adjust: exact !important;
-    print-color-adjust: exact !important;
-    background: linear-gradient(to bottom right, #0f172a, #1e293b, #0f172a) !important;
-  }
-
-  /* Ensure quadrant chart backgrounds print */
-  .v2-infographic [class*="bg-green-50"],
-  .v2-infographic [class*="bg-blue-50"],
-  .v2-infographic [class*="bg-amber-50"],
-  .v2-infographic [class*="bg-red-50"] {
-    -webkit-print-color-adjust: exact !important;
-    print-color-adjust: exact !important;
-  }
-
-  /* Hide interactive quadrant plot in print, show list view */
-  .v2-infographic .quadrant-interactive {
-    display: none !important;
-  }
-
-  .v2-infographic .quadrant-print-view {
-    display: block !important;
-  }
-
-  /* Expandable sections should be expanded in print */
-  .v2-infographic [data-expanded="false"] {
-    max-height: none !important;
-    overflow: visible !important;
-  }
-
-  /* Ensure step cards print fully */
+  /* Step cards - keep together */
   .v2-infographic .step-card {
     page-break-inside: avoid !important;
     break-inside: avoid !important;
   }
 
-  /* Ensure highlight cards don't break */
-  .v2-infographic .highlight-card {
+  /* Highlight cards - keep together */
+  .v2-infographic .highlight-row {
     page-break-inside: avoid !important;
     break-inside: avoid !important;
   }
 
-  /* Ensure gap detail cards don't break */
-  .v2-infographic .gap-detail-card {
-    page-break-inside: avoid !important;
-    break-inside: avoid !important;
+  /* === KEY FIX: Force highlights to show in print === */
+  
+  .v2-infographic .highlights-collapsible-content,
+  .v2-infographic .highlights-collapsible-content.hidden {
+    display: block !important;
   }
 
-  /* Force all colored badges to print */
-  .v2-infographic [class*="rounded-full"],
-  .v2-infographic [class*="rounded-lg"],
-  .v2-infographic [class*="rounded-xl"] {
-    -webkit-print-color-adjust: exact !important;
-    print-color-adjust: exact !important;
+  /* Hide the chevron icon in print */
+  .v2-infographic .highlights-toggle svg:last-child {
+    display: none !important;
   }
 
-  /* Ensure pathway metadata and final decision print well */
-  .v2-infographic .ultimate-decision {
+  /* === Color printing === */
+  
+  .v2-infographic,
+  .v2-infographic * {
     -webkit-print-color-adjust: exact !important;
     print-color-adjust: exact !important;
-    background: linear-gradient(to bottom right, #1e293b, #0f172a) !important;
+    color-adjust: exact !important;
   }
 }
 
