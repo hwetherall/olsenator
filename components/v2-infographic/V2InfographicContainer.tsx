@@ -82,6 +82,7 @@ export function V2InfographicContainer({ data, onCopyHtml, language = 'en' }: V2
           identification={data.identification}
           questionAndAnswer={data.question_and_answer}
           thesis={data.thesis}
+          synthesis={data.synthesis}
           language={language}
         />
 

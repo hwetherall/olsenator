@@ -80,7 +80,11 @@ Verdict with decision (Yes/No/Borderline), confidence, and rationale.
 - alignment: Where "Should" and "Can" assessments agree
 - divergence: Where they conflict
 - gap_to_close: The critical focus area
-- final_verdict: Ultimate recommendation with condition if applicable
+- final_verdict: Ultimate recommendation including:
+  - verdict_title: A punchy 2-5 word title summarizing the recommended path forward (e.g., "Narrow Platform First", "Strategic Partnership Model", "Phased Market Entry", "Full Vertical Build"). This should be a unique, document-specific recommendation - NOT a generic label.
+  - decision: "Conditional", "Proceed", or "Pass"
+  - condition: A subtitle that expands on the verdict_title with more detail about the specific conditions or approach
+  - confidence: Overall confidence level
 
 ### gaps
 Array of 5-10 gap dimensions. For each:
@@ -144,7 +148,7 @@ Output a JSON object with these required fields:
 - thesis (the_prize, the_risk, the_unlock)
 - should_we_do_it (the_prize, strategic_fit, our_edge sections with bottom_line; verdict)
 - can_we_do_it (capital_and_infrastructure, market_access, people sections with bottom_line; verdict)
-- synthesis (alignment, divergence, gap_to_close, final_verdict)
+- synthesis (alignment, divergence, gap_to_close, final_verdict with verdict_title/decision/condition/confidence)
 - gaps (array of dimension/current_state/required_state/gap_summary/gap_size/ease_of_closing/quadrant)
 - gap_summary (dealbreakers, priority_investments, quick_wins, manageable, mixed arrays; overall_gap_assessment)
 - highlights (array with highlight/category/why_it_matters/polarity/source_confidence/time_sensitivity)

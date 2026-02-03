@@ -3,24 +3,28 @@
 import Image from 'next/image';
 
 import logo from '@/components/logo.jpg';
-import { Identification, QuestionAndAnswer, Thesis } from '@/lib/v2-schema';
+import { Identification, QuestionAndAnswer, Thesis, Synthesis } from '@/lib/v2-schema';
 import { Language, t, formatDate } from '@/lib/v2-translations';
 
 interface BannerSectionProps {
   identification: Identification;
   questionAndAnswer: QuestionAndAnswer;
   thesis: Thesis;
+  synthesis?: Synthesis;
   language?: Language;
 }
 
-export function BannerSection({ identification, questionAndAnswer, thesis, language = 'en' }: BannerSectionProps) {
-  // Extract decision keyword from answer
+export function BannerSection({ identification, questionAndAnswer, thesis, synthesis, language = 'en' }: BannerSectionProps) {
+  // Extract decision styling and verdict title from synthesis data
   const getDecisionFromAnswer = (answer: string, lang: Language) => {
     const lowerAnswer = answer.toLowerCase();
+    // Get the verdict title from synthesis if available, otherwise fall back to decision type
+    const verdictTitle = synthesis?.final_verdict?.verdict_title;
+    
     // Check for Japanese patterns first
     if (answer.includes('条件付き') || lowerAnswer.includes('conditional')) {
       return { 
-        word: t('option2NarrowPlatform', lang), 
+        word: verdictTitle || t('conditional', lang), 
         color: 'text-amber-400', 
         bg: 'bg-amber-500/10', 
         border: 'border-amber-500/30' 
@@ -28,7 +32,7 @@ export function BannerSection({ identification, questionAndAnswer, thesis, langu
     }
     if (lowerAnswer.includes('yes') || lowerAnswer.includes('proceed') || lowerAnswer.includes('go') || answer.includes('はい')) {
       return { 
-        word: t('go', lang), 
+        word: verdictTitle || t('go', lang), 
         color: 'text-emerald-400', 
         bg: 'bg-emerald-500/10', 
         border: 'border-emerald-500/30' 
@@ -36,14 +40,14 @@ export function BannerSection({ identification, questionAndAnswer, thesis, langu
     }
     if (lowerAnswer.includes('no') || lowerAnswer.includes('pass') || answer.includes('いいえ')) {
       return { 
-        word: t('noGo', lang), 
+        word: verdictTitle || t('noGo', lang), 
         color: 'text-red-400', 
         bg: 'bg-red-500/10', 
         border: 'border-red-500/30' 
       };
     }
     return { 
-      word: t('option2NarrowPlatform', lang), 
+      word: verdictTitle || t('conditional', lang), 
       color: 'text-amber-400', 
       bg: 'bg-amber-500/10', 
       border: 'border-amber-500/30' 

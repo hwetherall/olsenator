@@ -77,6 +77,7 @@
     "divergence": "Execution Capability (Can) lags behind Strategic Ambition. We want to build a scalable platform but are staffed for manual engineering consulting.",
     "gap_to_close": "Must validate the 'Cluster' procurement model (legal ability to buy SaaS) and automate the 'Step 2' diagnosis logic to escape low service margins.",
     "final_verdict": {
+      "verdict_title": "Partnership-Led Narrow Platform",
       "decision": "Conditional",
       "condition": "Proceed only if: 1) A 'Cluster' contract is secured to prove procurement viability, and 2) A dedicated Product Owner is empowered to override engineering delays.",
       "confidence": "Medium"

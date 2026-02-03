@@ -88,6 +88,7 @@ export const V2_PREFILL_TEXT = `<SECTION_0>
     "divergence": "Execution Capability (Can) lags behind Strategic Ambition. We want to build a scalable platform but are staffed for manual engineering consulting.",
     "gap_to_close": "Must validate the 'Cluster' procurement model (legal ability to buy SaaS) and automate the 'Step 2' diagnosis logic to escape low service margins.",
     "final_verdict": {
+      "verdict_title": "Partnership-Led Narrow Platform",
       "decision": "Conditional",
       "condition": "Proceed only if: 1) A 'Cluster' contract is secured to prove procurement viability, and 2) A dedicated Product Owner is empowered to override engineering delays.",
       "confidence": "Medium"
@@ -694,6 +695,7 @@ export const V2_EXTRACTION_JSON_JP: V2ExtractionResult = {
     "divergence": "実行能力（Can）が戦略的野心に遅れをとっている。スケーラブルなプラットフォームを構築したいと考えているが、手動のエンジニアリングコンサルティング向けの人員配置になっている。",
     "gap_to_close": "低いサービスマージンから脱却するために、「群（クラスター）」調達モデル（SaaSを購入する法的能力）を検証し、「ステップ2」の診断ロジックを自動化しなければならない。",
     "final_verdict": {
+      "verdict_title": "パートナーシップ主導のナロープラットフォーム",
       "decision": "Conditional",
       "condition": "以下の場合のみ進める：1) 調達の実現可能性を証明するための「群（クラスター）」契約が確保される、かつ 2) エンジニアリングによる遅延を覆す権限を持つ専任のプロダクトオーナーが配置される。",
       "confidence": "Medium"

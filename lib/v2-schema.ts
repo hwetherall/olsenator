@@ -100,8 +100,9 @@ export interface CanWeDoIt {
 }
 
 export interface FinalVerdict {
+  verdict_title: string; // AI-generated 2-5 word summary of the recommended path forward (e.g., "Narrow Platform First", "Full Vertical Integration")
   decision: "Conditional" | "Proceed" | "Pass";
-  condition: string;
+  condition: string; // Subtitle with more detail explaining the verdict
   confidence: "High" | "Medium" | "Low";
 }
 
@@ -378,8 +379,9 @@ export const V2_EXTRACTION_SCHEMA_JSON = `{
     "divergence": string,
     "gap_to_close": string,
     "final_verdict": {
+      "verdict_title": string, // 2-5 word summary of recommended path (e.g., "Narrow Platform First", "Strategic Partnership")
       "decision": "Conditional" | "Proceed" | "Pass",
-      "condition": string,
+      "condition": string, // Subtitle explaining the verdict in more detail
       "confidence": "High" | "Medium" | "Low"
     }
   },

@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { NextStepV2, PathwayMetadata, StepOwner, FailureAction } from '@/lib/v2-schema';
+import { NextStepV2, PathwayMetadata, FailureAction } from '@/lib/v2-schema';
 import { Language, t } from '@/lib/v2-translations';
 
 interface NextStepsPathwayProps {
@@ -10,29 +10,12 @@ interface NextStepsPathwayProps {
   language?: Language;
 }
 
-// Owner badge colors
-const ownerColors: Record<StepOwner, { bg: string; text: string; border: string; ring: string }> = {
-  'venture': { bg: '#eff6ff', text: '#1e40af', border: '#bfdbfe', ring: '#60a5fa' }, // Blue
-  'joint': { bg: '#fdf4ff', text: '#86198f', border: '#f0abfc', ring: '#e879f9' },   // Purple
-  'investor': { bg: '#f0fdf4', text: '#166534', border: '#bbf7d0', ring: '#4ade80' }, // Green
-};
-
 // Failure action colors
 const failureColors: Record<FailureAction, { bg: string; text: string; border: string }> = {
   'pivot': { bg: '#fffbeb', text: '#92400e', border: '#fde68a' },
   'pass': { bg: '#fef2f2', text: '#991b1b', border: '#fecaca' },
   'reassess': { bg: '#eef2ff', text: '#3730a3', border: '#c7d2fe' },
 };
-
-// Helper to translate owner names
-function translateOwner(owner: StepOwner, lang: Language): string {
-  const ownerTranslations: Record<StepOwner, { en: string; ja: string }> = {
-    'venture': { en: 'venture', ja: 'ベンチャー' },
-    'joint': { en: 'joint', ja: '共同' },
-    'investor': { en: 'investor', ja: '投資家' }
-  };
-  return ownerTranslations[owner]?.[lang] || owner;
-}
 
 // Helper to translate failure action
 function translateFailureAction(action: FailureAction, lang: Language): string {
@@ -46,7 +29,6 @@ function translateFailureAction(action: FailureAction, lang: Language): string {
 
 // Step detail modal
 function StepDetailModal({ step, onClose, language = 'en' }: { step: NextStepV2; onClose: () => void; language?: Language }) {
-  const ownerStyle = ownerColors[step.owner];
   const failureStyle = failureColors[step.if_gate_fails.action];
 
   return (
@@ -55,16 +37,13 @@ function StepDetailModal({ step, onClose, language = 'en' }: { step: NextStepV2;
         <div className="p-5 border-b border-slate-100 flex items-start justify-between sticky top-0 bg-white z-10">
           <div className="flex items-start gap-3">
             <div 
-              className="w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold flex-shrink-0"
-              style={{ backgroundColor: ownerStyle.bg, color: ownerStyle.text }}
+              className="w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold flex-shrink-0 bg-blue-100 text-blue-700"
             >
               {step.step_number}
             </div>
             <div>
               <h3 className="text-lg font-bold text-slate-800">{step.step_title}</h3>
               <div className="flex items-center gap-2 text-xs mt-1">
-                <span className="font-medium capitalize" style={{ color: ownerStyle.text }}>{translateOwner(step.owner, language)}</span>
-                <span className="text-slate-300">•</span>
                 <span className="text-slate-500">{step.timeline}</span>
               </div>
             </div>
@@ -112,8 +91,6 @@ function StepDetailModal({ step, onClose, language = 'en' }: { step: NextStepV2;
 
 // Clickable step card
 function ClickableStepCard({ step, onClick, language = 'en' }: { step: NextStepV2; onClick: () => void; language?: Language }) {
-  const ownerStyle = ownerColors[step.owner];
-
   return (
     <button 
       onClick={onClick}
@@ -123,8 +100,7 @@ function ClickableStepCard({ step, onClick, language = 'en' }: { step: NextStepV
       <div className="p-4 border-b border-slate-50 flex items-start justify-between gap-3 bg-white">
         <div className="flex items-start gap-3">
           <div 
-            className="w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold flex-shrink-0 shadow-sm"
-            style={{ backgroundColor: ownerStyle.bg, color: ownerStyle.text }}
+            className="w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold flex-shrink-0 shadow-sm bg-blue-100 text-blue-700"
           >
             {step.step_number}
           </div>
@@ -133,18 +109,10 @@ function ClickableStepCard({ step, onClick, language = 'en' }: { step: NextStepV
               {step.step_title}
             </h4>
             <div className="flex items-center gap-2 mt-1.5">
-              <span className="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-medium uppercase tracking-wide bg-slate-100 text-slate-500">
-                {step.timeline}
-              </span>
-              <span className="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-medium uppercase tracking-wide border" 
-                style={{ 
-                  backgroundColor: ownerStyle.bg, 
-                  color: ownerStyle.text,
-                  borderColor: ownerStyle.border 
-                }}>
-                {translateOwner(step.owner, language)}
-              </span>
-            </div>
+                              <span className="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-medium uppercase tracking-wide bg-slate-100 text-slate-500">
+                                {step.timeline}
+                              </span>
+                            </div>
           </div>
         </div>
         <div className="text-slate-300 group-hover:text-blue-500 transition-colors">
@@ -197,15 +165,6 @@ export function NextStepsPathway({ steps, metadata, language = 'en' }: NextSteps
               </svg>
             </div>
             <h2 className="text-base font-bold text-slate-800">{t('nextSteps', language)}</h2>
-          </div>
-          <div className="flex gap-2">
-             {/* Legend */}
-             {Object.entries(ownerColors).map(([owner, style]) => (
-               <div key={owner} className="flex items-center gap-1 px-1.5 py-0.5 rounded text-[10px]" style={{ backgroundColor: style.bg }}>
-                 <div className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: style.text }}></div>
-                 <span className="font-medium capitalize" style={{ color: style.text }}>{translateOwner(owner as StepOwner, language)}</span>
-               </div>
-             ))}
           </div>
         </div>
 
