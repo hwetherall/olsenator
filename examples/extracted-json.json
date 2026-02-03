@@ -7,7 +7,7 @@
     "geography": "Japan"
   },
   "question_and_answer": {
-    "the_question": "Should Nippon Light Metal launch the RIC infrastructure maintenance platform?",
+    "the_question": "Should Apex Materials Corporation launch the RIC infrastructure maintenance platform?",
     "the_answer": "Conditional Go (Option 2) – Proceed with a narrow MVP only after validating the \"Cluster\" procurement model via paid pilots",
     "confidence": {
       "rating": "Medium-High",
@@ -38,25 +38,25 @@
         "Ability to underwrite liability/safety risks (unlike pure software startups)",
         "Existing B2G relationships and 'Cluster Management' policy alignment"
       ],
-      "why_us": "Pure software players (FixMyStreet) lack engineering rigor; General Contractors are too manual. NLM bridges the 'Resolution Gap' (Steps 2-3).",
+      "why_us": "Pure software players (CityConnect) lack engineering rigor; General Contractors are too manual. AMC bridges the 'Resolution Gap' (Steps 2-3).",
       "bottom_line": "We have the 'Engineering Trust' required to sell safety-critical software that startups lack."
     },
     "verdict": {
       "decision": "Yes",
       "confidence": "High",
-      "rationale": "The market need is existential (labor shortage), and NLM has a unique right to win based on engineering authority and policy alignment."
+      "rationale": "The market need is existential (labor shortage), and AMC has a unique right to win based on engineering authority and policy alignment."
     }
   },
   "can_we_do_it": {
     "capital_and_infrastructure": {
       "cash_position": "Requires ~¥450M-¥500M funding to bridge the 22-month sales cycle 'Valley of Death'. Corporate balance sheet is sufficient.",
-      "facilities": "Existing regional footprint; relying on external cloud (AWS) and partners (FixMyStreet) for tech infrastructure.",
+      "facilities": "Existing regional footprint; relying on external cloud (AWS) and partners (CityConnect) for tech infrastructure.",
       "tools_and_systems": "Lacks internal SaaS infrastructure; relying on 'Concierge MVP' (manual) initially.",
       "bottom_line": "Capital is available, but digital infrastructure is non-existent and must be built or partnered."
     },
     "market_access": {
       "customer_relationships": "Strong B2G ties in water/disaster prevention; weaker brand recognition in general road/bridge departments.",
-      "geographic_presence": "National reach via Nikkei Engineering.",
+      "geographic_presence": "National reach via Apex Infrastructure Services.",
       "regulatory_experience": "Deep experience with public works, but 'SaaS Subscription' procurement pathways are unproven and risky.",
       "bottom_line": "Strong access to the *entity* (municipality), but potentially the wrong *buyer* (IT vs. Construction)."
     },
@@ -122,7 +122,7 @@
       "why_easy_or_hard": "Technically feasible to automate, but requires rigorous definition of logic and liability boundaries.",
       "action_to_close": "Define and execute a roadmap to automate the 'Step 2' diagnosis logic to reduce manual intervention by 50% in Year 1.",
       "risk_of_inaction": "Venture remains a low-margin consulting business disguised as a platform; unit economics never scale.",
-      "owner": "Venture Team / Nikkei Engineering"
+      "owner": "Venture Team / Apex Infrastructure Services"
     },
     {
       "dimension": "Traction / Validation",
@@ -139,7 +139,7 @@
         "label": "Medium"
       },
       "quadrant": "Mixed",
-      "why_easy_or_hard": "Access to customers is easy via NLM brand, but 22-month sales cycles make closing deals slow.",
+      "why_easy_or_hard": "Access to customers is easy via AMC brand, but 22-month sales cycles make closing deals slow.",
       "action_to_close": "Secure one paid 'Cluster' pilot contract (Prefecture + Municipalities) within 90 days.",
       "risk_of_inaction": "Valuation remains unsupported; cash burn continues without revenue validation.",
       "owner": "Project Lead"
@@ -188,7 +188,7 @@
       "dimension": "Regulatory / Legal",
       "category": "core",
       "current_state": "Ambiguous 'Inspector of Record' role creates risk of uninsurable liability for infrastructure failures.",
-      "required_state": "Clear Terms of Service and insurance structure indemnifying NLM from physical infrastructure failure.",
+      "required_state": "Clear Terms of Service and insurance structure indemnifying AMC from physical infrastructure failure.",
       "gap_summary": "Liability framework undefined; risk of 'false negatives' leading to accidents.",
       "gap_size": {
         "score": 5,
@@ -207,7 +207,7 @@
     {
       "dimension": "Partnerships / Ecosystem",
       "category": "optional",
-      "current_state": "Need for citizen reporting data intake; FixMyStreet identified as potential partner.",
+      "current_state": "Need for citizen reporting data intake; CityConnect identified as potential partner.",
       "required_state": "Formal API integration and commercial agreement with a citizen reporting provider.",
       "gap_summary": "Dependency on third-party for 'Step 1' data intake.",
       "gap_size": {
@@ -219,8 +219,8 @@
         "label": "Easy"
       },
       "quadrant": "Quick Win",
-      "why_easy_or_hard": "Partners (e.g., Dappi Studio) are available and willing; technical integration is standard.",
-      "action_to_close": "Formalize partnership/MOU with Dappi Studio (FixMyStreet) for data ingestion.",
+      "why_easy_or_hard": "Partners (e.g., Urban Solutions Inc.) are available and willing; technical integration is standard.",
+      "action_to_close": "Formalize partnership/MOU with Urban Solutions Inc. (CityConnect Japan) for data ingestion.",
       "risk_of_inaction": "Team wastes resources rebuilding a commodity 'reporting app' instead of the core engineering engine.",
       "owner": "Venture Team"
     }
@@ -285,10 +285,10 @@
       "source_confidence": "estimated"
     },
     {
-      "highlight": "NLM’s ability to underwrite safety liability creates a moat against software startups",
+      "highlight": "AMC's ability to underwrite safety liability creates a moat against software startups",
       "category": "Competitive",
       "why_it_matters": "Differentiation based on 'Engineering Trust' allows premium pricing over commoditized reporting apps",
-      "context_grounding": "Pure-play competitors (e.g., FixMyStreet) stop at 'reporting' to avoid risk. NLM can insure the 'resolution' workflow.",
+      "context_grounding": "Pure-play competitors (e.g., CityConnect) stop at 'reporting' to avoid risk. AMC can insure the 'resolution' workflow.",
       "polarity": "tailwind",
       "time_sensitivity": {
         "is_time_bound": false,
@@ -300,7 +300,8 @@
       "highlight": "Zero SaaS leadership on team risks 'Service Margin Trap' (30-40% margins)",
       "category": "Team",
       "why_it_matters": "Without a CPO to drive automation, the venture risks remaining a low-margin consulting firm",
-      "context_grounding": "Reliance on internal 'Product Owner' and manual 'Concierge MVP' workflows suppresses margins well below the 70%+ SaaS target.","polarity": "headwind",
+      "context_grounding": "Reliance on internal 'Product Owner' and manual 'Concierge MVP' workflows suppresses margins well below the 70%+ SaaS target.",
+      "polarity": "headwind",
       "time_sensitivity": {
         "is_time_bound": false,
         "window": null
@@ -372,10 +373,10 @@
       "step_number": 3,
       "step_title": "Secure Data Ingestion Partnership",
       "owner": "venture",
-      "description": "Execute technical due diligence and partnership negotiation with Dappi Studio (FixMyStreet Japan).",
+      "description": "Execute technical due diligence and partnership negotiation with Urban Solutions Inc. (CityConnect Japan).",
       "timeline": "60 days",
       "depends_on": null,
-      "success_gate": "Signed MOU with Dappi Studio and successful API data ingestion test.",
+      "success_gate": "Signed MOU with Urban Solutions Inc. and successful API data ingestion test.",
       "unlocks": "Validates the 'Narrow Platform' strategy.",
       "if_gate_fails": {
         "action": "reassess",
@@ -471,7 +472,7 @@
     "path_advantages": [
       {
         "advantage": "Speed to Market",
-        "description": "Leverages existing adoption of FixMyStreet.",
+        "description": "Leverages existing adoption of CityConnect.",
         "source_chapter": "opportunity-validation",
         "confidence": "high"
       }

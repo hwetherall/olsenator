@@ -1,4 +1,4 @@
-import { V2ExtractionResult } from './v2-schema';
+﻿import { V2ExtractionResult } from './v2-schema';
 
 export const V2_PREFILL_TEXT = `<SECTION_0>
 \`\`\`json
@@ -11,15 +11,15 @@ export const V2_PREFILL_TEXT = `<SECTION_0>
     "geography": "Japan"
   },
   "question_and_answer": {
-    "the_question": "Should Nippon Light Metal launch the RIC infrastructure maintenance platform?",
-    "the_answer": "Conditional Go (Option 2) – Proceed with a narrow MVP only after validating the \\"Cluster\\" procurement model via paid pilots",
+    "the_question": "Should Apex Materials Corporation launch the RIC infrastructure maintenance platform?",
+    "the_answer": "Conditional Go (Option 2) â€“ Proceed with a narrow MVP only after validating the \\"Cluster\\" procurement model via paid pilots",
     "confidence": {
       "rating": "Medium-High",
       "percentage": null
     }
   },
   "thesis": {
-    "the_prize": "Establishes a scalable, recurring-revenue business in a ¥820B market driven by irreversible labor shortages and national policy mandates",
+    "the_prize": "Establishes a scalable, recurring-revenue business in a Â¥820B market driven by irreversible labor shortages and national policy mandates",
     "the_risk": "Municipal procurement rigidity (Capex vs. Opex) and lack of SaaS leadership may trap the venture in low-margin consulting economics",
     "the_unlock": "Securing one \\"Cluster\\" contract (Prefecture + Municipalities) to prove the legal and commercial viability of aggregated subscriptions"
   }
@@ -32,7 +32,7 @@ export const V2_PREFILL_TEXT = `<SECTION_0>
 {
   "should_we_do_it": {
     "the_prize": {
-      "market_size": "TAM: ¥820.8B (Local Gov IT); SAM: Infrastructure Maintenance growing at 8.7% CAGR; Physical maintenance liability is ¥12.3T by 2048.",
+      "market_size": "TAM: Â¥820.8B (Local Gov IT); SAM: Infrastructure Maintenance growing at 8.7% CAGR; Physical maintenance liability is Â¥12.3T by 2048.",
       "margins": "Targeting SaaS margins (70-80%) at scale, but initially constrained to Service margins (30-40%) due to manual engineering workflows.",
       "durability": "High durability driven by irreversible labor shortages and '2025 Cliff' of aging assets; 22-month sales cycles create strong defensive moats once established.",
       "bottom_line": "Massive, structural opportunity driven by necessity, but requires surviving a long cash-flow trough."
@@ -49,25 +49,25 @@ export const V2_PREFILL_TEXT = `<SECTION_0>
         "Ability to underwrite liability/safety risks (unlike pure software startups)",
         "Existing B2G relationships and 'Cluster Management' policy alignment"
       ],
-      "why_us": "Pure software players (FixMyStreet) lack engineering rigor; General Contractors are too manual. NLM bridges the 'Resolution Gap' (Steps 2-3).",
+      "why_us": "Pure software players (CityConnect) lack engineering rigor; General Contractors are too manual. AMC bridges the 'Resolution Gap' (Steps 2-3).",
       "bottom_line": "We have the 'Engineering Trust' required to sell safety-critical software that startups lack."
     },
     "verdict": {
       "decision": "Yes",
       "confidence": "High",
-      "rationale": "The market need is existential (labor shortage), and NLM has a unique right to win based on engineering authority and policy alignment."
+      "rationale": "The market need is existential (labor shortage), and AMC has a unique right to win based on engineering authority and policy alignment."
     }
   },
   "can_we_do_it": {
     "capital_and_infrastructure": {
-      "cash_position": "Requires ~¥450M-¥500M funding to bridge the 22-month sales cycle 'Valley of Death'. Corporate balance sheet is sufficient.",
-      "facilities": "Existing regional footprint; relying on external cloud (AWS) and partners (FixMyStreet) for tech infrastructure.",
+      "cash_position": "Requires ~Â¥450M-Â¥500M funding to bridge the 22-month sales cycle 'Valley of Death'. Corporate balance sheet is sufficient.",
+      "facilities": "Existing regional footprint; relying on external cloud (AWS) and partners (CityConnect) for tech infrastructure.",
       "tools_and_systems": "Lacks internal SaaS infrastructure; relying on 'Concierge MVP' (manual) initially.",
       "bottom_line": "Capital is available, but digital infrastructure is non-existent and must be built or partnered."
     },
     "market_access": {
       "customer_relationships": "Strong B2G ties in water/disaster prevention; weaker brand recognition in general road/bridge departments.",
-      "geographic_presence": "National reach via Nikkei Engineering.",
+      "geographic_presence": "National reach via Apex Infrastructure Services.",
       "regulatory_experience": "Deep experience with public works, but 'SaaS Subscription' procurement pathways are unproven and risky.",
       "bottom_line": "Strong access to the *entity* (municipality), but potentially the wrong *buyer* (IT vs. Construction)."
     },
@@ -140,7 +140,7 @@ export const V2_PREFILL_TEXT = `<SECTION_0>
       "why_easy_or_hard": "Technically feasible to automate, but requires rigorous definition of logic and liability boundaries.",
       "action_to_close": "Define and execute a roadmap to automate the 'Step 2' diagnosis logic to reduce manual intervention by 50% in Year 1.",
       "risk_of_inaction": "Venture remains a low-margin consulting business disguised as a platform; unit economics never scale.",
-      "owner": "Venture Team / Nikkei Engineering"
+      "owner": "Venture Team / Apex Infrastructure Services"
     },
     {
       "dimension": "Traction / Validation",
@@ -157,7 +157,7 @@ export const V2_PREFILL_TEXT = `<SECTION_0>
         "label": "Medium"
       },
       "quadrant": "Mixed",
-      "why_easy_or_hard": "Access to customers is easy via NLM brand, but 22-month sales cycles make closing deals slow.",
+      "why_easy_or_hard": "Access to customers is easy via AMC brand, but 22-month sales cycles make closing deals slow.",
       "action_to_close": "Secure one paid 'Cluster' pilot contract (Prefecture + Municipalities) within 90 days.",
       "risk_of_inaction": "Valuation remains unsupported; cash burn continues without revenue validation.",
       "owner": "Project Lead"
@@ -165,7 +165,7 @@ export const V2_PREFILL_TEXT = `<SECTION_0>
     {
       "dimension": "Capital / Funding",
       "category": "core",
-      "current_state": "Projected ¥450M working capital deficit to bridge the 22-month sales cycle gap.",
+      "current_state": "Projected Â¥450M working capital deficit to bridge the 22-month sales cycle gap.",
       "required_state": "Committed internal funding tranche to cover the 'Valley of Death' before revenue scales.",
       "gap_summary": "Significant cash flow trough identified due to slow government payment cycles.",
       "gap_size": {
@@ -178,7 +178,7 @@ export const V2_PREFILL_TEXT = `<SECTION_0>
       },
       "quadrant": "Quick Win",
       "why_easy_or_hard": "Internal corporate allocation decision; balance sheet capacity exists.",
-      "action_to_close": "Approve ¥500M internal funding allocation tied to specific validation milestones.",
+      "action_to_close": "Approve Â¥500M internal funding allocation tied to specific validation milestones.",
       "risk_of_inaction": "Project halted mid-stream due to liquidity crisis before sales cycle completes.",
       "owner": "Corporate HQ / Finance"
     },
@@ -206,7 +206,7 @@ export const V2_PREFILL_TEXT = `<SECTION_0>
       "dimension": "Regulatory / Legal",
       "category": "core",
       "current_state": "Ambiguous 'Inspector of Record' role creates risk of uninsurable liability for infrastructure failures.",
-      "required_state": "Clear Terms of Service and insurance structure indemnifying NLM from physical infrastructure failure.",
+      "required_state": "Clear Terms of Service and insurance structure indemnifying AMC from physical infrastructure failure.",
       "gap_summary": "Liability framework undefined; risk of 'false negatives' leading to accidents.",
       "gap_size": {
         "score": 5,
@@ -225,7 +225,7 @@ export const V2_PREFILL_TEXT = `<SECTION_0>
     {
       "dimension": "Partnerships / Ecosystem",
       "category": "optional",
-      "current_state": "Need for citizen reporting data intake; FixMyStreet identified as potential partner.",
+      "current_state": "Need for citizen reporting data intake; CityConnect identified as potential partner.",
       "required_state": "Formal API integration and commercial agreement with a citizen reporting provider.",
       "gap_summary": "Dependency on third-party for 'Step 1' data intake.",
       "gap_size": {
@@ -237,8 +237,8 @@ export const V2_PREFILL_TEXT = `<SECTION_0>
         "label": "Easy"
       },
       "quadrant": "Quick Win",
-      "why_easy_or_hard": "Partners (e.g., Dappi Studio) are available and willing; technical integration is standard.",
-      "action_to_close": "Formalize partnership/MOU with Dappi Studio (FixMyStreet) for data ingestion.",
+      "why_easy_or_hard": "Partners (e.g., Urban Solutions Inc.) are available and willing; technical integration is standard.",
+      "action_to_close": "Formalize partnership/MOU with Urban Solutions Inc. (CityConnect) for data ingestion.",
       "risk_of_inaction": "Team wastes resources rebuilding a commodity 'reporting app' instead of the core engineering engine.",
       "owner": "Venture Team"
     }
@@ -274,7 +274,7 @@ export const V2_PREFILL_TEXT = `<SECTION_0>
 {
   "highlights": [
     {
-      "highlight": "Municipal technical staff declined 37–43%, creating forced demand for automation",
+      "highlight": "Municipal technical staff declined 37â€“43%, creating forced demand for automation",
       "category": "Market",
       "why_it_matters": "Structural labor collapse means municipalities physically cannot maintain assets manually, forcing platform adoption",
       "context_grounding": "Water supply staff down 37%, sewerage down 43% from peak. 10,000 bridges identified for repair 5 years ago remain untouched.",
@@ -286,10 +286,10 @@ export const V2_PREFILL_TEXT = `<SECTION_0>
       "source_confidence": "verified"
     },
     {
-      "highlight": "22-month government sales cycle creates a ¥450M working capital deficit",
+      "highlight": "22-month government sales cycle creates a Â¥450M working capital deficit",
       "category": "Financial",
       "why_it_matters": "The 'Valley of Death' is deeper than typical SaaS; requires significant corporate funding before break-even",
-      "context_grounding": "Industry average procurement timeline delays revenue. Cash trough hits ¥450M in Year 4 before collections catch up.",
+      "context_grounding": "Industry average procurement timeline delays revenue. Cash trough hits Â¥450M in Year 4 before collections catch up.",
       "polarity": "headwind",
       "time_sensitivity": {
         "is_time_bound": true,
@@ -301,7 +301,7 @@ export const V2_PREFILL_TEXT = `<SECTION_0>
       "highlight": "Unit economics are negative unless 'Cluster' strategy achieves >3:1 municipality aggregation",
       "category": "Financial",
       "why_it_matters": "Direct sales to small towns are mathematically unviable; the business model fails without bulk procurement",
-      "context_grounding": "CAC (¥3M–¥6M) exceeds Year 1 ARR (¥3M–¥5M) for single towns. Payback >24 months without aggregation.",
+      "context_grounding": "CAC (Â¥3Mâ€“Â¥6M) exceeds Year 1 ARR (Â¥3Mâ€“Â¥5M) for single towns. Payback >24 months without aggregation.",
       "polarity": "headwind",
       "time_sensitivity": {
         "is_time_bound": false,
@@ -310,10 +310,10 @@ export const V2_PREFILL_TEXT = `<SECTION_0>
       "source_confidence": "estimated"
     },
     {
-      "highlight": "NLM’s ability to underwrite safety liability creates a moat against software startups",
+      "highlight": "AMCâ€™s ability to underwrite safety liability creates a moat against software startups",
       "category": "Competitive",
       "why_it_matters": "Differentiation based on 'Engineering Trust' allows premium pricing over commoditized reporting apps",
-      "context_grounding": "Pure-play competitors (e.g., FixMyStreet) stop at 'reporting' to avoid risk. NLM can insure the 'resolution' workflow.",
+      "context_grounding": "Pure-play competitors (e.g., CityConnect) stop at 'reporting' to avoid risk. AMC can insure the 'resolution' workflow.",
       "polarity": "tailwind",
       "time_sensitivity": {
         "is_time_bound": false,
@@ -334,7 +334,7 @@ export const V2_PREFILL_TEXT = `<SECTION_0>
       "source_confidence": "verified"
     },
     {
-      "highlight": "¥20 trillion national resilience budget explicitly funds the 'Cluster Management' strategy",
+      "highlight": "Â¥20 trillion national resilience budget explicitly funds the 'Cluster Management' strategy",
       "category": "Market",
       "why_it_matters": "Fiscal policy has shifted from passive maintenance to active regional integration, subsidizing market entry",
       "context_grounding": "MLIT policy now mandates cross-jurisdictional collaboration, aligning perfectly with the platform's multi-tenant architecture.",
@@ -363,7 +363,7 @@ export const V2_PREFILL_TEXT = `<SECTION_0>
     "tailwinds": 3,
     "headwinds": 4,
     "neutral": 0,
-    "balance_check": "Balanced — highlights strong market drivers against severe financial and execution risks"
+    "balance_check": "Balanced â€” highlights strong market drivers against severe financial and execution risks"
   }
 }
 \`\`\`
@@ -405,10 +405,10 @@ export const V2_PREFILL_TEXT = `<SECTION_0>
       "step_number": 3,
       "step_title": "Secure Data Ingestion Partnership",
       "owner": "venture",
-      "description": "Execute technical due diligence and partnership negotiation with Dappi Studio (FixMyStreet Japan).",
+      "description": "Execute technical due diligence and partnership negotiation with Urban Solutions Inc. (CityConnect Japan).",
       "timeline": "60 days",
       "depends_on": null,
-      "success_gate": "Signed MOU with Dappi Studio and successful API data ingestion test.",
+      "success_gate": "Signed MOU with Urban Solutions Inc. and successful API data ingestion test.",
       "unlocks": "Validates the 'Narrow Platform' strategy.",
       "if_gate_fails": {
         "action": "reassess",
@@ -460,13 +460,13 @@ export const V2_PREFILL_TEXT = `<SECTION_0>
         "source_chapter": "six-t-analysis"
       },
       {
-        "headline": "22-Month Sales Cycles Create a ¥450M Cash Trough",
-        "insight": "Extended government purchasing timeline creates a severe working capital drag, requiring approximately ¥450M in upfront funding to bridge the gap between sales spend and cash collection. This 'Valley of Death' risks exhausting the venture's runway before the subscription model can compound.",
+        "headline": "22-Month Sales Cycles Create a Â¥450M Cash Trough",
+        "insight": "Extended government purchasing timeline creates a severe working capital drag, requiring approximately Â¥450M in upfront funding to bridge the gap between sales spend and cash collection. This 'Valley of Death' risks exhausting the venture's runway before the subscription model can compound.",
         "source_chapter": "finance-and-operations"
       },
       {
         "headline": "Manual Workflows Threaten to Trap Venture in Low Margins",
-        "insight": "Reliance on a 'Concierge MVP' with manual engineering review risks anchoring gross margins at consulting levels (30–40%) rather than software levels (70%+). Failure to automate the diagnosis logic will result in a scalable service business rather than the intended high-growth SaaS platform.",
+        "insight": "Reliance on a 'Concierge MVP' with manual engineering review risks anchoring gross margins at consulting levels (30â€“40%) rather than software levels (70%+). Failure to automate the diagnosis logic will result in a scalable service business rather than the intended high-growth SaaS platform.",
         "source_chapter": "finance-and-operations"
       },
       {
@@ -481,7 +481,7 @@ export const V2_PREFILL_TEXT = `<SECTION_0>
       },
       {
         "headline": "Aluminum Brand Authority May Not Transfer to Roads",
-        "insight": "Nikkei Engineering's deep authority in water gates does not automatically translate to credibility in general road and bridge maintenance. There is a risk that municipal road departments will view the firm as a niche hardware manufacturer rather than a strategic platform partner.",
+        "insight": "Apex Infrastructure Services' deep authority in water gates does not automatically translate to credibility in general road and bridge maintenance. There is a risk that municipal road departments will view the firm as a niche hardware manufacturer rather than a strategic platform partner.",
         "source_chapter": "market-research"
       },
       {
@@ -501,7 +501,7 @@ export const V2_PREFILL_TEXT = `<SECTION_0>
       },
       {
         "headline": "Partnering for 'Step 1' Data Intake Is the Optimal Path",
-        "insight": "Rebuilding a citizen reporting app would be redundant and costly given the dominance of players like FixMyStreet. The optimal strategy is to integrate their data via API, focusing NLM's resources entirely on the high-value downstream engineering workflow.",
+        "insight": "Rebuilding a citizen reporting app would be redundant and costly given the dominance of players like CityConnect. The optimal strategy is to integrate their data via API, focusing AMC's resources entirely on the high-value downstream engineering workflow.",
         "source_chapter": "product-and-technology"
       }
     ],
@@ -580,7 +580,7 @@ export const V2_PREFILL_TEXT = `<SECTION_0>
     "path_advantages": [
       {
         "advantage": "Speed to Market",
-        "description": "Leverages existing adoption of FixMyStreet.",
+        "description": "Leverages existing adoption of CityConnect.",
         "source_chapter": "opportunity-validation",
         "confidence": "high"
       }
@@ -618,260 +618,260 @@ export const V2_EXTRACTION_JSON = (() => {
 // Japanese version - imported from JSON file
 export const V2_EXTRACTION_JSON_JP: V2ExtractionResult = {
   "identification": {
-    "project_name": "地域インフラ群（RIC）再生プラットフォーム",
-    "one_liner": "市民からの通報をエンジニアに直接つなげることで、自治体が老朽化したインフラを修復するのを支援するソフトウェアプラットフォーム。複数の町がリソースを共有し、修復プロセスを自動化することで、技術職員不足を克服することを可能にする。",
-    "stage": "インキュベーション / 検証段階",
-    "sector": "GovTech（行政テック） / インフラSaaS",
-    "geography": "日本"
+    "project_name": "åœ°åŸŸã‚¤ãƒ³ãƒ•ãƒ©ç¾¤ï¼ˆRICï¼‰å†ç”Ÿãƒ—ãƒ©ãƒƒãƒˆãƒ•ã‚©ãƒ¼ãƒ ",
+    "one_liner": "å¸‚æ°‘ã‹ã‚‰ã®é€šå ±ã‚’ã‚¨ãƒ³ã‚¸ãƒ‹ã‚¢ã«ç›´æŽ¥ã¤ãªã’ã‚‹ã“ã¨ã§ã€è‡ªæ²»ä½“ãŒè€æœ½åŒ–ã—ãŸã‚¤ãƒ³ãƒ•ãƒ©ã‚’ä¿®å¾©ã™ã‚‹ã®ã‚’æ”¯æ´ã™ã‚‹ã‚½ãƒ•ãƒˆã‚¦ã‚§ã‚¢ãƒ—ãƒ©ãƒƒãƒˆãƒ•ã‚©ãƒ¼ãƒ ã€‚è¤‡æ•°ã®ç”ºãŒãƒªã‚½ãƒ¼ã‚¹ã‚’å…±æœ‰ã—ã€ä¿®å¾©ãƒ—ãƒ­ã‚»ã‚¹ã‚’è‡ªå‹•åŒ–ã™ã‚‹ã“ã¨ã§ã€æŠ€è¡“è·å“¡ä¸è¶³ã‚’å…‹æœã™ã‚‹ã“ã¨ã‚’å¯èƒ½ã«ã™ã‚‹ã€‚",
+    "stage": "ã‚¤ãƒ³ã‚­ãƒ¥ãƒ™ãƒ¼ã‚·ãƒ§ãƒ³ / æ¤œè¨¼æ®µéšŽ",
+    "sector": "GovTechï¼ˆè¡Œæ”¿ãƒ†ãƒƒã‚¯ï¼‰ / ã‚¤ãƒ³ãƒ•ãƒ©SaaS",
+    "geography": "æ—¥æœ¬"
   },
   "question_and_answer": {
-    "the_question": "日本軽金属はRICインフラ維持管理プラットフォームを立ち上げるべきか？",
-    "the_answer": "条件付きGo（オプション2） – 有償パイロットを通じて「群（クラスター）」調達モデルを検証した後、限定的なMVPでのみ進める",
+    "the_question": "Apex Materials Corporationã¯RICã‚¤ãƒ³ãƒ•ãƒ©ç¶­æŒç®¡ç†ãƒ—ãƒ©ãƒƒãƒˆãƒ•ã‚©ãƒ¼ãƒ ã‚’ç«‹ã¡ä¸Šã’ã‚‹ã¹ãã‹ï¼Ÿ",
+    "the_answer": "æ¡ä»¶ä»˜ãGoï¼ˆã‚ªãƒ—ã‚·ãƒ§ãƒ³2ï¼‰ â€“ æœ‰å„Ÿãƒ‘ã‚¤ãƒ­ãƒƒãƒˆã‚’é€šã˜ã¦ã€Œç¾¤ï¼ˆã‚¯ãƒ©ã‚¹ã‚¿ãƒ¼ï¼‰ã€èª¿é”ãƒ¢ãƒ‡ãƒ«ã‚’æ¤œè¨¼ã—ãŸå¾Œã€é™å®šçš„ãªMVPã§ã®ã¿é€²ã‚ã‚‹",
     "confidence": {
       "rating": "Medium-High",
       "percentage": null
     }
   },
   "thesis": {
-    "the_prize": "不可逆的な労働力不足と国の政策義務化によって牽引される8,200億円規模の市場において、スケーラブルで経常収益を生むビジネスを確立する",
-    "the_risk": "自治体の調達の硬直性（Capex対Opex）とSaaSリーダーシップの欠如により、ベンチャーが低利益率のコンサルティング経済に陥る可能性がある",
-    "the_unlock": "集約型サブスクリプションの法的および商業的な実現可能性を証明するために、1つの「群（クラスター）」契約（県＋市町村）を確保する"
+    "the_prize": "ä¸å¯é€†çš„ãªåŠ´åƒåŠ›ä¸è¶³ã¨å›½ã®æ”¿ç­–ç¾©å‹™åŒ–ã«ã‚ˆã£ã¦ç‰½å¼•ã•ã‚Œã‚‹8,200å„„å††è¦æ¨¡ã®å¸‚å ´ã«ãŠã„ã¦ã€ã‚¹ã‚±ãƒ¼ãƒ©ãƒ–ãƒ«ã§çµŒå¸¸åŽç›Šã‚’ç”Ÿã‚€ãƒ“ã‚¸ãƒã‚¹ã‚’ç¢ºç«‹ã™ã‚‹",
+    "the_risk": "è‡ªæ²»ä½“ã®èª¿é”ã®ç¡¬ç›´æ€§ï¼ˆCapexå¯¾Opexï¼‰ã¨SaaSãƒªãƒ¼ãƒ€ãƒ¼ã‚·ãƒƒãƒ—ã®æ¬ å¦‚ã«ã‚ˆã‚Šã€ãƒ™ãƒ³ãƒãƒ£ãƒ¼ãŒä½Žåˆ©ç›ŠçŽ‡ã®ã‚³ãƒ³ã‚µãƒ«ãƒ†ã‚£ãƒ³ã‚°çµŒæ¸ˆã«é™¥ã‚‹å¯èƒ½æ€§ãŒã‚ã‚‹",
+    "the_unlock": "é›†ç´„åž‹ã‚µãƒ–ã‚¹ã‚¯ãƒªãƒ—ã‚·ãƒ§ãƒ³ã®æ³•çš„ãŠã‚ˆã³å•†æ¥­çš„ãªå®Ÿç¾å¯èƒ½æ€§ã‚’è¨¼æ˜Žã™ã‚‹ãŸã‚ã«ã€1ã¤ã®ã€Œç¾¤ï¼ˆã‚¯ãƒ©ã‚¹ã‚¿ãƒ¼ï¼‰ã€å¥‘ç´„ï¼ˆçœŒï¼‹å¸‚ç”ºæ‘ï¼‰ã‚’ç¢ºä¿ã™ã‚‹"
   },
   "should_we_do_it": {
     "the_prize": {
-      "market_size": "TAM：8,208億円（地方自治体IT）; SAM：年平均成長率（CAGR）8.7%で成長するインフラ維持管理市場; 2048年までの物理的維持管理負債は12.3兆円。",
-      "margins": "規模拡大時にはSaaSの利益率（70-80%）を目指すが、当初は手動のエンジニアリングワークフローのためサービス利益率（30-40%）に制限される。",
-      "durability": "労働力不足と資産老朽化の「2025年の崖」により高い持続性がある。22ヶ月の販売サイクルは、一度確立されれば強力な防衛的な堀（Moat）となる。",
-      "bottom_line": "必要性に駆られた巨大かつ構造的な機会であるが、長いキャッシュフローの谷を乗り越える必要がある。"
+      "market_size": "TAMï¼š8,208å„„å††ï¼ˆåœ°æ–¹è‡ªæ²»ä½“ITï¼‰; SAMï¼šå¹´å¹³å‡æˆé•·çŽ‡ï¼ˆCAGRï¼‰8.7%ã§æˆé•·ã™ã‚‹ã‚¤ãƒ³ãƒ•ãƒ©ç¶­æŒç®¡ç†å¸‚å ´; 2048å¹´ã¾ã§ã®ç‰©ç†çš„ç¶­æŒç®¡ç†è² å‚µã¯12.3å…†å††ã€‚",
+      "margins": "è¦æ¨¡æ‹¡å¤§æ™‚ã«ã¯SaaSã®åˆ©ç›ŠçŽ‡ï¼ˆ70-80%ï¼‰ã‚’ç›®æŒ‡ã™ãŒã€å½“åˆã¯æ‰‹å‹•ã®ã‚¨ãƒ³ã‚¸ãƒ‹ã‚¢ãƒªãƒ³ã‚°ãƒ¯ãƒ¼ã‚¯ãƒ•ãƒ­ãƒ¼ã®ãŸã‚ã‚µãƒ¼ãƒ“ã‚¹åˆ©ç›ŠçŽ‡ï¼ˆ30-40%ï¼‰ã«åˆ¶é™ã•ã‚Œã‚‹ã€‚",
+      "durability": "åŠ´åƒåŠ›ä¸è¶³ã¨è³‡ç”£è€æœ½åŒ–ã®ã€Œ2025å¹´ã®å´–ã€ã«ã‚ˆã‚Šé«˜ã„æŒç¶šæ€§ãŒã‚ã‚‹ã€‚22ãƒ¶æœˆã®è²©å£²ã‚µã‚¤ã‚¯ãƒ«ã¯ã€ä¸€åº¦ç¢ºç«‹ã•ã‚Œã‚Œã°å¼·åŠ›ãªé˜²è¡›çš„ãªå €ï¼ˆMoatï¼‰ã¨ãªã‚‹ã€‚",
+      "bottom_line": "å¿…è¦æ€§ã«é§†ã‚‰ã‚ŒãŸå·¨å¤§ã‹ã¤æ§‹é€ çš„ãªæ©Ÿä¼šã§ã‚ã‚‹ãŒã€é•·ã„ã‚­ãƒ£ãƒƒã‚·ãƒ¥ãƒ•ãƒ­ãƒ¼ã®è°·ã‚’ä¹—ã‚Šè¶Šãˆã‚‹å¿…è¦ãŒã‚ã‚‹ã€‚"
     },
     "strategic_fit": {
-      "bet_type": "隣接領域（「管」エンジニアリングサービスから「プラットフォーム」ソフトウェアオーケストレーションへの移行）。",
-      "portfolio_fit": "「イノベーション・ジャーニー」および「循環型社会」の目標と一致しており、収益の質をプロジェクトベースから経常収益へと移行させる。",
-      "priority_alignment": "国土交通省の「地域インフラ群再生」政策を直接支援する。",
-      "bottom_line": "強力な戦略的整合性はあるが、ハードウェア/サービスからソフトウェアへのビジネスモデルの大幅な転換を意味する。"
+      "bet_type": "éš£æŽ¥é ˜åŸŸï¼ˆã€Œç®¡ã€ã‚¨ãƒ³ã‚¸ãƒ‹ã‚¢ãƒªãƒ³ã‚°ã‚µãƒ¼ãƒ“ã‚¹ã‹ã‚‰ã€Œãƒ—ãƒ©ãƒƒãƒˆãƒ•ã‚©ãƒ¼ãƒ ã€ã‚½ãƒ•ãƒˆã‚¦ã‚§ã‚¢ã‚ªãƒ¼ã‚±ã‚¹ãƒˆãƒ¬ãƒ¼ã‚·ãƒ§ãƒ³ã¸ã®ç§»è¡Œï¼‰ã€‚",
+      "portfolio_fit": "ã€Œã‚¤ãƒŽãƒ™ãƒ¼ã‚·ãƒ§ãƒ³ãƒ»ã‚¸ãƒ£ãƒ¼ãƒ‹ãƒ¼ã€ãŠã‚ˆã³ã€Œå¾ªç’°åž‹ç¤¾ä¼šã€ã®ç›®æ¨™ã¨ä¸€è‡´ã—ã¦ãŠã‚Šã€åŽç›Šã®è³ªã‚’ãƒ—ãƒ­ã‚¸ã‚§ã‚¯ãƒˆãƒ™ãƒ¼ã‚¹ã‹ã‚‰çµŒå¸¸åŽç›Šã¸ã¨ç§»è¡Œã•ã›ã‚‹ã€‚",
+      "priority_alignment": "å›½åœŸäº¤é€šçœã®ã€Œåœ°åŸŸã‚¤ãƒ³ãƒ•ãƒ©ç¾¤å†ç”Ÿã€æ”¿ç­–ã‚’ç›´æŽ¥æ”¯æ´ã™ã‚‹ã€‚",
+      "bottom_line": "å¼·åŠ›ãªæˆ¦ç•¥çš„æ•´åˆæ€§ã¯ã‚ã‚‹ãŒã€ãƒãƒ¼ãƒ‰ã‚¦ã‚§ã‚¢/ã‚µãƒ¼ãƒ“ã‚¹ã‹ã‚‰ã‚½ãƒ•ãƒˆã‚¦ã‚§ã‚¢ã¸ã®ãƒ“ã‚¸ãƒã‚¹ãƒ¢ãƒ‡ãƒ«ã®å¤§å¹…ãªè»¢æ›ã‚’æ„å‘³ã™ã‚‹ã€‚"
     },
     "our_edge": {
       "unfair_advantages": [
-        "アルミニウムインフラと防災における深いドメイン権威",
-        "賠償責任/安全性リスクを引き受ける能力（純粋なソフトウェアスタートアップとは異なる）",
-        "既存のB2G（対行政）関係と「群マネジメント」政策との整合性"
+        "ã‚¢ãƒ«ãƒŸãƒ‹ã‚¦ãƒ ã‚¤ãƒ³ãƒ•ãƒ©ã¨é˜²ç½ã«ãŠã‘ã‚‹æ·±ã„ãƒ‰ãƒ¡ã‚¤ãƒ³æ¨©å¨",
+        "è³ å„Ÿè²¬ä»»/å®‰å…¨æ€§ãƒªã‚¹ã‚¯ã‚’å¼•ãå—ã‘ã‚‹èƒ½åŠ›ï¼ˆç´”ç²‹ãªã‚½ãƒ•ãƒˆã‚¦ã‚§ã‚¢ã‚¹ã‚¿ãƒ¼ãƒˆã‚¢ãƒƒãƒ—ã¨ã¯ç•°ãªã‚‹ï¼‰",
+        "æ—¢å­˜ã®B2Gï¼ˆå¯¾è¡Œæ”¿ï¼‰é–¢ä¿‚ã¨ã€Œç¾¤ãƒžãƒã‚¸ãƒ¡ãƒ³ãƒˆã€æ”¿ç­–ã¨ã®æ•´åˆæ€§"
       ],
-      "why_us": "純粋なソフトウェアプレイヤー（FixMyStreetなど）は工学的厳密さに欠け、ゼネコンは手動すぎる。日軽金は「解決のギャップ」（ステップ2-3）を埋めることができる。",
-      "bottom_line": "我々には、スタートアップには欠けている、安全性が重要なソフトウェアを販売するために必要な「エンジニアリングへの信頼」がある。"
+      "why_us": "ç´”ç²‹ãªã‚½ãƒ•ãƒˆã‚¦ã‚§ã‚¢ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ï¼ˆCityConnectãªã©ï¼‰ã¯å·¥å­¦çš„åŽ³å¯†ã•ã«æ¬ ã‘ã€ã‚¼ãƒã‚³ãƒ³ã¯æ‰‹å‹•ã™ãŽã‚‹ã€‚AMCã¯ã€Œè§£æ±ºã®ã‚®ãƒ£ãƒƒãƒ—ã€ï¼ˆã‚¹ãƒ†ãƒƒãƒ—2-3ï¼‰ã‚’åŸ‹ã‚ã‚‹ã“ã¨ãŒã§ãã‚‹ã€‚",
+      "bottom_line": "æˆ‘ã€…ã«ã¯ã€ã‚¹ã‚¿ãƒ¼ãƒˆã‚¢ãƒƒãƒ—ã«ã¯æ¬ ã‘ã¦ã„ã‚‹ã€å®‰å…¨æ€§ãŒé‡è¦ãªã‚½ãƒ•ãƒˆã‚¦ã‚§ã‚¢ã‚’è²©å£²ã™ã‚‹ãŸã‚ã«å¿…è¦ãªã€Œã‚¨ãƒ³ã‚¸ãƒ‹ã‚¢ãƒªãƒ³ã‚°ã¸ã®ä¿¡é ¼ã€ãŒã‚ã‚‹ã€‚"
     },
     "verdict": {
       "decision": "Yes",
       "confidence": "High",
-      "rationale": "市場のニーズは実存的（労働力不足）であり、日軽金はエンジニアリングの権威と政策との整合性に基づいて勝つための独自の権利を持っている。"
+      "rationale": "å¸‚å ´ã®ãƒ‹ãƒ¼ã‚ºã¯å®Ÿå­˜çš„ï¼ˆåŠ´åƒåŠ›ä¸è¶³ï¼‰ã§ã‚ã‚Šã€AMCã¯ã‚¨ãƒ³ã‚¸ãƒ‹ã‚¢ãƒªãƒ³ã‚°ã®æ¨©å¨ã¨æ”¿ç­–ã¨ã®æ•´åˆæ€§ã«åŸºã¥ã„ã¦å‹ã¤ãŸã‚ã®ç‹¬è‡ªã®æ¨©åˆ©ã‚’æŒã£ã¦ã„ã‚‹ã€‚"
     }
   },
   "can_we_do_it": {
     "capital_and_infrastructure": {
-      "cash_position": "22ヶ月の販売サイクルの「死の谷」を埋めるために約4.5億～5億円の資金が必要。企業のバランスシートは十分である。",
-      "facilities": "既存の地域拠点がある。技術インフラについては外部クラウド（AWS）とパートナー（FixMyStreet）に依存。",
-      "tools_and_systems": "社内のSaaSインフラが不足している。当初は「コンシェルジュMVP」（手動）に依存する。",
-      "bottom_line": "資本はあるが、デジタルインフラは存在せず、構築または提携が必要である。"
+      "cash_position": "22ãƒ¶æœˆã®è²©å£²ã‚µã‚¤ã‚¯ãƒ«ã®ã€Œæ­»ã®è°·ã€ã‚’åŸ‹ã‚ã‚‹ãŸã‚ã«ç´„4.5å„„ï½ž5å„„å††ã®è³‡é‡‘ãŒå¿…è¦ã€‚ä¼æ¥­ã®ãƒãƒ©ãƒ³ã‚¹ã‚·ãƒ¼ãƒˆã¯ååˆ†ã§ã‚ã‚‹ã€‚",
+      "facilities": "æ—¢å­˜ã®åœ°åŸŸæ‹ ç‚¹ãŒã‚ã‚‹ã€‚æŠ€è¡“ã‚¤ãƒ³ãƒ•ãƒ©ã«ã¤ã„ã¦ã¯å¤–éƒ¨ã‚¯ãƒ©ã‚¦ãƒ‰ï¼ˆAWSï¼‰ã¨ãƒ‘ãƒ¼ãƒˆãƒŠãƒ¼ï¼ˆCityConnectï¼‰ã«ä¾å­˜ã€‚",
+      "tools_and_systems": "ç¤¾å†…ã®SaaSã‚¤ãƒ³ãƒ•ãƒ©ãŒä¸è¶³ã—ã¦ã„ã‚‹ã€‚å½“åˆã¯ã€Œã‚³ãƒ³ã‚·ã‚§ãƒ«ã‚¸ãƒ¥MVPã€ï¼ˆæ‰‹å‹•ï¼‰ã«ä¾å­˜ã™ã‚‹ã€‚",
+      "bottom_line": "è³‡æœ¬ã¯ã‚ã‚‹ãŒã€ãƒ‡ã‚¸ã‚¿ãƒ«ã‚¤ãƒ³ãƒ•ãƒ©ã¯å­˜åœ¨ã›ãšã€æ§‹ç¯‰ã¾ãŸã¯ææºãŒå¿…è¦ã§ã‚ã‚‹ã€‚"
     },
     "market_access": {
-      "customer_relationships": "水・防災分野での強力なB2G関係があるが、一般的な道路・橋梁部門でのブランド認知度は弱い。",
-      "geographic_presence": "日軽エンジニアリングを通じた全国的なリーチ。",
-      "regulatory_experience": "公共事業における深い経験はあるが、「SaaSサブスクリプション」の調達経路は未検証でありリスクがある。",
-      "bottom_line": "*組織*（自治体）へのアクセスは強力だが、*買い手*（IT部門 対 建設部門）が間違っている可能性がある。"
+      "customer_relationships": "æ°´ãƒ»é˜²ç½åˆ†é‡Žã§ã®å¼·åŠ›ãªB2Gé–¢ä¿‚ãŒã‚ã‚‹ãŒã€ä¸€èˆ¬çš„ãªé“è·¯ãƒ»æ©‹æ¢éƒ¨é–€ã§ã®ãƒ–ãƒ©ãƒ³ãƒ‰èªçŸ¥åº¦ã¯å¼±ã„ã€‚",
+      "geographic_presence": "Apex Infrastructure Servicesã‚’é€šã˜ãŸå…¨å›½çš„ãªãƒªãƒ¼ãƒã€‚",
+      "regulatory_experience": "å…¬å…±äº‹æ¥­ã«ãŠã‘ã‚‹æ·±ã„çµŒé¨“ã¯ã‚ã‚‹ãŒã€ã€ŒSaaSã‚µãƒ–ã‚¹ã‚¯ãƒªãƒ—ã‚·ãƒ§ãƒ³ã€ã®èª¿é”çµŒè·¯ã¯æœªæ¤œè¨¼ã§ã‚ã‚Šãƒªã‚¹ã‚¯ãŒã‚ã‚‹ã€‚",
+      "bottom_line": "*çµ„ç¹”*ï¼ˆè‡ªæ²»ä½“ï¼‰ã¸ã®ã‚¢ã‚¯ã‚»ã‚¹ã¯å¼·åŠ›ã ãŒã€*è²·ã„æ‰‹*ï¼ˆITéƒ¨é–€ å¯¾ å»ºè¨­éƒ¨é–€ï¼‰ãŒé–“é•ã£ã¦ã„ã‚‹å¯èƒ½æ€§ãŒã‚ã‚‹ã€‚"
     },
     "people": {
-      "skills": "世界クラスの土木工学の専門知識があるが、SaaSプロダクト管理とデジタル実行において決定的なギャップがある。",
-      "experience": "チームは「無欠陥（Zero-Defect）」のウォーターフォール型エンジニアリングには慣れているが、アジャイルなソフトウェアの反復には慣れていない。",
-      "bandwidth": "専任のCPO/CTOなしで「社内のプロダクトオーナーシップ」に依存することは、高い実行リスクを生む。",
-      "bottom_line": "デジタルリーダーシップにおける人的資本のギャップが大きい。外部のコーチ/ベンダーへの依存は脆弱性である。"
+      "skills": "ä¸–ç•Œã‚¯ãƒ©ã‚¹ã®åœŸæœ¨å·¥å­¦ã®å°‚é–€çŸ¥è­˜ãŒã‚ã‚‹ãŒã€SaaSãƒ—ãƒ­ãƒ€ã‚¯ãƒˆç®¡ç†ã¨ãƒ‡ã‚¸ã‚¿ãƒ«å®Ÿè¡Œã«ãŠã„ã¦æ±ºå®šçš„ãªã‚®ãƒ£ãƒƒãƒ—ãŒã‚ã‚‹ã€‚",
+      "experience": "ãƒãƒ¼ãƒ ã¯ã€Œç„¡æ¬ é™¥ï¼ˆZero-Defectï¼‰ã€ã®ã‚¦ã‚©ãƒ¼ã‚¿ãƒ¼ãƒ•ã‚©ãƒ¼ãƒ«åž‹ã‚¨ãƒ³ã‚¸ãƒ‹ã‚¢ãƒªãƒ³ã‚°ã«ã¯æ…£ã‚Œã¦ã„ã‚‹ãŒã€ã‚¢ã‚¸ãƒ£ã‚¤ãƒ«ãªã‚½ãƒ•ãƒˆã‚¦ã‚§ã‚¢ã®åå¾©ã«ã¯æ…£ã‚Œã¦ã„ãªã„ã€‚",
+      "bandwidth": "å°‚ä»»ã®CPO/CTOãªã—ã§ã€Œç¤¾å†…ã®ãƒ—ãƒ­ãƒ€ã‚¯ãƒˆã‚ªãƒ¼ãƒŠãƒ¼ã‚·ãƒƒãƒ—ã€ã«ä¾å­˜ã™ã‚‹ã“ã¨ã¯ã€é«˜ã„å®Ÿè¡Œãƒªã‚¹ã‚¯ã‚’ç”Ÿã‚€ã€‚",
+      "bottom_line": "ãƒ‡ã‚¸ã‚¿ãƒ«ãƒªãƒ¼ãƒ€ãƒ¼ã‚·ãƒƒãƒ—ã«ãŠã‘ã‚‹äººçš„è³‡æœ¬ã®ã‚®ãƒ£ãƒƒãƒ—ãŒå¤§ãã„ã€‚å¤–éƒ¨ã®ã‚³ãƒ¼ãƒ/ãƒ™ãƒ³ãƒ€ãƒ¼ã¸ã®ä¾å­˜ã¯è„†å¼±æ€§ã§ã‚ã‚‹ã€‚"
     },
     "verdict": {
       "decision": "Borderline",
       "confidence": "Medium",
-      "rationale": "資本と関係性はあるが、社内のソフトウェアDNAの欠如と手動ワークフローへの依存により、「サービスマージンの罠」に陥るリスクが高い。"
+      "rationale": "è³‡æœ¬ã¨é–¢ä¿‚æ€§ã¯ã‚ã‚‹ãŒã€ç¤¾å†…ã®ã‚½ãƒ•ãƒˆã‚¦ã‚§ã‚¢DNAã®æ¬ å¦‚ã¨æ‰‹å‹•ãƒ¯ãƒ¼ã‚¯ãƒ•ãƒ­ãƒ¼ã¸ã®ä¾å­˜ã«ã‚ˆã‚Šã€ã€Œã‚µãƒ¼ãƒ“ã‚¹ãƒžãƒ¼ã‚¸ãƒ³ã®ç½ ã€ã«é™¥ã‚‹ãƒªã‚¹ã‚¯ãŒé«˜ã„ã€‚"
     }
   },
   "synthesis": {
-    "alignment": "戦略的適合性（Should）と市場アクセス（Can）は一致している。我々は問題と顧客を深く理解している。",
-    "divergence": "実行能力（Can）が戦略的野心に遅れをとっている。スケーラブルなプラットフォームを構築したいと考えているが、手動のエンジニアリングコンサルティング向けの人員配置になっている。",
-    "gap_to_close": "低いサービスマージンから脱却するために、「群（クラスター）」調達モデル（SaaSを購入する法的能力）を検証し、「ステップ2」の診断ロジックを自動化しなければならない。",
+    "alignment": "æˆ¦ç•¥çš„é©åˆæ€§ï¼ˆShouldï¼‰ã¨å¸‚å ´ã‚¢ã‚¯ã‚»ã‚¹ï¼ˆCanï¼‰ã¯ä¸€è‡´ã—ã¦ã„ã‚‹ã€‚æˆ‘ã€…ã¯å•é¡Œã¨é¡§å®¢ã‚’æ·±ãç†è§£ã—ã¦ã„ã‚‹ã€‚",
+    "divergence": "å®Ÿè¡Œèƒ½åŠ›ï¼ˆCanï¼‰ãŒæˆ¦ç•¥çš„é‡Žå¿ƒã«é…ã‚Œã‚’ã¨ã£ã¦ã„ã‚‹ã€‚ã‚¹ã‚±ãƒ¼ãƒ©ãƒ–ãƒ«ãªãƒ—ãƒ©ãƒƒãƒˆãƒ•ã‚©ãƒ¼ãƒ ã‚’æ§‹ç¯‰ã—ãŸã„ã¨è€ƒãˆã¦ã„ã‚‹ãŒã€æ‰‹å‹•ã®ã‚¨ãƒ³ã‚¸ãƒ‹ã‚¢ãƒªãƒ³ã‚°ã‚³ãƒ³ã‚µãƒ«ãƒ†ã‚£ãƒ³ã‚°å‘ã‘ã®äººå“¡é…ç½®ã«ãªã£ã¦ã„ã‚‹ã€‚",
+    "gap_to_close": "ä½Žã„ã‚µãƒ¼ãƒ“ã‚¹ãƒžãƒ¼ã‚¸ãƒ³ã‹ã‚‰è„±å´ã™ã‚‹ãŸã‚ã«ã€ã€Œç¾¤ï¼ˆã‚¯ãƒ©ã‚¹ã‚¿ãƒ¼ï¼‰ã€èª¿é”ãƒ¢ãƒ‡ãƒ«ï¼ˆSaaSã‚’è³¼å…¥ã™ã‚‹æ³•çš„èƒ½åŠ›ï¼‰ã‚’æ¤œè¨¼ã—ã€ã€Œã‚¹ãƒ†ãƒƒãƒ—2ã€ã®è¨ºæ–­ãƒ­ã‚¸ãƒƒã‚¯ã‚’è‡ªå‹•åŒ–ã—ãªã‘ã‚Œã°ãªã‚‰ãªã„ã€‚",
     "final_verdict": {
-      "verdict_title": "パートナーシップ主導のナロープラットフォーム",
+      "verdict_title": "ãƒ‘ãƒ¼ãƒˆãƒŠãƒ¼ã‚·ãƒƒãƒ—ä¸»å°Žã®ãƒŠãƒ­ãƒ¼ãƒ—ãƒ©ãƒƒãƒˆãƒ•ã‚©ãƒ¼ãƒ ",
       "decision": "Conditional",
-      "condition": "以下の場合のみ進める：1) 調達の実現可能性を証明するための「群（クラスター）」契約が確保される、かつ 2) エンジニアリングによる遅延を覆す権限を持つ専任のプロダクトオーナーが配置される。",
+      "condition": "ä»¥ä¸‹ã®å ´åˆã®ã¿é€²ã‚ã‚‹ï¼š1) èª¿é”ã®å®Ÿç¾å¯èƒ½æ€§ã‚’è¨¼æ˜Žã™ã‚‹ãŸã‚ã®ã€Œç¾¤ï¼ˆã‚¯ãƒ©ã‚¹ã‚¿ãƒ¼ï¼‰ã€å¥‘ç´„ãŒç¢ºä¿ã•ã‚Œã‚‹ã€ã‹ã¤ 2) ã‚¨ãƒ³ã‚¸ãƒ‹ã‚¢ãƒªãƒ³ã‚°ã«ã‚ˆã‚‹é…å»¶ã‚’è¦†ã™æ¨©é™ã‚’æŒã¤å°‚ä»»ã®ãƒ—ãƒ­ãƒ€ã‚¯ãƒˆã‚ªãƒ¼ãƒŠãƒ¼ãŒé…ç½®ã•ã‚Œã‚‹ã€‚",
       "confidence": "Medium"
     }
   },
   "gaps": [
     {
-      "dimension": "チーム / リーダーシップ",
+      "dimension": "ãƒãƒ¼ãƒ  / ãƒªãƒ¼ãƒ€ãƒ¼ã‚·ãƒƒãƒ—",
       "category": "core",
-      "current_state": "強力なエンジニアリングドメインの専門知識はあるが、社内のSaaSリーダーシップ（CPO/CTO）が決定的に不足しており、社内スタッフとパートタイムのコーチに依存している。",
-      "required_state": "安全性に関わらない機能についてエンジニアリングの拒否権を覆す権限を持つ、B2B SaaS経験のあるフルタイムのプロダクトリード/CPO。",
-      "gap_summary": "経営幹部のソフトウェアDNAが欠如している。「無欠陥」文化がアジャイルな反復を脅かしている。",
-      "gap_size": { "score": 5, "label": "決定的" },
-      "ease_of_closing": { "score": 2, "label": "困難" },
+      "current_state": "å¼·åŠ›ãªã‚¨ãƒ³ã‚¸ãƒ‹ã‚¢ãƒªãƒ³ã‚°ãƒ‰ãƒ¡ã‚¤ãƒ³ã®å°‚é–€çŸ¥è­˜ã¯ã‚ã‚‹ãŒã€ç¤¾å†…ã®SaaSãƒªãƒ¼ãƒ€ãƒ¼ã‚·ãƒƒãƒ—ï¼ˆCPO/CTOï¼‰ãŒæ±ºå®šçš„ã«ä¸è¶³ã—ã¦ãŠã‚Šã€ç¤¾å†…ã‚¹ã‚¿ãƒƒãƒ•ã¨ãƒ‘ãƒ¼ãƒˆã‚¿ã‚¤ãƒ ã®ã‚³ãƒ¼ãƒã«ä¾å­˜ã—ã¦ã„ã‚‹ã€‚",
+      "required_state": "å®‰å…¨æ€§ã«é–¢ã‚ã‚‰ãªã„æ©Ÿèƒ½ã«ã¤ã„ã¦ã‚¨ãƒ³ã‚¸ãƒ‹ã‚¢ãƒªãƒ³ã‚°ã®æ‹’å¦æ¨©ã‚’è¦†ã™æ¨©é™ã‚’æŒã¤ã€B2B SaaSçµŒé¨“ã®ã‚ã‚‹ãƒ•ãƒ«ã‚¿ã‚¤ãƒ ã®ãƒ—ãƒ­ãƒ€ã‚¯ãƒˆãƒªãƒ¼ãƒ‰/CPOã€‚",
+      "gap_summary": "çµŒå–¶å¹¹éƒ¨ã®ã‚½ãƒ•ãƒˆã‚¦ã‚§ã‚¢DNAãŒæ¬ å¦‚ã—ã¦ã„ã‚‹ã€‚ã€Œç„¡æ¬ é™¥ã€æ–‡åŒ–ãŒã‚¢ã‚¸ãƒ£ã‚¤ãƒ«ãªåå¾©ã‚’è„…ã‹ã—ã¦ã„ã‚‹ã€‚",
+      "gap_size": { "score": 5, "label": "æ±ºå®šçš„" },
+      "ease_of_closing": { "score": 2, "label": "å›°é›£" },
       "quadrant": "Dealbreaker",
-      "why_easy_or_hard": "組織が外部CPOの採用を明確に拒否した。「部外者」やアジャイル手法に対する文化的抵抗が高い。",
-      "action_to_close": "B2B SaaS経験を持つフルタイムのプロダクトリードまたはCPOを採用し、ロードマップに対する決定権を与える。",
-      "risk_of_inaction": "ベンチャーはエンジニアリングの仕様は満たすがユーザーの採用が進まない「無用の長物」を作り、製品開発が停滞する。",
-      "owner": "イノベーション責任者"
+      "why_easy_or_hard": "çµ„ç¹”ãŒå¤–éƒ¨CPOã®æŽ¡ç”¨ã‚’æ˜Žç¢ºã«æ‹’å¦ã—ãŸã€‚ã€Œéƒ¨å¤–è€…ã€ã‚„ã‚¢ã‚¸ãƒ£ã‚¤ãƒ«æ‰‹æ³•ã«å¯¾ã™ã‚‹æ–‡åŒ–çš„æŠµæŠ—ãŒé«˜ã„ã€‚",
+      "action_to_close": "B2B SaaSçµŒé¨“ã‚’æŒã¤ãƒ•ãƒ«ã‚¿ã‚¤ãƒ ã®ãƒ—ãƒ­ãƒ€ã‚¯ãƒˆãƒªãƒ¼ãƒ‰ã¾ãŸã¯CPOã‚’æŽ¡ç”¨ã—ã€ãƒ­ãƒ¼ãƒ‰ãƒžãƒƒãƒ—ã«å¯¾ã™ã‚‹æ±ºå®šæ¨©ã‚’ä¸Žãˆã‚‹ã€‚",
+      "risk_of_inaction": "ãƒ™ãƒ³ãƒãƒ£ãƒ¼ã¯ã‚¨ãƒ³ã‚¸ãƒ‹ã‚¢ãƒªãƒ³ã‚°ã®ä»•æ§˜ã¯æº€ãŸã™ãŒãƒ¦ãƒ¼ã‚¶ãƒ¼ã®æŽ¡ç”¨ãŒé€²ã¾ãªã„ã€Œç„¡ç”¨ã®é•·ç‰©ã€ã‚’ä½œã‚Šã€è£½å“é–‹ç™ºãŒåœæ»žã™ã‚‹ã€‚",
+      "owner": "ã‚¤ãƒŽãƒ™ãƒ¼ã‚·ãƒ§ãƒ³è²¬ä»»è€…"
     },
     {
-      "dimension": "技術 / プロダクト",
+      "dimension": "æŠ€è¡“ / ãƒ—ãƒ­ãƒ€ã‚¯ãƒˆ",
       "category": "core",
-      "current_state": "スタッフが手動でデータを処理する「コンシェルジュMVP」ワークフローへの依存。レガシーシステムとの統合は未検証。",
-      "required_state": "1取引あたり人の介入なしに70%以上の粗利益を提供できる自動化された診断ロジック。",
-      "gap_summary": "手動の診断ロジックは「サービスマージンの罠」（利益率30～40%）を生み出す。",
-      "gap_size": { "score": 4, "label": "大" },
-      "ease_of_closing": { "score": 3, "label": "中" },
+      "current_state": "ã‚¹ã‚¿ãƒƒãƒ•ãŒæ‰‹å‹•ã§ãƒ‡ãƒ¼ã‚¿ã‚’å‡¦ç†ã™ã‚‹ã€Œã‚³ãƒ³ã‚·ã‚§ãƒ«ã‚¸ãƒ¥MVPã€ãƒ¯ãƒ¼ã‚¯ãƒ•ãƒ­ãƒ¼ã¸ã®ä¾å­˜ã€‚ãƒ¬ã‚¬ã‚·ãƒ¼ã‚·ã‚¹ãƒ†ãƒ ã¨ã®çµ±åˆã¯æœªæ¤œè¨¼ã€‚",
+      "required_state": "1å–å¼•ã‚ãŸã‚Šäººã®ä»‹å…¥ãªã—ã«70%ä»¥ä¸Šã®ç²—åˆ©ç›Šã‚’æä¾›ã§ãã‚‹è‡ªå‹•åŒ–ã•ã‚ŒãŸè¨ºæ–­ãƒ­ã‚¸ãƒƒã‚¯ã€‚",
+      "gap_summary": "æ‰‹å‹•ã®è¨ºæ–­ãƒ­ã‚¸ãƒƒã‚¯ã¯ã€Œã‚µãƒ¼ãƒ“ã‚¹ãƒžãƒ¼ã‚¸ãƒ³ã®ç½ ã€ï¼ˆåˆ©ç›ŠçŽ‡30ï½ž40%ï¼‰ã‚’ç”Ÿã¿å‡ºã™ã€‚",
+      "gap_size": { "score": 4, "label": "å¤§" },
+      "ease_of_closing": { "score": 3, "label": "ä¸­" },
       "quadrant": "Priority Investment",
-      "why_easy_or_hard": "自動化は技術的に可能だが、ロジックと責任境界の厳密な定義が必要。",
-      "action_to_close": "「ステップ2」の診断ロジックを自動化し、初年度に手動介入を50%削減するためのロードマップを定義・実行する。",
-      "risk_of_inaction": "ベンチャーはプラットフォームを装った低利益率のコンサルティングビジネスのままであり、ユニットエコノミクスは決してスケールしない。",
-      "owner": "ベンチャーチーム / 日軽エンジニアリング"
+      "why_easy_or_hard": "è‡ªå‹•åŒ–ã¯æŠ€è¡“çš„ã«å¯èƒ½ã ãŒã€ãƒ­ã‚¸ãƒƒã‚¯ã¨è²¬ä»»å¢ƒç•Œã®åŽ³å¯†ãªå®šç¾©ãŒå¿…è¦ã€‚",
+      "action_to_close": "ã€Œã‚¹ãƒ†ãƒƒãƒ—2ã€ã®è¨ºæ–­ãƒ­ã‚¸ãƒƒã‚¯ã‚’è‡ªå‹•åŒ–ã—ã€åˆå¹´åº¦ã«æ‰‹å‹•ä»‹å…¥ã‚’50%å‰Šæ¸›ã™ã‚‹ãŸã‚ã®ãƒ­ãƒ¼ãƒ‰ãƒžãƒƒãƒ—ã‚’å®šç¾©ãƒ»å®Ÿè¡Œã™ã‚‹ã€‚",
+      "risk_of_inaction": "ãƒ™ãƒ³ãƒãƒ£ãƒ¼ã¯ãƒ—ãƒ©ãƒƒãƒˆãƒ•ã‚©ãƒ¼ãƒ ã‚’è£…ã£ãŸä½Žåˆ©ç›ŠçŽ‡ã®ã‚³ãƒ³ã‚µãƒ«ãƒ†ã‚£ãƒ³ã‚°ãƒ“ã‚¸ãƒã‚¹ã®ã¾ã¾ã§ã‚ã‚Šã€ãƒ¦ãƒ‹ãƒƒãƒˆã‚¨ã‚³ãƒŽãƒŸã‚¯ã‚¹ã¯æ±ºã—ã¦ã‚¹ã‚±ãƒ¼ãƒ«ã—ãªã„ã€‚",
+      "owner": "ãƒ™ãƒ³ãƒãƒ£ãƒ¼ãƒãƒ¼ãƒ  / Apex Infrastructure Services"
     },
     {
-      "dimension": "トラクション / 検証",
+      "dimension": "ãƒˆãƒ©ã‚¯ã‚·ãƒ§ãƒ³ / æ¤œè¨¼",
       "category": "core",
-      "current_state": "有償の実績はゼロ。エンジニアリングサービスとは別のソフトウェアに対する支払い意思は未検証。",
-      "required_state": "少なくとも1つの「群（クラスター）」（県＋市町村）との有償パイロット契約により、サブスクリプションモデルを検証すること。",
-      "gap_summary": "商業的価値は理論上のもの。価格設定を検証するための支払い顧客がいない。",
-      "gap_size": { "score": 5, "label": "決定的" },
-      "ease_of_closing": { "score": 3, "label": "中" },
+      "current_state": "æœ‰å„Ÿã®å®Ÿç¸¾ã¯ã‚¼ãƒ­ã€‚ã‚¨ãƒ³ã‚¸ãƒ‹ã‚¢ãƒªãƒ³ã‚°ã‚µãƒ¼ãƒ“ã‚¹ã¨ã¯åˆ¥ã®ã‚½ãƒ•ãƒˆã‚¦ã‚§ã‚¢ã«å¯¾ã™ã‚‹æ”¯æ‰•ã„æ„æ€ã¯æœªæ¤œè¨¼ã€‚",
+      "required_state": "å°‘ãªãã¨ã‚‚1ã¤ã®ã€Œç¾¤ï¼ˆã‚¯ãƒ©ã‚¹ã‚¿ãƒ¼ï¼‰ã€ï¼ˆçœŒï¼‹å¸‚ç”ºæ‘ï¼‰ã¨ã®æœ‰å„Ÿãƒ‘ã‚¤ãƒ­ãƒƒãƒˆå¥‘ç´„ã«ã‚ˆã‚Šã€ã‚µãƒ–ã‚¹ã‚¯ãƒªãƒ—ã‚·ãƒ§ãƒ³ãƒ¢ãƒ‡ãƒ«ã‚’æ¤œè¨¼ã™ã‚‹ã“ã¨ã€‚",
+      "gap_summary": "å•†æ¥­çš„ä¾¡å€¤ã¯ç†è«–ä¸Šã®ã‚‚ã®ã€‚ä¾¡æ ¼è¨­å®šã‚’æ¤œè¨¼ã™ã‚‹ãŸã‚ã®æ”¯æ‰•ã„é¡§å®¢ãŒã„ãªã„ã€‚",
+      "gap_size": { "score": 5, "label": "æ±ºå®šçš„" },
+      "ease_of_closing": { "score": 3, "label": "ä¸­" },
       "quadrant": "Mixed",
-      "why_easy_or_hard": "日軽金ブランドを通じて顧客へのアクセスは容易だが、22ヶ月の販売サイクルのため成約に時間がかかる。",
-      "action_to_close": "90日以内に1つの有償「群（クラスター）」パイロット契約（県＋市町村）を確保する。",
-      "risk_of_inaction": "評価額の裏付けがないままとなり、収益検証なしにキャッシュバーンが続く。",
-      "owner": "プロジェクトリード"
+      "why_easy_or_hard": "AMCãƒ–ãƒ©ãƒ³ãƒ‰ã‚’é€šã˜ã¦é¡§å®¢ã¸ã®ã‚¢ã‚¯ã‚»ã‚¹ã¯å®¹æ˜“ã ãŒã€22ãƒ¶æœˆã®è²©å£²ã‚µã‚¤ã‚¯ãƒ«ã®ãŸã‚æˆç´„ã«æ™‚é–“ãŒã‹ã‹ã‚‹ã€‚",
+      "action_to_close": "90æ—¥ä»¥å†…ã«1ã¤ã®æœ‰å„Ÿã€Œç¾¤ï¼ˆã‚¯ãƒ©ã‚¹ã‚¿ãƒ¼ï¼‰ã€ãƒ‘ã‚¤ãƒ­ãƒƒãƒˆå¥‘ç´„ï¼ˆçœŒï¼‹å¸‚ç”ºæ‘ï¼‰ã‚’ç¢ºä¿ã™ã‚‹ã€‚",
+      "risk_of_inaction": "è©•ä¾¡é¡ã®è£ä»˜ã‘ãŒãªã„ã¾ã¾ã¨ãªã‚Šã€åŽç›Šæ¤œè¨¼ãªã—ã«ã‚­ãƒ£ãƒƒã‚·ãƒ¥ãƒãƒ¼ãƒ³ãŒç¶šãã€‚",
+      "owner": "ãƒ—ãƒ­ã‚¸ã‚§ã‚¯ãƒˆãƒªãƒ¼ãƒ‰"
     },
     {
-      "dimension": "資本 / 資金調達",
+      "dimension": "è³‡æœ¬ / è³‡é‡‘èª¿é”",
       "category": "core",
-      "current_state": "22ヶ月の販売サイクルのギャップを埋めるため、4.5億円の運転資金不足が予測される。",
-      "required_state": "収益が拡大する前の「死の谷」をカバーするためのコミットされた社内資金トランシェ。",
-      "gap_summary": "政府の支払いサイクルが遅いため、重大なキャッシュフローの谷が特定された。",
-      "gap_size": { "score": 3, "label": "中" },
-      "ease_of_closing": { "score": 4, "label": "容易" },
+      "current_state": "22ãƒ¶æœˆã®è²©å£²ã‚µã‚¤ã‚¯ãƒ«ã®ã‚®ãƒ£ãƒƒãƒ—ã‚’åŸ‹ã‚ã‚‹ãŸã‚ã€4.5å„„å††ã®é‹è»¢è³‡é‡‘ä¸è¶³ãŒäºˆæ¸¬ã•ã‚Œã‚‹ã€‚",
+      "required_state": "åŽç›ŠãŒæ‹¡å¤§ã™ã‚‹å‰ã®ã€Œæ­»ã®è°·ã€ã‚’ã‚«ãƒãƒ¼ã™ã‚‹ãŸã‚ã®ã‚³ãƒŸãƒƒãƒˆã•ã‚ŒãŸç¤¾å†…è³‡é‡‘ãƒˆãƒ©ãƒ³ã‚·ã‚§ã€‚",
+      "gap_summary": "æ”¿åºœã®æ”¯æ‰•ã„ã‚µã‚¤ã‚¯ãƒ«ãŒé…ã„ãŸã‚ã€é‡å¤§ãªã‚­ãƒ£ãƒƒã‚·ãƒ¥ãƒ•ãƒ­ãƒ¼ã®è°·ãŒç‰¹å®šã•ã‚ŒãŸã€‚",
+      "gap_size": { "score": 3, "label": "ä¸­" },
+      "ease_of_closing": { "score": 4, "label": "å®¹æ˜“" },
       "quadrant": "Quick Win",
-      "why_easy_or_hard": "社内の割り当て決定事項であり、バランスシートの余力は存在する。",
-      "action_to_close": "特定の検証マイルストーンに紐づいた5億円の社内資金割り当てを承認する。",
-      "risk_of_inaction": "販売サイクルが完了する前に流動性危機によりプロジェクトが中断される。",
-      "owner": "本社 / 財務"
+      "why_easy_or_hard": "ç¤¾å†…ã®å‰²ã‚Šå½“ã¦æ±ºå®šäº‹é …ã§ã‚ã‚Šã€ãƒãƒ©ãƒ³ã‚¹ã‚·ãƒ¼ãƒˆã®ä½™åŠ›ã¯å­˜åœ¨ã™ã‚‹ã€‚",
+      "action_to_close": "ç‰¹å®šã®æ¤œè¨¼ãƒžã‚¤ãƒ«ã‚¹ãƒˆãƒ¼ãƒ³ã«ç´ã¥ã„ãŸ5å„„å††ã®ç¤¾å†…è³‡é‡‘å‰²ã‚Šå½“ã¦ã‚’æ‰¿èªã™ã‚‹ã€‚",
+      "risk_of_inaction": "è²©å£²ã‚µã‚¤ã‚¯ãƒ«ãŒå®Œäº†ã™ã‚‹å‰ã«æµå‹•æ€§å±æ©Ÿã«ã‚ˆã‚Šãƒ—ãƒ­ã‚¸ã‚§ã‚¯ãƒˆãŒä¸­æ–­ã•ã‚Œã‚‹ã€‚",
+      "owner": "æœ¬ç¤¾ / è²¡å‹™"
     },
     {
-      "dimension": "市場アクセス / 市場投入（GTM）",
+      "dimension": "å¸‚å ´ã‚¢ã‚¯ã‚»ã‚¹ / å¸‚å ´æŠ•å…¥ï¼ˆGTMï¼‰",
       "category": "core",
-      "current_state": "単一の自治体への直接販売モデルは経済的に成立しない（小さな町では顧客獲得コスト > 生涯顧客価値）。",
-      "required_state": "県が複数の市町村を代表して購入する、検証済みの「群（クラスター）」販売モーション。",
-      "gap_summary": "「群」の集約が成功しなければユニットエコノミクスは破綻する。",
-      "gap_size": { "score": 4, "label": "大" },
-      "ease_of_closing": { "score": 2, "label": "困難" },
+      "current_state": "å˜ä¸€ã®è‡ªæ²»ä½“ã¸ã®ç›´æŽ¥è²©å£²ãƒ¢ãƒ‡ãƒ«ã¯çµŒæ¸ˆçš„ã«æˆç«‹ã—ãªã„ï¼ˆå°ã•ãªç”ºã§ã¯é¡§å®¢ç²å¾—ã‚³ã‚¹ãƒˆ > ç”Ÿæ¶¯é¡§å®¢ä¾¡å€¤ï¼‰ã€‚",
+      "required_state": "çœŒãŒè¤‡æ•°ã®å¸‚ç”ºæ‘ã‚’ä»£è¡¨ã—ã¦è³¼å…¥ã™ã‚‹ã€æ¤œè¨¼æ¸ˆã¿ã®ã€Œç¾¤ï¼ˆã‚¯ãƒ©ã‚¹ã‚¿ãƒ¼ï¼‰ã€è²©å£²ãƒ¢ãƒ¼ã‚·ãƒ§ãƒ³ã€‚",
+      "gap_summary": "ã€Œç¾¤ã€ã®é›†ç´„ãŒæˆåŠŸã—ãªã‘ã‚Œã°ãƒ¦ãƒ‹ãƒƒãƒˆã‚¨ã‚³ãƒŽãƒŸã‚¯ã‚¹ã¯ç ´ç¶»ã™ã‚‹ã€‚",
+      "gap_size": { "score": 4, "label": "å¤§" },
+      "ease_of_closing": { "score": 2, "label": "å›°é›£" },
       "quadrant": "Dealbreaker",
-      "why_easy_or_hard": "定着した自治体の調達行動（地元限定入札）を集約型モデルに変更する必要がある。",
-      "action_to_close": "パイロットを通じて「群（クラスター）」調達手段を検証し、集約が法的に可能であることを証明する。",
-      "risk_of_inaction": "ターゲット市場の80-90%に利益を出してサービス提供できない。顧客獲得コストが収益性を破壊する。",
-      "owner": "営業 / ベンチャーチーム"
+      "why_easy_or_hard": "å®šç€ã—ãŸè‡ªæ²»ä½“ã®èª¿é”è¡Œå‹•ï¼ˆåœ°å…ƒé™å®šå…¥æœ­ï¼‰ã‚’é›†ç´„åž‹ãƒ¢ãƒ‡ãƒ«ã«å¤‰æ›´ã™ã‚‹å¿…è¦ãŒã‚ã‚‹ã€‚",
+      "action_to_close": "ãƒ‘ã‚¤ãƒ­ãƒƒãƒˆã‚’é€šã˜ã¦ã€Œç¾¤ï¼ˆã‚¯ãƒ©ã‚¹ã‚¿ãƒ¼ï¼‰ã€èª¿é”æ‰‹æ®µã‚’æ¤œè¨¼ã—ã€é›†ç´„ãŒæ³•çš„ã«å¯èƒ½ã§ã‚ã‚‹ã“ã¨ã‚’è¨¼æ˜Žã™ã‚‹ã€‚",
+      "risk_of_inaction": "ã‚¿ãƒ¼ã‚²ãƒƒãƒˆå¸‚å ´ã®80-90%ã«åˆ©ç›Šã‚’å‡ºã—ã¦ã‚µãƒ¼ãƒ“ã‚¹æä¾›ã§ããªã„ã€‚é¡§å®¢ç²å¾—ã‚³ã‚¹ãƒˆãŒåŽç›Šæ€§ã‚’ç ´å£Šã™ã‚‹ã€‚",
+      "owner": "å–¶æ¥­ / ãƒ™ãƒ³ãƒãƒ£ãƒ¼ãƒãƒ¼ãƒ "
     },
     {
-      "dimension": "規制 / 法務",
+      "dimension": "è¦åˆ¶ / æ³•å‹™",
       "category": "core",
-      "current_state": "「記録検査官」の役割が曖昧であり、インフラ事故に対する保険不可能な賠償責任のリスクがある。",
-      "required_state": "物理的なインフラ事故から日軽金を免責する明確な利用規約と保険構造。",
-      "gap_summary": "責任の枠組みが未定義。「偽陰性」が事故につながるリスクがある。",
-      "gap_size": { "score": 5, "label": "決定的" },
-      "ease_of_closing": { "score": 3, "label": "中" },
+      "current_state": "ã€Œè¨˜éŒ²æ¤œæŸ»å®˜ã€ã®å½¹å‰²ãŒæ›–æ˜§ã§ã‚ã‚Šã€ã‚¤ãƒ³ãƒ•ãƒ©äº‹æ•…ã«å¯¾ã™ã‚‹ä¿é™ºä¸å¯èƒ½ãªè³ å„Ÿè²¬ä»»ã®ãƒªã‚¹ã‚¯ãŒã‚ã‚‹ã€‚",
+      "required_state": "ç‰©ç†çš„ãªã‚¤ãƒ³ãƒ•ãƒ©äº‹æ•…ã‹ã‚‰AMCã‚’å…è²¬ã™ã‚‹æ˜Žç¢ºãªåˆ©ç”¨è¦ç´„ã¨ä¿é™ºæ§‹é€ ã€‚",
+      "gap_summary": "è²¬ä»»ã®æž çµ„ã¿ãŒæœªå®šç¾©ã€‚ã€Œå½é™°æ€§ã€ãŒäº‹æ•…ã«ã¤ãªãŒã‚‹ãƒªã‚¹ã‚¯ãŒã‚ã‚‹ã€‚",
+      "gap_size": { "score": 5, "label": "æ±ºå®šçš„" },
+      "ease_of_closing": { "score": 3, "label": "ä¸­" },
       "quadrant": "Priority Investment",
-      "why_easy_or_hard": "専門の法務顧問と保険構築で解決可能だが、リスクは実存的である。",
-      "action_to_close": "工学的判断の責任をユーザーに戻すことを明示した利用規約を起草し検証する。",
-      "risk_of_inaction": "たった一度の事故でベンチャーが破産したり、評判の波及を引き起こす可能性がある。",
-      "owner": "企業法務"
+      "why_easy_or_hard": "å°‚é–€ã®æ³•å‹™é¡§å•ã¨ä¿é™ºæ§‹ç¯‰ã§è§£æ±ºå¯èƒ½ã ãŒã€ãƒªã‚¹ã‚¯ã¯å®Ÿå­˜çš„ã§ã‚ã‚‹ã€‚",
+      "action_to_close": "å·¥å­¦çš„åˆ¤æ–­ã®è²¬ä»»ã‚’ãƒ¦ãƒ¼ã‚¶ãƒ¼ã«æˆ»ã™ã“ã¨ã‚’æ˜Žç¤ºã—ãŸåˆ©ç”¨è¦ç´„ã‚’èµ·è‰ã—æ¤œè¨¼ã™ã‚‹ã€‚",
+      "risk_of_inaction": "ãŸã£ãŸä¸€åº¦ã®äº‹æ•…ã§ãƒ™ãƒ³ãƒãƒ£ãƒ¼ãŒç ´ç”£ã—ãŸã‚Šã€è©•åˆ¤ã®æ³¢åŠã‚’å¼•ãèµ·ã“ã™å¯èƒ½æ€§ãŒã‚ã‚‹ã€‚",
+      "owner": "ä¼æ¥­æ³•å‹™"
     },
     {
-      "dimension": "パートナーシップ / エコシステム",
+      "dimension": "ãƒ‘ãƒ¼ãƒˆãƒŠãƒ¼ã‚·ãƒƒãƒ— / ã‚¨ã‚³ã‚·ã‚¹ãƒ†ãƒ ",
       "category": "optional",
-      "current_state": "市民通報データの取り込みが必要。FixMyStreetが潜在的なパートナーとして特定されている。",
-      "required_state": "市民通報プロバイダーとの正式なAPI統合と商業契約。",
-      "gap_summary": "「ステップ1」のデータ取り込みにおける第三者への依存。",
-      "gap_size": { "score": 2, "label": "小" },
-      "ease_of_closing": { "score": 4, "label": "容易" },
+      "current_state": "å¸‚æ°‘é€šå ±ãƒ‡ãƒ¼ã‚¿ã®å–ã‚Šè¾¼ã¿ãŒå¿…è¦ã€‚CityConnectãŒæ½œåœ¨çš„ãªãƒ‘ãƒ¼ãƒˆãƒŠãƒ¼ã¨ã—ã¦ç‰¹å®šã•ã‚Œã¦ã„ã‚‹ã€‚",
+      "required_state": "å¸‚æ°‘é€šå ±ãƒ—ãƒ­ãƒã‚¤ãƒ€ãƒ¼ã¨ã®æ­£å¼ãªAPIçµ±åˆã¨å•†æ¥­å¥‘ç´„ã€‚",
+      "gap_summary": "ã€Œã‚¹ãƒ†ãƒƒãƒ—1ã€ã®ãƒ‡ãƒ¼ã‚¿å–ã‚Šè¾¼ã¿ã«ãŠã‘ã‚‹ç¬¬ä¸‰è€…ã¸ã®ä¾å­˜ã€‚",
+      "gap_size": { "score": 2, "label": "å°" },
+      "ease_of_closing": { "score": 4, "label": "å®¹æ˜“" },
       "quadrant": "Quick Win",
-      "why_easy_or_hard": "パートナー（例：Dappi Studio）は利用可能で意欲的であり、技術統合は標準的である。",
-      "action_to_close": "データ取り込みのためにDappi Studio（FixMyStreet）とのパートナーシップ/MOUを正式化する。",
-      "risk_of_inaction": "チームはコアとなるエンジニアリングエンジンの代わりに、コモディティ化した「通報アプリ」の再構築にリソースを浪費することになる。",
-      "owner": "ベンチャーチーム"
+      "why_easy_or_hard": "ãƒ‘ãƒ¼ãƒˆãƒŠãƒ¼ï¼ˆä¾‹ï¼šUrban Solutions Inc.ï¼‰ã¯åˆ©ç”¨å¯èƒ½ã§æ„æ¬²çš„ã§ã‚ã‚Šã€æŠ€è¡“çµ±åˆã¯æ¨™æº–çš„ã§ã‚ã‚‹ã€‚",
+      "action_to_close": "ãƒ‡ãƒ¼ã‚¿å–ã‚Šè¾¼ã¿ã®ãŸã‚ã«Urban Solutions Inc.ï¼ˆCityConnectï¼‰ã¨ã®ãƒ‘ãƒ¼ãƒˆãƒŠãƒ¼ã‚·ãƒƒãƒ—/MOUã‚’æ­£å¼åŒ–ã™ã‚‹ã€‚",
+      "risk_of_inaction": "ãƒãƒ¼ãƒ ã¯ã‚³ã‚¢ã¨ãªã‚‹ã‚¨ãƒ³ã‚¸ãƒ‹ã‚¢ãƒªãƒ³ã‚°ã‚¨ãƒ³ã‚¸ãƒ³ã®ä»£ã‚ã‚Šã«ã€ã‚³ãƒ¢ãƒ‡ã‚£ãƒ†ã‚£åŒ–ã—ãŸã€Œé€šå ±ã‚¢ãƒ—ãƒªã€ã®å†æ§‹ç¯‰ã«ãƒªã‚½ãƒ¼ã‚¹ã‚’æµªè²»ã™ã‚‹ã“ã¨ã«ãªã‚‹ã€‚",
+      "owner": "ãƒ™ãƒ³ãƒãƒ£ãƒ¼ãƒãƒ¼ãƒ "
     }
   ],
   "gap_summary": {
     "total_dimensions_assessed": 7,
-    "dealbreakers": ["チーム / リーダーシップ", "市場アクセス / 市場投入（GTM）"],
-    "priority_investments": ["技術 / プロダクト", "規制 / 法務"],
-    "quick_wins": ["資本 / 資金調達", "パートナーシップ / エコシステム"],
+    "dealbreakers": ["ãƒãƒ¼ãƒ  / ãƒªãƒ¼ãƒ€ãƒ¼ã‚·ãƒƒãƒ—", "å¸‚å ´ã‚¢ã‚¯ã‚»ã‚¹ / å¸‚å ´æŠ•å…¥ï¼ˆGTMï¼‰"],
+    "priority_investments": ["æŠ€è¡“ / ãƒ—ãƒ­ãƒ€ã‚¯ãƒˆ", "è¦åˆ¶ / æ³•å‹™"],
+    "quick_wins": ["è³‡æœ¬ / è³‡é‡‘èª¿é”", "ãƒ‘ãƒ¼ãƒˆãƒŠãƒ¼ã‚·ãƒƒãƒ— / ã‚¨ã‚³ã‚·ã‚¹ãƒ†ãƒ "],
     "manageable": [],
-    "mixed": ["技術 / プロダクト", "資本 / 資金調達", "規制 / 法務"],
-    "overall_gap_assessment": "高リスクなベンチャーである。資本と技術は解決可能だが、「チーム」（SaaS DNAの欠如）と「市場アクセス」（未検証のクラスター調達への依存）は、全額出資の前に解決されなければならない決定的な取引停止要因である。"
+    "mixed": ["æŠ€è¡“ / ãƒ—ãƒ­ãƒ€ã‚¯ãƒˆ", "è³‡æœ¬ / è³‡é‡‘èª¿é”", "è¦åˆ¶ / æ³•å‹™"],
+    "overall_gap_assessment": "é«˜ãƒªã‚¹ã‚¯ãªãƒ™ãƒ³ãƒãƒ£ãƒ¼ã§ã‚ã‚‹ã€‚è³‡æœ¬ã¨æŠ€è¡“ã¯è§£æ±ºå¯èƒ½ã ãŒã€ã€Œãƒãƒ¼ãƒ ã€ï¼ˆSaaS DNAã®æ¬ å¦‚ï¼‰ã¨ã€Œå¸‚å ´ã‚¢ã‚¯ã‚»ã‚¹ã€ï¼ˆæœªæ¤œè¨¼ã®ã‚¯ãƒ©ã‚¹ã‚¿ãƒ¼èª¿é”ã¸ã®ä¾å­˜ï¼‰ã¯ã€å…¨é¡å‡ºè³‡ã®å‰ã«è§£æ±ºã•ã‚Œãªã‘ã‚Œã°ãªã‚‰ãªã„æ±ºå®šçš„ãªå–å¼•åœæ­¢è¦å› ã§ã‚ã‚‹ã€‚"
   },
   "highlights": [
     {
-      "highlight": "自治体の技術職員が37～43%減少し、自動化への強制的な需要が生まれている",
-      "category": "市場",
-      "why_it_matters": "構造的な労働崩壊は、自治体が手動で資産を維持することが物理的に不可能であることを意味し、プラットフォームの採用を強制する",
-      "context_grounding": "水道職員はピーク時から37%減、下水道は43%減。5年前に修理が必要とされた1万の橋梁が手つかずのまま。",
+      "highlight": "è‡ªæ²»ä½“ã®æŠ€è¡“è·å“¡ãŒ37ï½ž43%æ¸›å°‘ã—ã€è‡ªå‹•åŒ–ã¸ã®å¼·åˆ¶çš„ãªéœ€è¦ãŒç”Ÿã¾ã‚Œã¦ã„ã‚‹",
+      "category": "å¸‚å ´",
+      "why_it_matters": "æ§‹é€ çš„ãªåŠ´åƒå´©å£Šã¯ã€è‡ªæ²»ä½“ãŒæ‰‹å‹•ã§è³‡ç”£ã‚’ç¶­æŒã™ã‚‹ã“ã¨ãŒç‰©ç†çš„ã«ä¸å¯èƒ½ã§ã‚ã‚‹ã“ã¨ã‚’æ„å‘³ã—ã€ãƒ—ãƒ©ãƒƒãƒˆãƒ•ã‚©ãƒ¼ãƒ ã®æŽ¡ç”¨ã‚’å¼·åˆ¶ã™ã‚‹",
+      "context_grounding": "æ°´é“è·å“¡ã¯ãƒ”ãƒ¼ã‚¯æ™‚ã‹ã‚‰37%æ¸›ã€ä¸‹æ°´é“ã¯43%æ¸›ã€‚5å¹´å‰ã«ä¿®ç†ãŒå¿…è¦ã¨ã•ã‚ŒãŸ1ä¸‡ã®æ©‹æ¢ãŒæ‰‹ã¤ã‹ãšã®ã¾ã¾ã€‚",
       "polarity": "tailwind",
-      "time_sensitivity": { "is_time_bound": true, "window": "ベテランエンジニアの退職に伴い、危機は2030年までにピークに達する" },
+      "time_sensitivity": { "is_time_bound": true, "window": "ãƒ™ãƒ†ãƒ©ãƒ³ã‚¨ãƒ³ã‚¸ãƒ‹ã‚¢ã®é€€è·ã«ä¼´ã„ã€å±æ©Ÿã¯2030å¹´ã¾ã§ã«ãƒ”ãƒ¼ã‚¯ã«é”ã™ã‚‹" },
       "source_confidence": "verified"
     },
     {
-      "highlight": "22ヶ月の政府販売サイクルにより、4.5億円の運転資金不足が生じる",
-      "category": "財務",
-      "why_it_matters": "「死の谷」は一般的なSaaSよりも深い。損益分岐点に達する前に多額の企業資金が必要となる",
-      "context_grounding": "業界平均の調達タイムラインが収益を遅らせる。回収が追いつく前の4年目にキャッシュの谷が4.5億円に達する。",
+      "highlight": "22ãƒ¶æœˆã®æ”¿åºœè²©å£²ã‚µã‚¤ã‚¯ãƒ«ã«ã‚ˆã‚Šã€4.5å„„å††ã®é‹è»¢è³‡é‡‘ä¸è¶³ãŒç”Ÿã˜ã‚‹",
+      "category": "è²¡å‹™",
+      "why_it_matters": "ã€Œæ­»ã®è°·ã€ã¯ä¸€èˆ¬çš„ãªSaaSã‚ˆã‚Šã‚‚æ·±ã„ã€‚æç›Šåˆ†å²ç‚¹ã«é”ã™ã‚‹å‰ã«å¤šé¡ã®ä¼æ¥­è³‡é‡‘ãŒå¿…è¦ã¨ãªã‚‹",
+      "context_grounding": "æ¥­ç•Œå¹³å‡ã®èª¿é”ã‚¿ã‚¤ãƒ ãƒ©ã‚¤ãƒ³ãŒåŽç›Šã‚’é…ã‚‰ã›ã‚‹ã€‚å›žåŽãŒè¿½ã„ã¤ãå‰ã®4å¹´ç›®ã«ã‚­ãƒ£ãƒƒã‚·ãƒ¥ã®è°·ãŒ4.5å„„å††ã«é”ã™ã‚‹ã€‚",
       "polarity": "headwind",
-      "time_sensitivity": { "is_time_bound": true, "window": "1～3年目のための即時の資金需要" },
+      "time_sensitivity": { "is_time_bound": true, "window": "1ï½ž3å¹´ç›®ã®ãŸã‚ã®å³æ™‚ã®è³‡é‡‘éœ€è¦" },
       "source_confidence": "estimated"
     },
     {
-      "highlight": "「群（クラスター）」戦略が3:1以上の自治体集約を達成しない限り、ユニットエコノミクスはマイナスになる",
-      "category": "財務",
-      "why_it_matters": "小さな町への直接販売は数学的に成立しない。一括調達なしではビジネスモデルが破綻する",
-      "context_grounding": "単一の町の場合、顧客獲得コスト（300万～600万円）が初年度のARR（300万～500万円）を上回る。集約なしでは回収期間が24ヶ月を超える。",
+      "highlight": "ã€Œç¾¤ï¼ˆã‚¯ãƒ©ã‚¹ã‚¿ãƒ¼ï¼‰ã€æˆ¦ç•¥ãŒ3:1ä»¥ä¸Šã®è‡ªæ²»ä½“é›†ç´„ã‚’é”æˆã—ãªã„é™ã‚Šã€ãƒ¦ãƒ‹ãƒƒãƒˆã‚¨ã‚³ãƒŽãƒŸã‚¯ã‚¹ã¯ãƒžã‚¤ãƒŠã‚¹ã«ãªã‚‹",
+      "category": "è²¡å‹™",
+      "why_it_matters": "å°ã•ãªç”ºã¸ã®ç›´æŽ¥è²©å£²ã¯æ•°å­¦çš„ã«æˆç«‹ã—ãªã„ã€‚ä¸€æ‹¬èª¿é”ãªã—ã§ã¯ãƒ“ã‚¸ãƒã‚¹ãƒ¢ãƒ‡ãƒ«ãŒç ´ç¶»ã™ã‚‹",
+      "context_grounding": "å˜ä¸€ã®ç”ºã®å ´åˆã€é¡§å®¢ç²å¾—ã‚³ã‚¹ãƒˆï¼ˆ300ä¸‡ï½ž600ä¸‡å††ï¼‰ãŒåˆå¹´åº¦ã®ARRï¼ˆ300ä¸‡ï½ž500ä¸‡å††ï¼‰ã‚’ä¸Šå›žã‚‹ã€‚é›†ç´„ãªã—ã§ã¯å›žåŽæœŸé–“ãŒ24ãƒ¶æœˆã‚’è¶…ãˆã‚‹ã€‚",
       "polarity": "headwind",
       "time_sensitivity": { "is_time_bound": false, "window": null },
       "source_confidence": "estimated"
     },
     {
-      "highlight": "安全性の責任を引き受ける日軽金の能力が、ソフトウェアスタートアップに対する参入障壁（Moat）を生む",
-      "category": "競争優位性",
-      "why_it_matters": "「エンジニアリングへの信頼」に基づく差別化により、コモディティ化した通報アプリよりも高価格設定が可能になる",
-      "context_grounding": "専業の競合他社（FixMyStreetなど）はリスクを避けるため「通報」にとどまる。日軽金は「解決」のワークフローに保険をかけることができる。",
+      "highlight": "å®‰å…¨æ€§ã®è²¬ä»»ã‚’å¼•ãå—ã‘ã‚‹AMCã®èƒ½åŠ›ãŒã€ã‚½ãƒ•ãƒˆã‚¦ã‚§ã‚¢ã‚¹ã‚¿ãƒ¼ãƒˆã‚¢ãƒƒãƒ—ã«å¯¾ã™ã‚‹å‚å…¥éšœå£ï¼ˆMoatï¼‰ã‚’ç”Ÿã‚€",
+      "category": "ç«¶äº‰å„ªä½æ€§",
+      "why_it_matters": "ã€Œã‚¨ãƒ³ã‚¸ãƒ‹ã‚¢ãƒªãƒ³ã‚°ã¸ã®ä¿¡é ¼ã€ã«åŸºã¥ãå·®åˆ¥åŒ–ã«ã‚ˆã‚Šã€ã‚³ãƒ¢ãƒ‡ã‚£ãƒ†ã‚£åŒ–ã—ãŸé€šå ±ã‚¢ãƒ—ãƒªã‚ˆã‚Šã‚‚é«˜ä¾¡æ ¼è¨­å®šãŒå¯èƒ½ã«ãªã‚‹",
+      "context_grounding": "å°‚æ¥­ã®ç«¶åˆä»–ç¤¾ï¼ˆCityConnectãªã©ï¼‰ã¯ãƒªã‚¹ã‚¯ã‚’é¿ã‘ã‚‹ãŸã‚ã€Œé€šå ±ã€ã«ã¨ã©ã¾ã‚‹ã€‚AMCã¯ã€Œè§£æ±ºã€ã®ãƒ¯ãƒ¼ã‚¯ãƒ•ãƒ­ãƒ¼ã«ä¿é™ºã‚’ã‹ã‘ã‚‹ã“ã¨ãŒã§ãã‚‹ã€‚",
       "polarity": "tailwind",
       "time_sensitivity": { "is_time_bound": false, "window": null },
       "source_confidence": "assumed"
     },
     {
-      "highlight": "チームにSaaSリーダーシップがゼロであるため、「サービスマージンの罠」（利益率30～40%）のリスクがある",
-      "category": "チーム",
-      "why_it_matters": "自動化を推進するCPOがいなければ、ベンチャーは低利益率のコンサルティング会社のままになるリスクがある",
-      "context_grounding": "社内の「プロダクトオーナー」と手動の「コンシェルジュMVP」ワークフローへの依存が、70%以上のSaaS目標を大きく下回る利益率に抑え込んでいる。",
+      "highlight": "ãƒãƒ¼ãƒ ã«SaaSãƒªãƒ¼ãƒ€ãƒ¼ã‚·ãƒƒãƒ—ãŒã‚¼ãƒ­ã§ã‚ã‚‹ãŸã‚ã€ã€Œã‚µãƒ¼ãƒ“ã‚¹ãƒžãƒ¼ã‚¸ãƒ³ã®ç½ ã€ï¼ˆåˆ©ç›ŠçŽ‡30ï½ž40%ï¼‰ã®ãƒªã‚¹ã‚¯ãŒã‚ã‚‹",
+      "category": "ãƒãƒ¼ãƒ ",
+      "why_it_matters": "è‡ªå‹•åŒ–ã‚’æŽ¨é€²ã™ã‚‹CPOãŒã„ãªã‘ã‚Œã°ã€ãƒ™ãƒ³ãƒãƒ£ãƒ¼ã¯ä½Žåˆ©ç›ŠçŽ‡ã®ã‚³ãƒ³ã‚µãƒ«ãƒ†ã‚£ãƒ³ã‚°ä¼šç¤¾ã®ã¾ã¾ã«ãªã‚‹ãƒªã‚¹ã‚¯ãŒã‚ã‚‹",
+      "context_grounding": "ç¤¾å†…ã®ã€Œãƒ—ãƒ­ãƒ€ã‚¯ãƒˆã‚ªãƒ¼ãƒŠãƒ¼ã€ã¨æ‰‹å‹•ã®ã€Œã‚³ãƒ³ã‚·ã‚§ãƒ«ã‚¸ãƒ¥MVPã€ãƒ¯ãƒ¼ã‚¯ãƒ•ãƒ­ãƒ¼ã¸ã®ä¾å­˜ãŒã€70%ä»¥ä¸Šã®SaaSç›®æ¨™ã‚’å¤§ããä¸‹å›žã‚‹åˆ©ç›ŠçŽ‡ã«æŠ‘ãˆè¾¼ã‚“ã§ã„ã‚‹ã€‚",
       "polarity": "headwind",
       "time_sensitivity": { "is_time_bound": false, "window": null },
       "source_confidence": "verified"
     },
     {
-      "highlight": "20兆円の国土強靭化予算が「群（クラスター）マネジメント」戦略に明確に資金提供している",
-      "category": "市場",
-      "why_it_matters": "財政政策は受動的な維持管理から能動的な地域統合へと移行しており、市場参入を補助している",
-      "context_grounding": "国交省の政策は現在、広域連携を義務付けており、プラットフォームのマルチテナントアーキテクチャと完全に一致している。",
+      "highlight": "20å…†å††ã®å›½åœŸå¼·é­åŒ–äºˆç®—ãŒã€Œç¾¤ï¼ˆã‚¯ãƒ©ã‚¹ã‚¿ãƒ¼ï¼‰ãƒžãƒã‚¸ãƒ¡ãƒ³ãƒˆã€æˆ¦ç•¥ã«æ˜Žç¢ºã«è³‡é‡‘æä¾›ã—ã¦ã„ã‚‹",
+      "category": "å¸‚å ´",
+      "why_it_matters": "è²¡æ”¿æ”¿ç­–ã¯å—å‹•çš„ãªç¶­æŒç®¡ç†ã‹ã‚‰èƒ½å‹•çš„ãªåœ°åŸŸçµ±åˆã¸ã¨ç§»è¡Œã—ã¦ãŠã‚Šã€å¸‚å ´å‚å…¥ã‚’è£œåŠ©ã—ã¦ã„ã‚‹",
+      "context_grounding": "å›½äº¤çœã®æ”¿ç­–ã¯ç¾åœ¨ã€åºƒåŸŸé€£æºã‚’ç¾©å‹™ä»˜ã‘ã¦ãŠã‚Šã€ãƒ—ãƒ©ãƒƒãƒˆãƒ•ã‚©ãƒ¼ãƒ ã®ãƒžãƒ«ãƒãƒ†ãƒŠãƒ³ãƒˆã‚¢ãƒ¼ã‚­ãƒ†ã‚¯ãƒãƒ£ã¨å®Œå…¨ã«ä¸€è‡´ã—ã¦ã„ã‚‹ã€‚",
       "polarity": "tailwind",
-      "time_sensitivity": { "is_time_bound": true, "window": "予算配分は現在有効。連携するには数ヶ月以内の決定が必要" },
+      "time_sensitivity": { "is_time_bound": true, "window": "äºˆç®—é…åˆ†ã¯ç¾åœ¨æœ‰åŠ¹ã€‚é€£æºã™ã‚‹ã«ã¯æ•°ãƒ¶æœˆä»¥å†…ã®æ±ºå®šãŒå¿…è¦" },
       "source_confidence": "verified"
     },
     {
-      "highlight": "調達規則により、建設（Capex）を優先してSaaS支払い（Opex）が法的にブロックされる可能性がある",
-      "category": "リスク",
-      "why_it_matters": "予算コードが存在しない場合、どれだけ製品価値があっても収益を生み出せない",
-      "context_grounding": "自治体はインフラ向けの「クラウドサービス」予算項目を欠いていることが多い。「地元限定」の入札ルールがTAMをさらに分断している。",
+      "highlight": "èª¿é”è¦å‰‡ã«ã‚ˆã‚Šã€å»ºè¨­ï¼ˆCapexï¼‰ã‚’å„ªå…ˆã—ã¦SaaSæ”¯æ‰•ã„ï¼ˆOpexï¼‰ãŒæ³•çš„ã«ãƒ–ãƒ­ãƒƒã‚¯ã•ã‚Œã‚‹å¯èƒ½æ€§ãŒã‚ã‚‹",
+      "category": "ãƒªã‚¹ã‚¯",
+      "why_it_matters": "äºˆç®—ã‚³ãƒ¼ãƒ‰ãŒå­˜åœ¨ã—ãªã„å ´åˆã€ã©ã‚Œã ã‘è£½å“ä¾¡å€¤ãŒã‚ã£ã¦ã‚‚åŽç›Šã‚’ç”Ÿã¿å‡ºã›ãªã„",
+      "context_grounding": "è‡ªæ²»ä½“ã¯ã‚¤ãƒ³ãƒ•ãƒ©å‘ã‘ã®ã€Œã‚¯ãƒ©ã‚¦ãƒ‰ã‚µãƒ¼ãƒ“ã‚¹ã€äºˆç®—é …ç›®ã‚’æ¬ ã„ã¦ã„ã‚‹ã“ã¨ãŒå¤šã„ã€‚ã€Œåœ°å…ƒé™å®šã€ã®å…¥æœ­ãƒ«ãƒ¼ãƒ«ãŒTAMã‚’ã•ã‚‰ã«åˆ†æ–­ã—ã¦ã„ã‚‹ã€‚",
       "polarity": "headwind",
-      "time_sensitivity": { "is_time_bound": true, "window": "90日のパイロットフェーズで検証されなければならない" },
+      "time_sensitivity": { "is_time_bound": true, "window": "90æ—¥ã®ãƒ‘ã‚¤ãƒ­ãƒƒãƒˆãƒ•ã‚§ãƒ¼ã‚ºã§æ¤œè¨¼ã•ã‚Œãªã‘ã‚Œã°ãªã‚‰ãªã„" },
       "source_confidence": "estimated"
     }
   ],
@@ -880,88 +880,88 @@ export const V2_EXTRACTION_JSON_JP: V2ExtractionResult = {
     "tailwinds": 3,
     "headwinds": 4,
     "neutral": 0,
-    "balance_check": "バランスが取れている — 強力な市場の推進要因と、深刻な財務および実行リスクが対比されている"
+    "balance_check": "ãƒãƒ©ãƒ³ã‚¹ãŒå–ã‚Œã¦ã„ã‚‹ â€” å¼·åŠ›ãªå¸‚å ´ã®æŽ¨é€²è¦å› ã¨ã€æ·±åˆ»ãªè²¡å‹™ãŠã‚ˆã³å®Ÿè¡Œãƒªã‚¹ã‚¯ãŒå¯¾æ¯”ã•ã‚Œã¦ã„ã‚‹"
   },
   "next_steps": [
     {
       "step_number": 1,
-      "step_title": "調達と支払い意思の検証",
+      "step_title": "èª¿é”ã¨æ”¯æ‰•ã„æ„æ€ã®æ¤œè¨¼",
       "owner": "venture",
-      "description": "3～5のターゲット自治体と「調達予行演習」を実施し、建設（Capex）ではなくSaaS（Opex）として法的に支払い可能かを確認する。",
-      "timeline": "60日",
+      "description": "3ï½ž5ã®ã‚¿ãƒ¼ã‚²ãƒƒãƒˆè‡ªæ²»ä½“ã¨ã€Œèª¿é”äºˆè¡Œæ¼”ç¿’ã€ã‚’å®Ÿæ–½ã—ã€å»ºè¨­ï¼ˆCapexï¼‰ã§ã¯ãªãSaaSï¼ˆOpexï¼‰ã¨ã—ã¦æ³•çš„ã«æ”¯æ‰•ã„å¯èƒ½ã‹ã‚’ç¢ºèªã™ã‚‹ã€‚",
+      "timeline": "60æ—¥",
       "depends_on": null,
-      "success_gate": "3つ以上の自治体が経常料金モデルに言及したLOI（基本合意書）に署名する。",
-      "unlocks": "商業的な実現可能性を検証し、調達リスクをクリアにする。",
-      "if_gate_fails": { "action": "pivot", "detail": "社内利用のための「テック活用型サービス」へピボットする。" }
+      "success_gate": "3ã¤ä»¥ä¸Šã®è‡ªæ²»ä½“ãŒçµŒå¸¸æ–™é‡‘ãƒ¢ãƒ‡ãƒ«ã«è¨€åŠã—ãŸLOIï¼ˆåŸºæœ¬åˆæ„æ›¸ï¼‰ã«ç½²åã™ã‚‹ã€‚",
+      "unlocks": "å•†æ¥­çš„ãªå®Ÿç¾å¯èƒ½æ€§ã‚’æ¤œè¨¼ã—ã€èª¿é”ãƒªã‚¹ã‚¯ã‚’ã‚¯ãƒªã‚¢ã«ã™ã‚‹ã€‚",
+      "if_gate_fails": { "action": "pivot", "detail": "ç¤¾å†…åˆ©ç”¨ã®ãŸã‚ã®ã€Œãƒ†ãƒƒã‚¯æ´»ç”¨åž‹ã‚µãƒ¼ãƒ“ã‚¹ã€ã¸ãƒ”ãƒœãƒƒãƒˆã™ã‚‹ã€‚" }
     },
     {
       "step_number": 2,
-      "step_title": "責任と保険の枠組みの定義",
+      "step_title": "è²¬ä»»ã¨ä¿é™ºã®æž çµ„ã¿ã®å®šç¾©",
       "owner": "joint",
-      "description": "「情報提供」と「工学的判断」を区別する利用規約を起草するために、法的レビューを委託する。",
-      "timeline": "60日",
+      "description": "ã€Œæƒ…å ±æä¾›ã€ã¨ã€Œå·¥å­¦çš„åˆ¤æ–­ã€ã‚’åŒºåˆ¥ã™ã‚‹åˆ©ç”¨è¦ç´„ã‚’èµ·è‰ã™ã‚‹ãŸã‚ã«ã€æ³•çš„ãƒ¬ãƒ“ãƒ¥ãƒ¼ã‚’å§”è¨—ã™ã‚‹ã€‚",
+      "timeline": "60æ—¥",
       "depends_on": null,
-      "success_gate": "プラットフォームの責任がサブスクリプション料金に限定されることを確認する法的意見書。",
-      "unlocks": "「保険不可能なリスク」というブロッカーを取り除く。",
-      "if_gate_fails": { "action": "pass", "detail": "責任を切り離せない場合、プロジェクトを終了する。" }
+      "success_gate": "ãƒ—ãƒ©ãƒƒãƒˆãƒ•ã‚©ãƒ¼ãƒ ã®è²¬ä»»ãŒã‚µãƒ–ã‚¹ã‚¯ãƒªãƒ—ã‚·ãƒ§ãƒ³æ–™é‡‘ã«é™å®šã•ã‚Œã‚‹ã“ã¨ã‚’ç¢ºèªã™ã‚‹æ³•çš„æ„è¦‹æ›¸ã€‚",
+      "unlocks": "ã€Œä¿é™ºä¸å¯èƒ½ãªãƒªã‚¹ã‚¯ã€ã¨ã„ã†ãƒ–ãƒ­ãƒƒã‚«ãƒ¼ã‚’å–ã‚Šé™¤ãã€‚",
+      "if_gate_fails": { "action": "pass", "detail": "è²¬ä»»ã‚’åˆ‡ã‚Šé›¢ã›ãªã„å ´åˆã€ãƒ—ãƒ­ã‚¸ã‚§ã‚¯ãƒˆã‚’çµ‚äº†ã™ã‚‹ã€‚" }
     },
     {
       "step_number": 3,
-      "step_title": "データ取り込みパートナーシップの確保",
+      "step_title": "ãƒ‡ãƒ¼ã‚¿å–ã‚Šè¾¼ã¿ãƒ‘ãƒ¼ãƒˆãƒŠãƒ¼ã‚·ãƒƒãƒ—ã®ç¢ºä¿",
       "owner": "venture",
-      "description": "Dappi Studio（FixMyStreet Japan）との技術的デューデリジェンスとパートナーシップ交渉を実行する。",
-      "timeline": "60日",
+      "description": "Urban Solutions Inc.ï¼ˆCityConnect Japanï¼‰ã¨ã®æŠ€è¡“çš„ãƒ‡ãƒ¥ãƒ¼ãƒ‡ãƒªã‚¸ã‚§ãƒ³ã‚¹ã¨ãƒ‘ãƒ¼ãƒˆãƒŠãƒ¼ã‚·ãƒƒãƒ—äº¤æ¸‰ã‚’å®Ÿè¡Œã™ã‚‹ã€‚",
+      "timeline": "60æ—¥",
       "depends_on": null,
-      "success_gate": "Dappi StudioとのMOU締結およびAPIデータ取り込みテストの成功。",
-      "unlocks": "「ナロープラットフォーム（機能限定型）」戦略を検証する。",
-      "if_gate_fails": { "action": "reassess", "detail": "通報ツールの買収または構築コストを評価する。" }
+      "success_gate": "Urban Solutions Inc.ã¨ã®MOUç· çµãŠã‚ˆã³APIãƒ‡ãƒ¼ã‚¿å–ã‚Šè¾¼ã¿ãƒ†ã‚¹ãƒˆã®æˆåŠŸã€‚",
+      "unlocks": "ã€ŒãƒŠãƒ­ãƒ¼ãƒ—ãƒ©ãƒƒãƒˆãƒ•ã‚©ãƒ¼ãƒ ï¼ˆæ©Ÿèƒ½é™å®šåž‹ï¼‰ã€æˆ¦ç•¥ã‚’æ¤œè¨¼ã™ã‚‹ã€‚",
+      "if_gate_fails": { "action": "reassess", "detail": "é€šå ±ãƒ„ãƒ¼ãƒ«ã®è²·åŽã¾ãŸã¯æ§‹ç¯‰ã‚³ã‚¹ãƒˆã‚’è©•ä¾¡ã™ã‚‹ã€‚" }
     },
     {
       "step_number": 4,
-      "step_title": "「コンシェルジュ」クラスターパイロットの実行",
+      "step_title": "ã€Œã‚³ãƒ³ã‚·ã‚§ãƒ«ã‚¸ãƒ¥ã€ã‚¯ãƒ©ã‚¹ã‚¿ãƒ¼ãƒ‘ã‚¤ãƒ­ãƒƒãƒˆã®å®Ÿè¡Œ",
       "owner": "venture",
-      "description": "コードを書く前に効率化を証明するために、1つの「垂直クラスター」で手動の「コンシェルジュMVP」を立ち上げる。",
-      "timeline": "90日",
+      "description": "ã‚³ãƒ¼ãƒ‰ã‚’æ›¸ãå‰ã«åŠ¹çŽ‡åŒ–ã‚’è¨¼æ˜Žã™ã‚‹ãŸã‚ã«ã€1ã¤ã®ã€Œåž‚ç›´ã‚¯ãƒ©ã‚¹ã‚¿ãƒ¼ã€ã§æ‰‹å‹•ã®ã€Œã‚³ãƒ³ã‚·ã‚§ãƒ«ã‚¸ãƒ¥MVPã€ã‚’ç«‹ã¡ä¸Šã’ã‚‹ã€‚",
+      "timeline": "90æ—¥",
       "depends_on": [1, 2, 3],
-      "success_gate": "パイロットクラスターで管理負担が20%以上削減されることを確認する。",
-      "unlocks": "完全なソフトウェア開発予算に対する最終的なGo/No-Go決定。",
-      "if_gate_fails": { "action": "pass", "detail": "手動シミュレーションが失敗した場合、ソフトウェア支出の前に中止する。" }
+      "success_gate": "ãƒ‘ã‚¤ãƒ­ãƒƒãƒˆã‚¯ãƒ©ã‚¹ã‚¿ãƒ¼ã§ç®¡ç†è² æ‹…ãŒ20%ä»¥ä¸Šå‰Šæ¸›ã•ã‚Œã‚‹ã“ã¨ã‚’ç¢ºèªã™ã‚‹ã€‚",
+      "unlocks": "å®Œå…¨ãªã‚½ãƒ•ãƒˆã‚¦ã‚§ã‚¢é–‹ç™ºäºˆç®—ã«å¯¾ã™ã‚‹æœ€çµ‚çš„ãªGo/No-Goæ±ºå®šã€‚",
+      "if_gate_fails": { "action": "pass", "detail": "æ‰‹å‹•ã‚·ãƒŸãƒ¥ãƒ¬ãƒ¼ã‚·ãƒ§ãƒ³ãŒå¤±æ•—ã—ãŸå ´åˆã€ã‚½ãƒ•ãƒˆã‚¦ã‚§ã‚¢æ”¯å‡ºã®å‰ã«ä¸­æ­¢ã™ã‚‹ã€‚" }
     }
   ],
   "pathway_metadata": {
     "total_steps": 4,
-    "critical_path_duration": "5-6ヶ月",
-    "ultimate_decision": "完全なソフトウェア開発資金提供に関するGo/No-Go。",
+    "critical_path_duration": "5-6ãƒ¶æœˆ",
+    "ultimate_decision": "å®Œå…¨ãªã‚½ãƒ•ãƒˆã‚¦ã‚§ã‚¢é–‹ç™ºè³‡é‡‘æä¾›ã«é–¢ã™ã‚‹Go/No-Goã€‚",
     "pathway_confidence": "High"
   },
   "supporting_analysis": {
     "explored_and_tested": [
-      { "headline": "単独規模ではユニットエコノミクスが失敗する", "insight": "個々の自治体では顧客獲得コスト（CAC）が初年度収益を上回る。", "source_chapter": "unit-economics" },
-      { "headline": "調達規則がSaaSをブロックする", "insight": "Capex/Opexの厳格な分離により、サブスクリプション支払いが妨げられる可能性がある。", "source_chapter": "six-t-analysis" }
+      { "headline": "å˜ç‹¬è¦æ¨¡ã§ã¯ãƒ¦ãƒ‹ãƒƒãƒˆã‚¨ã‚³ãƒŽãƒŸã‚¯ã‚¹ãŒå¤±æ•—ã™ã‚‹", "insight": "å€‹ã€…ã®è‡ªæ²»ä½“ã§ã¯é¡§å®¢ç²å¾—ã‚³ã‚¹ãƒˆï¼ˆCACï¼‰ãŒåˆå¹´åº¦åŽç›Šã‚’ä¸Šå›žã‚‹ã€‚", "source_chapter": "unit-economics" },
+      { "headline": "èª¿é”è¦å‰‡ãŒSaaSã‚’ãƒ–ãƒ­ãƒƒã‚¯ã™ã‚‹", "insight": "Capex/Opexã®åŽ³æ ¼ãªåˆ†é›¢ã«ã‚ˆã‚Šã€ã‚µãƒ–ã‚¹ã‚¯ãƒªãƒ—ã‚·ãƒ§ãƒ³æ”¯æ‰•ã„ãŒå¦¨ã’ã‚‰ã‚Œã‚‹å¯èƒ½æ€§ãŒã‚ã‚‹ã€‚", "source_chapter": "six-t-analysis" }
     ],
     "risks_acknowledged": [
-      { "headline": "硬直的なCapex予算編成", "insight": "「群（クラスター）」の抜け道が失敗すれば、市場はゼロになる。", "severity": "high", "source_chapter": "six-t-analysis" },
-      { "headline": "22ヶ月の販売サイクル", "insight": "巨大なキャッシュフローの谷により、支払い不能のリスクがある。", "severity": "high", "source_chapter": "finance-and-operations" }
+      { "headline": "ç¡¬ç›´çš„ãªCapexäºˆç®—ç·¨æˆ", "insight": "ã€Œç¾¤ï¼ˆã‚¯ãƒ©ã‚¹ã‚¿ãƒ¼ï¼‰ã€ã®æŠœã‘é“ãŒå¤±æ•—ã™ã‚Œã°ã€å¸‚å ´ã¯ã‚¼ãƒ­ã«ãªã‚‹ã€‚", "severity": "high", "source_chapter": "six-t-analysis" },
+      { "headline": "22ãƒ¶æœˆã®è²©å£²ã‚µã‚¤ã‚¯ãƒ«", "insight": "å·¨å¤§ãªã‚­ãƒ£ãƒƒã‚·ãƒ¥ãƒ•ãƒ­ãƒ¼ã®è°·ã«ã‚ˆã‚Šã€æ”¯æ‰•ã„ä¸èƒ½ã®ãƒªã‚¹ã‚¯ãŒã‚ã‚‹ã€‚", "severity": "high", "source_chapter": "finance-and-operations" }
     ],
     "path_summary": {
-      "recommendation": "オプション1：パートナーシップ主導のナロープラットフォーム",
-      "path_description": "通報については提携しつつ、独自の「群（クラスター）マネジメント」ワークフローに焦点を当てる。",
+      "recommendation": "ã‚ªãƒ—ã‚·ãƒ§ãƒ³1ï¼šãƒ‘ãƒ¼ãƒˆãƒŠãƒ¼ã‚·ãƒƒãƒ—ä¸»å°Žã®ãƒŠãƒ­ãƒ¼ãƒ—ãƒ©ãƒƒãƒˆãƒ•ã‚©ãƒ¼ãƒ ",
+      "path_description": "é€šå ±ã«ã¤ã„ã¦ã¯ææºã—ã¤ã¤ã€ç‹¬è‡ªã®ã€Œç¾¤ï¼ˆã‚¯ãƒ©ã‚¹ã‚¿ãƒ¼ï¼‰ãƒžãƒã‚¸ãƒ¡ãƒ³ãƒˆã€ãƒ¯ãƒ¼ã‚¯ãƒ•ãƒ­ãƒ¼ã«ç„¦ç‚¹ã‚’å½“ã¦ã‚‹ã€‚",
       "confidence": "high"
     },
     "key_trade_offs_resolved": [
       {
-        "trade_off": "スピード 対 コントロール",
-        "resolution": "ステップ1については提携し、ステップ2-3については独自のロジックを構築する。",
-        "supporting_evidence": "6-12ヶ月の開発サイクルを回避する。",
+        "trade_off": "ã‚¹ãƒ”ãƒ¼ãƒ‰ å¯¾ ã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ«",
+        "resolution": "ã‚¹ãƒ†ãƒƒãƒ—1ã«ã¤ã„ã¦ã¯ææºã—ã€ã‚¹ãƒ†ãƒƒãƒ—2-3ã«ã¤ã„ã¦ã¯ç‹¬è‡ªã®ãƒ­ã‚¸ãƒƒã‚¯ã‚’æ§‹ç¯‰ã™ã‚‹ã€‚",
+        "supporting_evidence": "6-12ãƒ¶æœˆã®é–‹ç™ºã‚µã‚¤ã‚¯ãƒ«ã‚’å›žé¿ã™ã‚‹ã€‚",
         "source_chapters": ["opportunity-validation"],
         "confidence": "high"
       }
     ],
     "alternatives_considered": [
-      { "alternative": "完全な社内構築", "why_not_preferred": "高い初期コストと維持管理責任。", "source_chapters": ["opportunity-validation"], "confidence": "high" }
+      { "alternative": "å®Œå…¨ãªç¤¾å†…æ§‹ç¯‰", "why_not_preferred": "é«˜ã„åˆæœŸã‚³ã‚¹ãƒˆã¨ç¶­æŒç®¡ç†è²¬ä»»ã€‚", "source_chapters": ["opportunity-validation"], "confidence": "high" }
     ],
     "path_advantages": [
-      { "advantage": "市場投入スピード", "description": "FixMyStreetの既存の採用を活用する。", "source_chapter": "opportunity-validation", "confidence": "high" }
+      { "advantage": "å¸‚å ´æŠ•å…¥ã‚¹ãƒ”ãƒ¼ãƒ‰", "description": "CityConnectã®æ—¢å­˜ã®æŽ¡ç”¨ã‚’æ´»ç”¨ã™ã‚‹ã€‚", "source_chapter": "opportunity-validation", "confidence": "high" }
     ]
   }
 } as unknown as V2ExtractionResult;

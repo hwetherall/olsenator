@@ -7,7 +7,7 @@
     "geography": "日本"
   },
   "question_and_answer": {
-    "the_question": "日本軽金属はRICインフラ維持管理プラットフォームを立ち上げるべきか？",
+    "the_question": "Apex Materials CorporationはRICインフラ維持管理プラットフォームを立ち上げるべきか？",
     "the_answer": "条件付きGo（オプション2） – 有償パイロットを通じて「群（クラスター）」調達モデルを検証した後、限定的なMVPでのみ進める",
     "confidence": {
       "rating": "中～高",
@@ -38,25 +38,25 @@
         "賠償責任/安全性リスクを引き受ける能力（純粋なソフトウェアスタートアップとは異なる）",
         "既存のB2G（対行政）関係と「群マネジメント」政策との整合性"
       ],
-      "why_us": "純粋なソフトウェアプレイヤー（FixMyStreetなど）は工学的厳密さに欠け、ゼネコンは手動すぎる。日軽金は「解決のギャップ」（ステップ2-3）を埋めることができる。",
+      "why_us": "純粋なソフトウェアプレイヤー（CityConnectなど）は工学的厳密さに欠け、ゼネコンは手動すぎる。AMCは「解決のギャップ」（ステップ2-3）を埋めることができる。",
       "bottom_line": "我々には、スタートアップには欠けている、安全性が重要なソフトウェアを販売するために必要な「エンジニアリングへの信頼」がある。"
     },
     "verdict": {
       "decision": "はい",
       "confidence": "高",
-      "rationale": "市場のニーズは実存的（労働力不足）であり、日軽金はエンジニアリングの権威と政策との整合性に基づいて勝つための独自の権利を持っている。"
+      "rationale": "市場のニーズは実存的（労働力不足）であり、AMCはエンジニアリングの権威と政策との整合性に基づいて勝つための独自の権利を持っている。"
     }
   },
   "can_we_do_it": {
     "capital_and_infrastructure": {
       "cash_position": "22ヶ月の販売サイクルの「死の谷」を埋めるために約4.5億～5億円の資金が必要。企業のバランスシートは十分である。",
-      "facilities": "既存の地域拠点がある。技術インフラについては外部クラウド（AWS）とパートナー（FixMyStreet）に依存。",
+      "facilities": "既存の地域拠点がある。技術インフラについては外部クラウド（AWS）とパートナー（CityConnect）に依存。",
       "tools_and_systems": "社内のSaaSインフラが不足している。当初は「コンシェルジュMVP」（手動）に依存する。",
       "bottom_line": "資本はあるが、デジタルインフラは存在せず、構築または提携が必要である。"
     },
     "market_access": {
       "customer_relationships": "水・防災分野での強力なB2G関係があるが、一般的な道路・橋梁部門でのブランド認知度は弱い。",
-      "geographic_presence": "日軽エンジニアリングを通じた全国的なリーチ。",
+      "geographic_presence": "Apex Infrastructure Servicesを通じた全国的なリーチ。",
       "regulatory_experience": "公共事業における深い経験はあるが、「SaaSサブスクリプション」の調達経路は未検証でありリスクがある。",
       "bottom_line": "*組織*（自治体）へのアクセスは強力だが、*買い手*（IT部門 対 建設部門）が間違っている可能性がある。"
     },
@@ -122,7 +122,7 @@
       "why_easy_or_hard": "自動化は技術的に可能だが、ロジックと責任境界の厳密な定義が必要。",
       "action_to_close": "「ステップ2」の診断ロジックを自動化し、初年度に手動介入を50%削減するためのロードマップを定義・実行する。",
       "risk_of_inaction": "ベンチャーはプラットフォームを装った低利益率のコンサルティングビジネスのままであり、ユニットエコノミクスは決してスケールしない。",
-      "owner": "ベンチャーチーム / 日軽エンジニアリング"
+      "owner": "ベンチャーチーム / Apex Infrastructure Services"
     },
     {
       "dimension": "トラクション / 検証",
@@ -139,7 +139,7 @@
         "label": "中"
       },
       "quadrant": "混合",
-      "why_easy_or_hard": "日軽金ブランドを通じて顧客へのアクセスは容易だが、22ヶ月の販売サイクルのため成約に時間がかかる。",
+      "why_easy_or_hard": "AMCブランドを通じて顧客へのアクセスは容易だが、22ヶ月の販売サイクルのため成約に時間がかかる。",
       "action_to_close": "90日以内に1つの有償「群（クラスター）」パイロット契約（県＋市町村）を確保する。",
       "risk_of_inaction": "評価額の裏付けがないままとなり、収益検証なしにキャッシュバーンが続く。",
       "owner": "プロジェクトリード"
@@ -188,7 +188,7 @@
       "dimension": "規制 / 法務",
       "category": "コア",
       "current_state": "「記録検査官」の役割が曖昧であり、インフラ事故に対する保険不可能な賠償責任のリスクがある。",
-      "required_state": "物理的なインフラ事故から日軽金を免責する明確な利用規約と保険構造。",
+      "required_state": "物理的なインフラ事故からAMCを免責する明確な利用規約と保険構造。",
       "gap_summary": "責任の枠組みが未定義。「偽陰性」が事故につながるリスクがある。",
       "gap_size": {
         "score": 5,
@@ -207,7 +207,7 @@
     {
       "dimension": "パートナーシップ / エコシステム",
       "category": "オプション",
-      "current_state": "市民通報データの取り込みが必要。FixMyStreetが潜在的なパートナーとして特定されている。",
+      "current_state": "市民通報データの取り込みが必要。CityConnectが潜在的なパートナーとして特定されている。",
       "required_state": "市民通報プロバイダーとの正式なAPI統合と商業契約。",
       "gap_summary": "「ステップ1」のデータ取り込みにおける第三者への依存。",
       "gap_size": {
@@ -219,8 +219,8 @@
         "label": "容易"
       },
       "quadrant": "クイックウィン",
-      "why_easy_or_hard": "パートナー（例：Dappi Studio）は利用可能で意欲的であり、技術統合は標準的である。",
-      "action_to_close": "データ取り込みのためにDappi Studio（FixMyStreet）とのパートナーシップ/MOUを正式化する。",
+      "why_easy_or_hard": "パートナー（例：Urban Solutions Inc.）は利用可能で意欲的であり、技術統合は標準的である。",
+      "action_to_close": "データ取り込みのためにUrban Solutions Inc.（CityConnect）とのパートナーシップ/MOUを正式化する。",
       "risk_of_inaction": "チームはコアとなるエンジニアリングエンジンの代わりに、コモディティ化した「通報アプリ」の再構築にリソースを浪費することになる。",
       "owner": "ベンチャーチーム"
     }
@@ -285,10 +285,10 @@
       "source_confidence": "推定"
     },
     {
-      "highlight": "安全性の責任を引き受ける日軽金の能力が、ソフトウェアスタートアップに対する参入障壁（Moat）を生む",
+      "highlight": "安全性の責任を引き受けるAMCの能力が、ソフトウェアスタートアップに対する参入障壁（Moat）を生む",
       "category": "競争優位性",
       "why_it_matters": "「エンジニアリングへの信頼」に基づく差別化により、コモディティ化した通報アプリよりも高価格設定が可能になる",
-      "context_grounding": "専業の競合他社（FixMyStreetなど）はリスクを避けるため「通報」にとどまる。日軽金は「解決」のワークフローに保険をかけることができる。",
+      "context_grounding": "専業の競合他社（CityConnectなど）はリスクを避けるため「通報」にとどまる。AMCは「解決」のワークフローに保険をかけることができる。",
       "polarity": "追い風",
       "time_sensitivity": {
         "is_time_bound": false,
@@ -373,10 +373,10 @@
       "step_number": 3,
       "step_title": "データ取り込みパートナーシップの確保",
       "owner": "ベンチャー",
-      "description": "Dappi Studio（FixMyStreet Japan）との技術的デューデリジェンスとパートナーシップ交渉を実行する。",
+      "description": "Urban Solutions Inc.（CityConnect Japan）との技術的デューデリジェンスとパートナーシップ交渉を実行する。",
       "timeline": "60日",
       "depends_on": null,
-      "success_gate": "Dappi StudioとのMOU締結およびAPIデータ取り込みテストの成功。",
+      "success_gate": "Urban Solutions Inc.とのMOU締結およびAPIデータ取り込みテストの成功。",
       "unlocks": "「ナロープラットフォーム（機能限定型）」戦略を検証する。",
       "if_gate_fails": {
         "action": "再評価",
@@ -464,7 +464,7 @@
     "path_advantages": [
       {
         "advantage": "市場投入スピード",
-        "description": "FixMyStreetの既存の採用を活用する。",
+        "description": "CityConnectの既存の採用を活用する。",
         "source_chapter": "opportunity-validation",
         "confidence": "高"
       }

@@ -253,16 +253,16 @@ export const translations = {
     ja: 'オプション1：現状維持'
   },
   option1StrategyDetail: {
-    en: 'Maintain Nikkei Engineering\'s traditional business model, operating as a Tier 1 System Integrator focusing exclusively on physical engineering, fabrication, and construction (Steps 3–5). Rely on government-led digitalization initiatives rather than building proprietary technology.',
-    ja: '日経エンジニアリングの従来ビジネスモデルを維持し、物理的エンジニアリング、製造、建設（ステップ3〜5）に専念するTier 1システムインテグレーターとして運営。独自技術の構築ではなく、政府主導のデジタル化イニシアチブに依存。'
+    en: 'Maintain Apex Infrastructure Services\' traditional business model, operating as a Tier 1 System Integrator focusing exclusively on physical engineering, fabrication, and construction (Steps 3–5). Rely on government-led digitalization initiatives rather than building proprietary technology.',
+    ja: 'Apex Infrastructure Servicesの従来ビジネスモデルを維持し、物理的エンジニアリング、製造、建設（ステップ3〜5）に専念するTier 1システムインテグレーターとして運営。独自技術の構築ではなく、政府主導のデジタル化イニシアチブに依存。'
   },
   option1WhyNotSelected: {
     en: 'High strategic risk of commoditization as competitors like Nippon Koei digitize their service offerings. Fails to establish a new scalable profit center, leaving the company entirely dependent on cyclical construction bids.',
     ja: '日本工営のような競合がサービスをデジタル化する中、コモディティ化の戦略的リスクが高い。新たなスケーラブルな収益源を確立できず、循環的な建設入札に完全依存。'
   },
   option1WhenPreferred: {
-    en: 'If NLM faces an immediate liquidity crisis requiring absolute cash preservation, or if MLIT explicitly mandates a single government-run platform that excludes private sector middleware.',
-    ja: 'NLMが絶対的なキャッシュ保全を必要とする緊急の流動性危機に直面した場合、またはMLITが民間ミドルウェアを排除する単一の政府運営プラットフォームを明示的に義務付けた場合。'
+    en: 'If AMC faces an immediate liquidity crisis requiring absolute cash preservation, or if MLIT explicitly mandates a single government-run platform that excludes private sector middleware.',
+    ja: 'AMCが絶対的なキャッシュ保全を必要とする緊急の流動性危機に直面した場合、またはMLITが民間ミドルウェアを排除する単一の政府運営プラットフォームを明示的に義務付けた場合。'
   },
   
   // Option 2 (Narrow Platform) Content
@@ -295,8 +295,8 @@ export const translations = {
     ja: 'オプション2：ナロープラットフォーム（推奨）'
   },
   option2StrategyDetail: {
-    en: 'Position Nikkei Engineering as the "triage" middleware between citizen reporting and professional repair. Partner with Dappi Studio (FixMyStreet) for data intake while focusing internal resources on converting raw citizen data into verified engineering work orders.',
-    ja: '日経エンジニアリングを市民通報と専門修繕の間の「トリアージ」ミドルウェアとして位置付け。Dappi Studio（FixMyStreet）と提携してデータ取得を行い、内部リソースは生の市民データを検証済みエンジニアリング作業指示に変換することに集中。'
+    en: 'Position Apex Infrastructure Services as the "triage" middleware between citizen reporting and professional repair. Partner with Urban Solutions Inc. (CityConnect) for data intake while focusing internal resources on converting raw citizen data into verified engineering work orders.',
+    ja: 'Apex Infrastructure Servicesを市民通報と専門修繕の間の「トリアージ」ミドルウェアとして位置付け。Urban Solutions Inc.（CityConnect）と提携してデータ取得を行い、内部リソースは生の市民データを検証済みエンジニアリング作業指示に変換することに集中。'
   },
   option2RationaleIntro: {
     en: 'This option is recommended based on three key factors:',
@@ -307,8 +307,8 @@ export const translations = {
     ja: '競争優位性'
   },
   option2Rationale1Detail: {
-    en: 'Uses Nikkei Engineering\'s legal licensure to certify safety, a capability that pure software competitors cannot replicate due to liability constraints.',
-    ja: '日経エンジニアリングの法的免許を活用して安全性を認証。純粋なソフトウェア競合は責任制約により再現不可能な能力。'
+    en: 'Uses Apex Infrastructure Services\' legal licensure to certify safety, a capability that pure software competitors cannot replicate due to liability constraints.',
+    ja: 'Apex Infrastructure Servicesの法的免許を活用して安全性を認証。純粋なソフトウェア競合は責任制約により再現不可能な能力。'
   },
   option2Rationale2Title: {
     en: 'Capital Efficiency',
@@ -327,8 +327,8 @@ export const translations = {
     ja: '市民通報のフィルタリングを自動化することで自治体の人手不足に直接対処。現在政府導入を妨げている「デジタル受信箱」の氾濫問題を解決。'
   },
   option2ConsDetail: {
-    en: 'Creates dependency on Dappi Studio for the data funnel. Procurement friction remains a risk as municipalities may face challenges paying for OpEx subscription services.',
-    ja: 'データファネルにおいてDappi Studioへの依存が生じる。自治体がOpExサブスクリプションサービスへの支払いに課題を抱える可能性があり、調達摩擦がリスクとして残る。'
+    en: 'Creates dependency on Urban Solutions Inc. for the data funnel. Procurement friction remains a risk as municipalities may face challenges paying for OpEx subscription services.',
+    ja: 'データファネルにおいてUrban Solutions Inc.への依存が生じる。自治体がOpExサブスクリプションサービスへの支払いに課題を抱える可能性があり、調達摩擦がリスクとして残る。'
   },
   
   // Option 3 (End-to-End) Content
@@ -369,8 +369,8 @@ export const translations = {
     ja: '日本の法律は同一事業体が設計と建設入札の両方を管理することを禁止しており（職務分離）、統合マーケットプレイスは法的に実現不可能。「大規模資本」と3.5年を超える開発期間が必要。'
   },
   option3WhenPreferred: {
-    en: 'If Japanese construction laws are amended to allow design-build integration within digital platforms, or if NLM acquires a major software company with existing marketplace infrastructure and user base.',
-    ja: 'デジタルプラットフォーム内での設計・建設統合を許可するよう日本の建設法が改正された場合、またはNLMが既存のマーケットプレイスインフラとユーザーベースを持つ大手ソフトウェア企業を買収した場合。'
+    en: 'If Japanese construction laws are amended to allow design-build integration within digital platforms, or if AMC acquires a major software company with existing marketplace infrastructure and user base.',
+    ja: 'デジタルプラットフォーム内での設計・建設統合を許可するよう日本の建設法が改正された場合、またはAMCが既存のマーケットプレイスインフラとユーザーベースを持つ大手ソフトウェア企業を買収した場合。'
   },
   option3ProsDetail: {
     en: 'Total lifecycle ownership creates high switching costs and network effects, establishing a defensive moat against large IT competitors.',
@@ -395,16 +395,16 @@ export const translations = {
     ja: 'ドメイン専門家'
   },
   domainExpertDetail: {
-    en: 'Nikkei Engineering acts as the "Technical Anchor," defining the inspection protocols (Steps 2–3).',
-    ja: '日経エンジニアリングが「技術アンカー」として点検プロトコル（ステップ2〜3）を定義。'
+    en: 'Apex Infrastructure Services acts as the "Technical Anchor," defining the inspection protocols (Steps 2–3).',
+    ja: 'Apex Infrastructure Servicesが「技術アンカー」として点検プロトコル（ステップ2〜3）を定義。'
   },
   orchestrationRole: {
     en: 'Orchestration Role',
     ja: 'オーケストレーション役'
   },
   orchestrationRoleDetail: {
-    en: 'NLM functions as the Platform Orchestrator, managing the data flow between citizens, municipalities, and external contractors.',
-    ja: 'NLMがプラットフォーム・オーケストレーターとして、市民・自治体・外部事業者間のデータ流通を統括。'
+    en: 'AMC functions as the Platform Orchestrator, managing the data flow between citizens, municipalities, and external contractors.',
+    ja: 'AMCがプラットフォーム・オーケストレーターとして、市民・自治体・外部事業者間のデータ流通を統括。'
   },
 
   // StrategicFitSection
