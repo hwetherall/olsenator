@@ -1,6 +1,5 @@
 'use client';
 
-import { useState, useEffect } from 'react';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { oneLight } from 'react-syntax-highlighter/dist/esm/styles/prism';
 import { CopyButton } from './CopyButton';
@@ -13,36 +12,13 @@ interface JsonOutputProps {
   loadingSubtext?: string;
   duration?: number;
   retried?: boolean;
-  countdownDuration?: number;
 }
 
-function CountdownTimer({ duration = 15 }: { duration?: number }) {
-  const [timeLeft, setTimeLeft] = useState(duration);
-  const totalTime = duration;
-  
-  useEffect(() => {
-    // Reset timer when duration changes
-    setTimeLeft(duration);
-  }, [duration]);
-  
-  useEffect(() => {
-    if (timeLeft <= 0) return;
-    
-    const timer = setInterval(() => {
-      setTimeLeft((prev) => Math.max(0, prev - 1));
-    }, 1000);
-    
-    return () => clearInterval(timer);
-  }, [timeLeft]);
-  
-  const progress = ((totalTime - timeLeft) / totalTime) * 100;
-  const circumference = 2 * Math.PI * 54; // radius = 54
-  const strokeDashoffset = circumference - (progress / 100) * circumference;
-  
+function SpinnerLogo() {
   return (
     <div className="relative w-32 h-32">
-      {/* Background circle */}
-      <svg className="w-32 h-32 transform -rotate-90">
+      <svg className="w-32 h-32 animate-spin" viewBox="0 0 128 128">
+        {/* Outer ring */}
         <circle
           cx="64"
           cy="64"
@@ -50,9 +26,9 @@ function CountdownTimer({ duration = 15 }: { duration?: number }) {
           stroke="currentColor"
           strokeWidth="8"
           fill="none"
-          className="text-gray-100"
+          className="text-gray-200"
         />
-        {/* Progress circle */}
+        {/* Animated arc */}
         <circle
           cx="64"
           cy="64"
@@ -61,19 +37,12 @@ function CountdownTimer({ duration = 15 }: { duration?: number }) {
           strokeWidth="8"
           fill="none"
           strokeLinecap="round"
-          className="text-[var(--accent)] transition-all duration-1000 ease-linear"
+          className="text-[var(--accent)]"
           style={{
-            strokeDasharray: circumference,
-            strokeDashoffset: strokeDashoffset,
+            strokeDasharray: '270 90',
           }}
         />
       </svg>
-      {/* Countdown number */}
-      <div className="absolute inset-0 flex items-center justify-center">
-        <span className="text-4xl font-light text-[var(--foreground)] tabular-nums">
-          {timeLeft}
-        </span>
-      </div>
     </div>
   );
 }
@@ -85,15 +54,14 @@ export function JsonOutput({
   loadingMessage = 'Extracting memo data...', 
   loadingSubtext = 'Analyzing your investment memo',
   duration, 
-  retried,
-  countdownDuration = 15
+  retried
 }: JsonOutputProps) {
   const jsonString = data ? JSON.stringify(data, null, 2) : '';
 
   if (isLoading) {
     return (
       <div className="w-full h-[500px] bg-white border-2 border-[var(--border)] rounded-2xl flex flex-col items-center justify-center gap-6 shadow-sm">
-        <CountdownTimer duration={countdownDuration} />
+        <SpinnerLogo />
         <div className="text-center">
           <p className="text-[var(--foreground)] font-semibold">{loadingMessage}</p>
           <p className="text-sm text-[var(--muted)] mt-2">{loadingSubtext}</p>

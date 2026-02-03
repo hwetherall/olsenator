@@ -3,7 +3,7 @@ import { QAExtractionResult, validateQAExtractionResult } from './qa-schema';
 import { V2ExtractionResult, validateV2ExtractionResult } from './v2-schema';
 import { EXTRACTION_SYSTEM_PROMPT, SIMPLIFIED_EXTRACTION_PROMPT, createUserPrompt } from './prompts';
 import { QA_EXTRACTION_SYSTEM_PROMPT, SIMPLIFIED_QA_EXTRACTION_PROMPT, createQAUserPrompt } from './qa-prompts';
-import { V2_EXTRACTION_SYSTEM_PROMPT, SIMPLIFIED_V2_EXTRACTION_PROMPT, createV2UserPrompt } from './v2-prompts';
+import { JSON_CLEANUP_PROMPT, createV2UserPrompt } from './v2-prompts';
 
 const OPENROUTER_API_URL = 'https://openrouter.ai/api/v1/chat/completions';
 const MODEL = 'google/gemini-3-flash-preview';
@@ -297,44 +297,24 @@ export async function extractV2Data(
   }
 
   const messages: OpenRouterMessage[] = [
-    { role: 'system', content: V2_EXTRACTION_SYSTEM_PROMPT },
+    { role: 'system', content: JSON_CLEANUP_PROMPT },
     { role: 'user', content: createV2UserPrompt(documentContent) },
   ];
 
-  console.log('Attempting V2 extraction with full prompt...');
-  const firstResponse = await callOpenRouter(messages, apiKey);
+  console.log('Attempting JSON validation...');
+  const response = await callOpenRouter(messages, apiKey);
 
-  if (firstResponse.error) {
-    return { success: false, error: firstResponse.error };
+  if (response.error) {
+    return { success: false, error: response.error };
   }
 
-  const firstParse = parseV2ExtractionResult(firstResponse.content);
-  if (firstParse.data) {
-    return { success: true, data: firstParse.data };
-  }
-
-  console.log('First V2 attempt failed, retrying with simplified prompt...');
-  console.log('First attempt error:', firstParse.error);
-
-  const retryMessages: OpenRouterMessage[] = [
-    { role: 'system', content: SIMPLIFIED_V2_EXTRACTION_PROMPT },
-    { role: 'user', content: createV2UserPrompt(documentContent) },
-  ];
-
-  const retryResponse = await callOpenRouter(retryMessages, apiKey);
-
-  if (retryResponse.error) {
-    return { success: false, error: `Retry failed: ${retryResponse.error}`, retried: true };
-  }
-
-  const retryParse = parseV2ExtractionResult(retryResponse.content);
-  if (retryParse.data) {
-    return { success: true, data: retryParse.data, retried: true };
+  const parse = parseV2ExtractionResult(response.content);
+  if (parse.data) {
+    return { success: true, data: parse.data };
   }
 
   return {
     success: false,
-    error: `Failed to extract valid V2 JSON after retry. Last error: ${retryParse.error}`,
-    retried: true,
+    error: `Failed to validate JSON. Error: ${parse.error}`,
   };
 }

@@ -1,11 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { extractV2Data } from '@/lib/openrouter';
-import { isStructuredV2Input } from '@/lib/v2-prompts';
 
-export const maxDuration = 60; // Allow up to 60 seconds for extraction
+export const maxDuration = 60; // Allow up to 60 seconds for validation
 
 interface ExtractV2Request {
-  content: string;
+  content: string; // Expected to be JSON string
 }
 
 export async function POST(request: NextRequest) {
@@ -19,21 +18,18 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    if (body.content.trim().length < 100) {
+    if (body.content.trim().length < 50) {
       return NextResponse.json(
-        { success: false, error: 'Content is too short. Please paste the full document.' },
+        { success: false, error: 'Content is too short. Please paste valid JSON.' },
         { status: 400 }
       );
     }
 
     const startTime = Date.now();
-    const isStructured = isStructuredV2Input(body.content);
     
-    if (isStructured) {
-      console.log('Detected pre-structured V2 input, sending to AI for transformation...');
-    }
+    console.log('Validating and fixing V2 JSON input...');
 
-    // Always use AI extraction to transform input into final V2 schema
+    // Use AI to validate and fix JSON syntax errors
     const apiKey = process.env.OPENROUTER_API_KEY;
 
     if (!apiKey) {
@@ -44,15 +40,15 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    console.log(`Processing V2 extraction (${body.content.length} characters)...`);
+    console.log(`Processing V2 JSON validation (${body.content.length} characters)...`);
 
     const result = await extractV2Data(body.content, apiKey);
 
     const duration = Date.now() - startTime;
-    console.log(`V2 extraction completed in ${duration}ms, success: ${result.success}`);
+    console.log(`V2 validation completed in ${duration}ms, success: ${result.success}`);
 
     if (!result.success) {
-      console.error('V2 extraction failed:', result.error);
+      console.error('V2 validation failed:', result.error);
       return NextResponse.json(
         { 
           success: false, 
