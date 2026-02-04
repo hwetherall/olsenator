@@ -1,5 +1,4 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { ExtractionResult } from '@/lib/schema';
 
 export const maxDuration = 120; // Allow up to 120 seconds for translation
 
@@ -7,12 +6,12 @@ const OPENROUTER_API_URL = 'https://openrouter.ai/api/v1/chat/completions';
 const MODEL = 'google/gemini-3-flash-preview';
 
 interface TranslateRequest {
-  data: ExtractionResult;
+  data: unknown; // ExtractionResult (memo) or V2ExtractionResult
 }
 
 interface TranslateResponse {
   success: boolean;
-  data?: ExtractionResult;
+  data?: unknown;
   error?: string;
 }
 
@@ -225,7 +224,7 @@ export async function POST(request: NextRequest): Promise<NextResponse<Translate
 
     return NextResponse.json({
       success: true,
-      data: translatedData as ExtractionResult,
+      data: translatedData,
     });
   } catch (error) {
     console.error('Translation error:', error);

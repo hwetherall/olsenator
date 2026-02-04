@@ -92,6 +92,10 @@ export default function Home() {
   
   // Client View Language State
   const [clientLanguage, setClientLanguage] = useState<Language>('en');
+  
+  // V2 Japanese output: when true, extract then translate to Japanese and show Japanese infographic
+  const [v2JapaneseOutput, setV2JapaneseOutput] = useState(false);
+  const [v2Language, setV2Language] = useState<Language>('en');
 
   useEffect(() => {
     if (typeof window === 'undefined') return;
@@ -140,6 +144,7 @@ export default function Home() {
     setDisplayData(null);
     setQaData(null);
     setV2Data(null);
+    setV2Language('en');
     setDuration(undefined);
     setRetried(undefined);
     
@@ -333,10 +338,37 @@ export default function Home() {
         return;
       }
 
-      const totalDuration = Date.now() - startTime;
-      setV2Data(result.data);
-      setDuration(totalDuration);
+      let finalV2Data: V2ExtractionResult = result.data;
       setRetried(result.retried);
+
+      if (v2JapaneseOutput) {
+        setIsLoading(false);
+        setIsTranslating(true);
+        try {
+          const translateResponse = await fetch('/api/translate', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ data: result.data }),
+          });
+          const translateResult = await translateResponse.json();
+          if (translateResult.success && translateResult.data) {
+            finalV2Data = translateResult.data as V2ExtractionResult;
+            setV2Language('ja');
+          } else {
+            console.error('V2 translation failed:', translateResult.error);
+          }
+        } catch (err) {
+          console.error('Failed to translate V2 to Japanese:', err);
+        }
+        setIsTranslating(false);
+      } else {
+        setV2Language('en');
+      }
+
+      const totalDuration = Date.now() - startTime;
+      setV2Data(finalV2Data);
+      setDuration(totalDuration);
+      setShowInfographic(true);
 
     } catch (err) {
       setError(
@@ -361,6 +393,7 @@ export default function Home() {
     } else {
       setV2Content('');
       setV2Data(null);
+      setV2Language('en');
     }
     setError(null);
     setDuration(undefined);
@@ -383,8 +416,9 @@ export default function Home() {
     if (mode === 'v2') {
       // Set the content to the prefill text so it's visible what was used
       setV2Content(V2_PREFILL_TEXT);
-      // Directly set the data without API call
+      // Directly set the data without API call (English prefill)
       setV2Data(V2_EXTRACTION_JSON as unknown as V2ExtractionResult);
+      setV2Language('en');
       // Clear any errors
       setError(null);
       // Show the infographic immediately
@@ -665,6 +699,36 @@ export default function Home() {
                 </button>
               </div>
             )}
+
+            {/* Japanese Output Toggle - V2 Analysis: output Japanese JSON and infographic */}
+            {mode === 'v2' && (
+              <div className="flex items-center justify-between p-4 bg-white border border-[var(--border)] rounded-2xl shadow-sm">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-xl bg-rose-500/10 flex items-center justify-center">
+                    <svg className="w-5 h-5 text-rose-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                  </div>
+                  <div>
+                    <span className="text-sm font-semibold text-[var(--foreground)]">Output in Japanese</span>
+                    <p className="text-xs text-[var(--muted)]">Translate result to Japanese and show Japanese infographic</p>
+                  </div>
+                </div>
+                <button
+                  onClick={() => setV2JapaneseOutput(!v2JapaneseOutput)}
+                  disabled={isLoading || isTranslating}
+                  className={`relative w-12 h-7 rounded-full transition-colors disabled:opacity-50 ${
+                    v2JapaneseOutput ? 'bg-rose-500' : 'bg-gray-200'
+                  }`}
+                >
+                  <span
+                    className={`absolute top-1 left-1 w-5 h-5 rounded-full bg-white shadow-sm transition-transform ${
+                      v2JapaneseOutput ? 'translate-x-5' : 'translate-x-0'
+                    }`}
+                  />
+                </button>
+              </div>
+            )}
             
             <div className="flex gap-3">
               <button
@@ -693,7 +757,9 @@ export default function Home() {
                     ? (kajimaEnabled ? 'Extract & Translate' : 'Extract Data')
                     : mode === 'qa'
                       ? 'Analyze Q&A'
-                      : 'Generate V2 Infographic'
+                      : mode === 'v2'
+                        ? (v2JapaneseOutput ? 'Generate & Translate to Japanese' : 'Generate V2 Infographic')
+                        : 'Generate V2 Infographic'
                 )}
               </button>
               
@@ -857,7 +923,7 @@ export default function Home() {
               <V2InfographicContainer
                 data={v2Data}
                 onCopyHtml={handleCopyHtml}
-                language={mode === 'client' ? clientLanguage : 'en'}
+                language={mode === 'client' ? clientLanguage : v2Language}
               />
             )}
           </div>

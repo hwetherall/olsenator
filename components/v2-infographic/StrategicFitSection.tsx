@@ -26,6 +26,23 @@ function getVerdictColor(decision: string) {
   return { bg: 'bg-amber-50', text: 'text-amber-800', border: 'border-amber-500', icon: 'text-amber-600' };
 }
 
+// Normalize decision for logic (handles both English and Japanese JSON values)
+function normalizeDecision(decision: string): 'Yes' | 'No' | 'Borderline' | string {
+  if (decision === 'Yes' || decision === 'はい') return 'Yes';
+  if (decision === 'No' || decision === 'いいえ') return 'No';
+  if (decision === 'Borderline' || decision === '境界線上') return 'Borderline';
+  return decision;
+}
+
+// Map raw decision value to translated label (Yes/Borderline/No -> はい/境界線上/いいえ when language is ja)
+function getDecisionDisplayLabel(decision: string, lang: Language): string {
+  const key = decision === 'Yes' || decision === 'はい' ? 'yes'
+    : decision === 'No' || decision === 'いいえ' ? 'no'
+    : decision === 'Borderline' || decision === '境界線上' ? 'borderline'
+    : null;
+  return key ? t(key, lang) : decision;
+}
+
 function getConfidenceColor(level: string) {
   switch (level) {
     case 'High':
@@ -118,23 +135,29 @@ interface VerdictBadgeProps {
 function VerdictBadge({ verdict, language }: VerdictBadgeProps) {
   const colors = getVerdictColor(verdict.decision);
   const confidenceColors = getConfidenceColor(verdict.confidence);
+  const decisionNorm = normalizeDecision(verdict.decision);
 
   return (
     <div className={`verdict-badge rounded-xl p-5 border-l-4 ${colors.bg} ${colors.border.replace('border', 'border-l')} shadow-sm`}>
       <div className="flex items-center justify-between mb-3">
         <div className="flex items-center gap-2">
-          {verdict.decision === 'Yes' && (
+          {decisionNorm === 'Yes' && (
             <svg className={`w-5 h-5 ${colors.icon}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
           )}
-          {verdict.decision === 'Borderline' && (
+          {decisionNorm === 'Borderline' && (
             <svg className={`w-5 h-5 ${colors.icon}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
             </svg>
           )}
+          {decisionNorm === 'No' && (
+            <svg className={`w-5 h-5 ${colors.icon}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+          )}
           <span className={`text-base font-bold ${colors.text}`}>
-            {verdict.decision}
+            {getDecisionDisplayLabel(verdict.decision, language)}
           </span>
         </div>
         <span className={`px-2.5 py-1 rounded-md text-xs font-semibold ${confidenceColors.bg} ${confidenceColors.text}`}>
