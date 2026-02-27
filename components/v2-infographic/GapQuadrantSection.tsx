@@ -92,18 +92,6 @@ function GapBridgeCard({ gap, isExpanded, onClick }: { gap: Gap; isExpanded: boo
           </div>
         </div>
         <div className="flex items-center gap-3">
-          <div className="text-right hidden sm:block">
-            <div className="text-[10px] uppercase font-bold text-slate-400">Gap Size</div>
-            <div className="flex gap-0.5 justify-end mt-0.5">
-              {[1, 2, 3, 4, 5].map((i) => (
-                <div 
-                  key={i} 
-                  className={`w-1.5 h-3 rounded-sm ${i <= gap.gap_size.score ? '' : 'bg-slate-100'}`}
-                  style={{ backgroundColor: i <= gap.gap_size.score ? config.dot : undefined }}
-                />
-              ))}
-            </div>
-          </div>
         </div>
       </div>
 

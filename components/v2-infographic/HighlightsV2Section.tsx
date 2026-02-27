@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { HighlightV2, HighlightsMetadata, SourceConfidence } from '@/lib/v2-schema';
+import { HighlightV2, HighlightsMetadata } from '@/lib/v2-schema';
 import { Language, t } from '@/lib/v2-translations';
 
 interface HighlightsV2SectionProps {
@@ -23,12 +23,6 @@ const categoryColors: Record<string, string> = {
   'Regulatory': 'text-amber-600 bg-amber-50 border-amber-100',
 };
 
-// Simplified confidence indicators
-const confidenceIcons: Record<SourceConfidence, string> = {
-  'verified': '✓',
-  'estimated': '~',
-  'assumed': '?',
-};
 
 function HighlightRow({ highlight }: { highlight: HighlightV2 }) {
   const isTailwind = highlight.polarity === 'tailwind';

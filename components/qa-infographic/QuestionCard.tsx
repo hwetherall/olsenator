@@ -12,14 +12,6 @@ interface QuestionCardProps {
 export function QuestionCard({ question, showCommentary = true }: QuestionCardProps) {
   const [isExpanded, setIsExpanded] = useState(false);
 
-  const confidenceColors = {
-    High: { bg: colors.risk.greenLight, text: colors.risk.green, dot: colors.risk.green },
-    Medium: { bg: colors.risk.amberLight, text: colors.risk.amber, dot: colors.risk.amber },
-    Low: { bg: colors.risk.redLight, text: colors.risk.red, dot: colors.risk.red },
-  };
-
-  const conf = confidenceColors[question.confidence];
-
   return (
     <div 
       className="transition-all hover:bg-slate-50"
@@ -66,18 +58,6 @@ export function QuestionCard({ question, showCommentary = true }: QuestionCardPr
             {/* Footer Row */}
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-6">
-                {/* Confidence Badge */}
-                <span 
-                  className="inline-flex items-center gap-1.5 text-xs font-medium uppercase tracking-wider"
-                  style={{ color: conf.text }}
-                >
-                  <span 
-                    className="w-1.5 h-1.5 rounded-full"
-                    style={{ backgroundColor: conf.dot }}
-                  />
-                  {question.confidence}
-                </span>
-
                 {/* Source */}
                 {question.source && (
                   <span 

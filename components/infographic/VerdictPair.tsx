@@ -1,7 +1,7 @@
 'use client';
 
 import { Verdict } from '@/lib/schema';
-import { colors, typography, getConfidenceColor } from '@/lib/infographic-styles';
+import { colors, typography } from '@/lib/infographic-styles';
 import { getLabels } from '@/lib/kajima-labels';
 
 interface VerdictPairProps {
@@ -66,7 +66,6 @@ interface VerdictPanelProps {
 
 function VerdictPanel({ title, verdict, icon, kajimaMode }: VerdictPanelProps) {
   const labels = getLabels(kajimaMode);
-  const confidenceColor = getConfidenceColor(verdict.confidenceLevel);
 
   return (
     <div 
@@ -91,21 +90,7 @@ function VerdictPanel({ title, verdict, icon, kajimaMode }: VerdictPanelProps) {
           </h3>
         </div>
         
-        {/* Confidence Badge */}
-        <span 
-          className="px-2 py-1 rounded text-xs font-medium"
-          style={{ 
-            backgroundColor: `${confidenceColor}15`,
-            color: confidenceColor,
-          }}
-        >
-          {kajimaMode 
-            ? (verdict.confidenceLevel === 'High' ? labels.highConfidence 
-               : verdict.confidenceLevel === 'Medium' ? labels.mediumConfidence 
-               : labels.lowConfidence)
-            : `${verdict.confidenceLevel} Confidence`
-          }
-        </span>
+        {/* Confidence Badge removed */}
       </div>
 
       {/* Verdict */}

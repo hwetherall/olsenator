@@ -43,18 +43,6 @@ function getDecisionDisplayLabel(decision: string, lang: Language): string {
   return key ? t(key, lang) : decision;
 }
 
-function getConfidenceColor(level: string) {
-  switch (level) {
-    case 'High':
-      return { bg: 'bg-emerald-100', text: 'text-emerald-800' };
-    case 'Medium':
-      return { bg: 'bg-amber-100', text: 'text-amber-800' };
-    case 'Low':
-      return { bg: 'bg-red-100', text: 'text-red-800' };
-    default:
-      return { bg: 'bg-slate-100', text: 'text-slate-600' };
-  }
-}
 
 interface ExpandableSectionProps {
   title: string;
@@ -134,13 +122,11 @@ interface VerdictBadgeProps {
 
 function VerdictBadge({ verdict, language }: VerdictBadgeProps) {
   const colors = getVerdictColor(verdict.decision);
-  const confidenceColors = getConfidenceColor(verdict.confidence);
   const decisionNorm = normalizeDecision(verdict.decision);
 
   return (
     <div className={`verdict-badge rounded-xl p-5 border-l-4 ${colors.bg} ${colors.border.replace('border', 'border-l')} shadow-sm`}>
-      <div className="flex items-center justify-between mb-3">
-        <div className="flex items-center gap-2">
+      <div className="flex items-center gap-2 mb-3">
           {decisionNorm === 'Yes' && (
             <svg className={`w-5 h-5 ${colors.icon}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -159,10 +145,6 @@ function VerdictBadge({ verdict, language }: VerdictBadgeProps) {
           <span className={`text-base font-bold ${colors.text}`}>
             {getDecisionDisplayLabel(verdict.decision, language)}
           </span>
-        </div>
-        <span className={`px-2.5 py-1 rounded-md text-xs font-semibold ${confidenceColors.bg} ${confidenceColors.text}`}>
-          {verdict.confidence} {t('confidence', language)}
-        </span>
       </div>
       <p className="text-sm text-slate-600 leading-relaxed pl-7 border-l-2 border-slate-200 ml-2.5">
         {verdict.rationale}

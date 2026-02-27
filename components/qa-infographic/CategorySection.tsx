@@ -20,11 +20,6 @@ export function CategorySection({
   const categoryColors = getCategoryColor(category);
   const label = getCategoryLabel(category);
 
-  // Calculate stats for this category
-  const highCount = questions.filter(q => q.confidence === 'High').length;
-  const mediumCount = questions.filter(q => q.confidence === 'Medium').length;
-  const lowCount = questions.filter(q => q.confidence === 'Low').length;
-
   return (
     <div className="avoid-break mb-8">
       {/* Category Header */}
@@ -55,28 +50,6 @@ export function CategorySection({
         </div>
 
         <div className="flex items-center gap-8">
-          {/* Mini Stats */}
-          <div className="flex items-center gap-3">
-            {highCount > 0 && (
-              <div className="flex items-center gap-1.5" title={`${highCount} High Confidence`}>
-                <div className="w-2 h-2 rounded-full" style={{ backgroundColor: colors.risk.green }} />
-                <span className="text-xs text-slate-500 font-medium">{highCount}</span>
-              </div>
-            )}
-            {mediumCount > 0 && (
-              <div className="flex items-center gap-1.5" title={`${mediumCount} Medium Confidence`}>
-                <div className="w-2 h-2 rounded-full" style={{ backgroundColor: colors.risk.amber }} />
-                <span className="text-xs text-slate-500 font-medium">{mediumCount}</span>
-              </div>
-            )}
-            {lowCount > 0 && (
-              <div className="flex items-center gap-1.5" title={`${lowCount} Low Confidence`}>
-                <div className="w-2 h-2 rounded-full" style={{ backgroundColor: colors.risk.red }} />
-                <span className="text-xs text-slate-500 font-medium">{lowCount}</span>
-              </div>
-            )}
-          </div>
-
           {/* Expand Icon */}
           <div 
             className="transition-transform duration-300"
