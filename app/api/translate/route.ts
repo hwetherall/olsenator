@@ -39,6 +39,33 @@ const EXCLUDED_FIELDS = new Set([
   'confidenceLevel',  // "High" | "Medium" | "Low"
 ]);
 
+function shouldSkipTranslation(path: (string | number)[], value: unknown): boolean {
+  const lastKey = path[path.length - 1];
+  const parentKey = path[path.length - 2];
+
+  if (typeof lastKey === 'string' && EXCLUDED_FIELDS.has(lastKey)) {
+    return true;
+  }
+
+  if (typeof value !== 'string') {
+    return false;
+  }
+
+  // Keep raw V2 enum fields canonical so locale changes do not alter scoring logic.
+  if (
+    lastKey === 'confidence' &&
+    (parentKey === 'verdict' || parentKey === 'final_verdict')
+  ) {
+    return true;
+  }
+
+  if (lastKey === 'pathway_confidence' || lastKey === 'source_confidence') {
+    return true;
+  }
+
+  return false;
+}
+
 /**
  * Recursively translate all string values in an object
  */
@@ -51,10 +78,8 @@ async function translateObject(
   const paths: (string | number)[][] = [];
 
   function collectStrings(value: unknown, path: (string | number)[] = []): void {
-    // Skip fields that are enum values and should not be translated
-    const lastKey = path[path.length - 1];
-    if (typeof lastKey === 'string' && EXCLUDED_FIELDS.has(lastKey)) {
-      return; // Skip this field entirely
+    if (shouldSkipTranslation(path, value)) {
+      return;
     }
     
     if (typeof value === 'string' && value.trim().length > 0) {

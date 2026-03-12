@@ -34,6 +34,13 @@ function normalizeDecision(decision: string): 'Yes' | 'No' | 'Borderline' | stri
   return decision;
 }
 
+function normalizeConfidence(confidence: string): 'High' | 'Medium' | 'Low' | string {
+  if (confidence === 'High' || confidence === '高') return 'High';
+  if (confidence === 'Medium' || confidence === '中') return 'Medium';
+  if (confidence === 'Low' || confidence === '低') return 'Low';
+  return confidence;
+}
+
 // Map raw decision value to translated label (Yes/Borderline/No -> はい/境界線上/いいえ when language is ja)
 function getDecisionDisplayLabel(decision: string, lang: Language): string {
   const key = decision === 'Yes' || decision === 'はい' ? 'yes'
@@ -155,15 +162,18 @@ function VerdictBadge({ verdict, language }: VerdictBadgeProps) {
 
 // Helper to calculate position from verdict
 function getVerdictPosition(verdict: SectionVerdict): number {
+  const decision = normalizeDecision(verdict.decision);
+  const confidence = normalizeConfidence(verdict.confidence);
+
   // Convert verdict to a position (0-100)
-  if (verdict.decision === 'Yes') {
-    return verdict.confidence === 'High' ? 85 : verdict.confidence === 'Medium' ? 70 : 60;
+  if (decision === 'Yes') {
+    return confidence === 'High' ? 85 : confidence === 'Medium' ? 70 : 60;
   }
-  if (verdict.decision === 'Borderline') {
-    return verdict.confidence === 'High' ? 55 : verdict.confidence === 'Medium' ? 45 : 40;
+  if (decision === 'Borderline') {
+    return confidence === 'High' ? 55 : confidence === 'Medium' ? 45 : 40;
   }
   // No
-  return verdict.confidence === 'High' ? 20 : verdict.confidence === 'Medium' ? 30 : 35;
+  return confidence === 'High' ? 20 : confidence === 'Medium' ? 30 : 35;
 }
 
 export function StrategicFitSection({ shouldWeDoIt, canWeDoIt, synthesis, language = 'en' }: StrategicFitSectionProps) {
@@ -385,7 +395,10 @@ export function StrategicFitSection({ shouldWeDoIt, canWeDoIt, synthesis, langua
           <div className="flex items-stretch gap-3">
             <div className="flex flex-col justify-between py-2 text-[12px] text-black font-medium w-6">
               <span>{t('high', language)}</span>
-              <span className="writing-mode-vertical transform -rotate-180 text-black font-semibold tracking-wide" style={{ writingMode: 'vertical-rl' }}>
+              <span
+                className={`writing-mode-vertical text-black font-semibold tracking-wide ${language === 'ja' ? '' : 'transform -rotate-180'}`}
+                style={{ writingMode: 'vertical-rl' }}
+              >
                 {t('executionCapability', language)}
               </span>
               <span>{t('low', language)}</span>
